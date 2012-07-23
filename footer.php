@@ -15,18 +15,9 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-$theme = 'newsletter';
-load_theme_textdomain( $theme, TEMPLATEPATH, '/languages' );
-$locale = get_locale();
-$locale_file = TEMPLATEPATH . '/languages/$locale.php';
-if( is_readable($locale_file) )
-  require_once( $locale_file );
-
-function get_page_number() {
-  $p = get_query_var('paged');
-  if( $p ) {
-    printf( ' | %s%s', __('Page', $theme), $p );
-  }
-}
-  
 ?>
+  </body>
+  <footer>
+    Copyright (C) 2012 JzL
+  </footer>
+</html>
