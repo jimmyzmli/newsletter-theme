@@ -25,8 +25,281 @@ Author URI: http://jimmyzmli.ca
 Version: 1.0
 Tags:
 
-Liscense:
-Liscense URI:
-
+Liscense: GPL v3
+Liscense URI: http://www.gnu.org/licenses/
 
 */
+
+@import('reset.css');
+
+/*Global
+  --------------------------------------------------------- */  
+
+.promo-title h2 {
+    margin: 0px;
+    text-decoration: underline;
+}
+
+#body {
+    margin: 185px auto 0px auto;
+    width: 960px;
+}
+
+/*Top Section
+  --------------------------------------------------------- */  
+
+header {
+    position: absolute;
+     top: 0px;
+     left: 0px;
+    width: 100%;
+}
+
+/*Top Info Bar
+-------------------------------------- */
+
+header .info-bar {
+    background: #f3f9ff;
+    border-width: 2px 0px 2px 0px;
+    border-style: solid;
+    border-color: silver;
+    height: 1.25em;
+    width: 960px;
+    margin: 0px auto 0px auto;
+    padding: 0px;
+    text-align: center;
+}
+
+/*Banner
+-------------------------------------- */
+#top-banner {
+    width: 960px;
+    height: 125px;
+    margin: auto auto;
+    padding: 0px 0px;
+}
+
+#top-banner img {
+    width: 100%;
+    height: 100%;
+}
+
+
+/*Nav bar
+-------------------------------------- */
+
+#top-nav {
+    border: 1px solid black;
+    width: 960px;
+    margin: auto auto;
+}
+
+#branding,
+#top-nav .nav-bar-horizontal {
+    float: left;
+    line-height: 30px;
+    margin: 0px;
+    padding: 0px;
+}
+
+#branding {
+    border-right: 1px solid black;
+    width: 20%;
+    text-align: center;
+    margin-right: 120px;
+}
+
+.nav-bar-horizontal li {
+    border-left: 1px dashed black;
+    border-right: 1px dashed black;
+    display: block;
+    float: left;
+    list-style: none;
+    text-align: center;
+    width: 120px;
+}
+
+/*Search box
+-------------------------------------- */
+
+#top-nav #search-box {
+    float: right;
+    width: 120px;
+}
+
+#top-nav #search-box input {
+    width: 100px;
+}
+
+
+/*Main Section
+  --------------------------------------------------------- */
+
+#main {
+    float: left;
+    border: 1px solid black;
+    width: 624px;
+    margin: 0px 32px 0px 0px;
+}
+
+/*Top Story
+  -------------------------------------- */
+
+#top-promo {
+    width: 100%;
+    border: 1px solid black;
+}
+
+#top-promo .promo-title {
+    float: left;
+    width: 174px;
+    margin: 0px;
+}
+
+#top-promo .promo-img {
+    float: left;
+    width: 450px;
+    height: 259px;
+    margin: 0px;
+}
+
+/*News Tiles
+  -------------------------------------- */
+#main .news-tile-full {
+    width: 100%;
+}
+
+#main .news-promo {
+    float: left;
+    padding: 0px;
+    margin: 0px;
+}
+
+[class|=news-tile] .promo-img,
+[class|=news-tile] .promo-desc,
+[class|=news-tile] .promo-title {
+    width: 100%;
+}
+
+[class|=news-tile] .promo-story {
+    padding: 0px;
+    margin: 0px;
+}
+
+[class|=news-tile] {
+    border: 1px solid black;
+    float: left;
+    text-align: center;
+    margin: 4px;
+    padding: 0px;
+}
+
+.news-tile-full {
+    width: 100%;
+}
+
+#main .news-tile-half {
+    width: 302px;
+}
+
+.news-tile-quart {
+    width: 146px;
+}
+
+
+/*Right section
+  --------------------------------------------------------- */
+
+#side {
+    float: left;
+    /*border: 1px solid black;*/
+    width: 300px;
+    margin: 0px;
+}
+
+/*About
+  -------------------------------------- */
+
+#about {
+    margin: 0px 0px 30px 0px;
+    padding: 10px;
+}
+
+#about h2 {
+    margin: 0px 0px 10px 0px;
+}
+
+#about .desc {
+    width: 100%;
+    border: 1px solid black;
+}
+
+
+/*Spotlight/Featured
+  -------------------------------------- */
+
+#top-spotlight {
+    margin: 0px 0px 30px 0px;
+}
+
+#top-spotlight .promo-img {
+    float: left;
+    height: 100px;
+    width: 100px;
+}
+
+#top-spotlight .promo-title {
+    text-decoration: underline;
+}
+
+#top-spotlight .promo-title,
+#top-spotlight .promo-desc {
+    float: left;
+    width: 190px;
+    margin-left: 10px;
+}
+
+#top-spotlight .promo-story {
+    margin: 0px 0px 10px 0px;
+}
+
+/*Side Updates bar
+  -------------------------------------- */
+
+#side .updates {
+    border: 1px solid black;
+    width: 300px;
+    margin: 0px 0px 30px 0px;
+}
+
+#side .updates .promo-story {
+    border: 1px dashed grey;
+    margin: 5px 0px 5px 0px;
+    background: lightblue;
+}
+
+#side .updates .promo-author,
+#side .updates .promo-date {
+    display: inline;
+}
+
+#side .updates .promo-desc {
+    background: white;
+}
+
+/*Landing page small Widget Bar
+  -------------------------------------- */
+
+#side .survey-bar {
+    border: 1px solid black;
+    padding: 0px;
+    margin: 0px;
+}
+
+/*Footer
+  --------------------------------------------------------- */  
+footer {
+    width: 960px;
+    margin: 20px auto 0px auto;
+    background: lightgrey;
+}
