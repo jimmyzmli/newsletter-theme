@@ -18,149 +18,113 @@
 ?>
 <?php
 
-$posts = get_posts();
+function get_posts_for_cat( $cat, $n ) {
+  if( !is_numeric($cat) )
+    if( is_string( $cat ) ) 
+      $cat = get_cat_ID( $cat_name );
+  if( is_numeric($cat) ) {
+    $args = array(
+		  'category' => intval($cat),
+		  'numberposts' => $n,
+		  'orderby' => 'post_view_count',
+		  'order' => 'ASC'
+		  );
+    $posts = get_posts( $args );
+    return $posts;
+  }else {
+    return array();
+  }
+}
+
+$prefix = get_template_directory_uri();
+
+$opts = get_option("layout_opts");
+$opts = is_array($opts) ? $opts : array();
+$layout = is_array( $opts['layout'] ) ? $opts['layout'] : array();
+
+$cats = get_cats($layout);
 
 ?>
 <?php get_header(); ?>
-    <section id="body">
-          <section id="main">
-	    <section id="top-promo">
-	      <h2>Top News Story</h2>
-	      <section class="promo-title">
-		<h2>News Title</h2>
-		<article class="promo-desc">
-		  NEWS NEWS NEWS NEWS NEWS LOL
-		</article>
-	      </section>
-	      <img src="noimg" class="promo-img"/>
-	      <div style="clear:both"></div>
-	    </section>
-
-	    <section class="news-promo">
-	      <h2>World News</h2>
-	      <section class="news-tile-half">
-		<section class="promo-story">
-		  <img src="noimg" class="promo-img"/>
-		  <section class="promo-title">Iraq Attack etc.</section>
-		  <section class="promo-desc">Iraq attack</section>
-		</section>
-	      </section>
-	      <section class="news-tile-quart">
-		<section class="promo-story">
-		  <section class="promo-title">Iraq Attack etc.</section>
-		  <section class="promo-desc">Iraq attack</section>		
-		</section>	      
-	      </section>
-	      <section class="news-tile-quart">
-		<section class="promo-story">
-		  <section class="promo-title">Iraq Attack etc.</section>
-		  <section class="promo-desc">Iraq attack</section>		
-		</section>	      
-	      </section>
-	      <div style="clear:both"></div>
-	    </section>
-
-	    <section class="news-promo">
-	      <h2>Business</h2>
-	      <section class="news-tile-half">
-		<section class="promo-story">
-		  <img src="noimg" class="promo-img"/>
-		  <section class="promo-title">Iraq Attack etc.</section>
-		  <section class="promo-desc">Iraq attack</section>
-		</section>
-	      </section>
-	      <section class="news-tile-half">
-		<section class="promo-story">
-		  <section class="promo-title">Iraq Attack etc.</section>
-		  <section class="promo-desc">Iraq attack</section>		
-		</section>	      
-	      </section>
-	      <div style="clear:both"></div>
-	    </section>
-
-	    <section class="news-promo">
-	      <h2>Sports</h2>
-	      <section class="news-tile-half">
-		<section class="promo-story">
-		  <section class="promo-title">Iraq Attack etc.</section>
-		  <section class="promo-desc">Iraq attack</section>		
-		</section>	      
-	      </section>
-	      <div style="clear:both"></div>
-	    </section>
-
-	    <section class="news-promo">
-	      <h2>Entertainment</h2>
-	      <section class="news-tile-half">
-		<section class="promo-story">
-		  <section class="promo-title">Iraq Attack etc.</section>
-		  <section class="promo-desc">Iraq attack</section>		
-		</section>
-		<section class="promo-story">
-		  <section class="promo-title">Iraq Attack etc.</section>
-		  <section class="promo-desc">Iraq attack</section>		
-		</section>
-		<div style="clear:both"></div>
-	      </section>
-	    </section>
-	    
-	    <div style="clear:both"></div>
-	  </section>
-
-	  <section id="side">
-	    
-	    <section id="about">
-	      <h2>About News Letter</h2>
-	      <div class="desc">About here BLAH BLAH BLAH BLAH BLAH</div>
-	    </section>
-	    
-	    <section id="top-spotlight">
-	      <h2>Featured</h2>
-	      
-	      <article class="promo-story">
-		<img src="noimg" class="promo-img"/>
-		<section class="promo-title">
-		  Holy shit! Birds poop.
-		</section>
-		<section class="promo-desc">
-		  TIL Birds can poop. Blah blah blah lorem ipsum.
-		</section>
-		<div style="clear:both"></div>
-	      </article>
-
-	      <article class="promo-story">
-		<img src="noimg" class="promo-img"/>
-		<section class="promo-title">
-		  Holy shit! Birds poop.
-		</section>
-		<section class="promo-desc">
-		  TIL Birds can poop. Blah blah blah lorem ipsum.
-		</section>
-		<div style="clear:both"></div>
-	      </article>
-	      
-	    </section>
-
-	    <section class="updates">
-	      <h2>Updates</h2>
-	      <article class="promo-story">
-		<section class="promo-author">JzL</section>
-		<section class="promo-date">Mon Jul 23</section>		
-		<section class="promo-desc">TWITT TWITT. PFFTOOOOT.</section>
-	      </article>
-	      <article class="promo-story">
-		<section class="promo-author">JzL</section>
-		<section class="promo-date">Mon Jul 23</section>		
-		<section class="promo-desc">TWITT TWITT. PFFTOOOOT.</section>
-	      </article>
-	    </section>
-
-	    <section class="survey-bar">
-	      <h2>Surveys</h2>
-	      ABCDEFG
-	    </section>
-	    
-	  </section>
-	  <div style="clear:both"></div>
+<section id="body">
+  <section id="main">
+    <section id="top-promo">
+      <h2>Top News Story</h2>
+      <section class="promo-title">
+	<h2>News Title</h2>
+	<article class="promo-desc">
+	  NEWS NEWS NEWS NEWS NEWS LOL
+	</article>
+      </section>
+      <img src="http://placehold.it/450x259" class="promo-img"/>
+      <div style="clear:both"></div>
     </section>
+
+    <?php foreach( $cats as $i=>$c ) : ?>
+    <section class="news-promo">
+      <h2><?=$c->name?></h2>
+      <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : ?>
+      <section class="news-tile-<?=get_size_name($tile['size'])?>">
+	<?php foreach( get_posts_for_cat($c->cat_ID,1) as $k=>$post ) : setup_postdata($post) ?>
+	<section class="promo-story">
+	  <img src="<?=get_the_post_thumbnail($p->id, array(300,200))?>" class="promo-img"/>
+	  <div class="promo-title">
+	    <a href="<?php the_permalink() ?>"><?php the_title() ?></a>
+          </div>
+	  <section class="promo-desc"><?php the_excerpt() ?></section>
+	</section>
+        <?php endforeach; wp_reset_postdata(); ?>
+      </section>
+      <?php endforeach; ?>
+      <div style="clear:both"></div>
+    </section>
+    <?php endforeach; ?>
+    <div style="clear:both"></div>
+  </section> <!-- #main -->
+
+  <section id="side">
+    
+    <section id="about">
+      <h2>About News Letter</h2>
+      <div class="desc">About here BLAH BLAH BLAH BLAH BLAH</div>
+    </section>
+    
+    <section id="top-spotlight">
+      <h2>Featured</h2>
+      <?php foreach( get_posts_for_cat('General',2) as $i=>$post ) : setup_postdata($post) ?>
+      <article class="promo-story">
+	<img src="http://placehold.it/69x69" class="promo-img"/>
+	<section class="promo-title">
+	  <a href="<?php the_permalink() ?>"><?php the_title() ?></a>
+	</section>
+	<section class="promo-desc">
+	  <?php the_excerpt() ?>
+	</section>
+	<div style="clear:both"></div>
+      </article>
+      <?php endforeach; wp_reset_postdata(); ?>
+    </section>
+
+    <section class="updates">
+      <h2>Updates</h2>
+      <article class="promo-story">
+	<section class="promo-author">JzL</section>
+	<section class="promo-date">Mon Jul 23</section>		
+	<section class="promo-desc">TWITT TWITT. PFFTOOOOT.</section>
+      </article>
+      <article class="promo-story">
+	<section class="promo-author">JzL</section>
+	<section class="promo-date">Mon Jul 23</section>		
+	<section class="promo-desc">TWITT TWITT. PFFTOOOOT.</section>
+      </article>
+    </section>
+
+    <section class="survey-bar">
+      <h2>Surveys</h2>
+      ABCDEFG
+    </section>
+  </section> <!-- #side -->
+</section> <!-- #body -->
+<div style="clear:both"></div>
+</section>
 <?php get_footer() ?>
