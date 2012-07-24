@@ -30,7 +30,7 @@ Liscense URI: http://www.gnu.org/licenses/
 
 */
 
-@import('reset.css');
+@import('common.css');
 
 /*Global
   --------------------------------------------------------- */  
@@ -41,7 +41,7 @@ Liscense URI: http://www.gnu.org/licenses/
 }
 
 #body {
-    margin: 185px auto 0px auto;
+    margin: 180px auto 0px auto;
     width: 960px;
 }
 
@@ -137,9 +137,8 @@ header .info-bar {
 
 #main {
     float: left;
-    border: 1px solid black;
     width: 624px;
-    margin: 0px 32px 0px 0px;
+    margin: 0px 0px 0px 0px;
 }
 
 /*Top Story
@@ -148,6 +147,7 @@ header .info-bar {
 #top-promo {
     width: 100%;
     border: 1px solid black;
+    padding: 10px;
 }
 
 #top-promo .promo-title {
@@ -170,9 +170,14 @@ header .info-bar {
 }
 
 #main .news-promo {
+    background: #E6FFCC;
     float: left;
     padding: 0px;
     margin: 0px;
+}
+
+#main .news-promo > h2 {
+    background: #CCFFE6;
 }
 
 [class|=news-tile] .promo-img,
@@ -211,7 +216,7 @@ header .info-bar {
   --------------------------------------------------------- */
 
 #side {
-    float: left;
+    float: right;
     /*border: 1px solid black;*/
     width: 300px;
     margin: 0px;
@@ -231,7 +236,11 @@ header .info-bar {
 
 #about .desc {
     width: 100%;
-    border: 1px solid black;
+    background: #52FFFF;
+    border: 4px dashed black;
+    border-left: 0px;
+    border-right: 0px;
+    padding: 10px;
 }
 
 
