@@ -30,14 +30,15 @@ $hcats = get_cats($hlayout);
 $hcats = array_merge($hcats,cat_inverse($hcats,$cats));
 
 ?>
-<style type="text/css">
-  <?php include("theme_settings.css"); ?>
-</style>
+
 <link href="<?="$prefix/layout_setting.css"?>" rel="stylesheet"/>
+<link href="<?="$prefix/js/resizable.css"?>" rel="stylesheet"/>
+
 <script type="text/javascript" src="<?="$prefix/js/jquery.min.js"?>"></script>
 <script type="text/javascript" src="<?="$prefix/js/jquery-ui.min.js"?>"></script>
 <script type="text/javascript" src="<?="$prefix/js/json2.js"?>"></script>
 <script type="text/javascript" src="<?="$prefix/layout_setting.js"?>"></script>
+
 <section id="body" class="clearfix">
   <section id="layout-panel" class="clearfix">
     <h2 class="title"><?=__("Layout",$theme)?></h2>
@@ -48,7 +49,7 @@ $hcats = array_merge($hcats,cat_inverse($hcats,$cats));
 	<input type="hidden" class="cat_ID" value="<?=$c->cat_ID?>"/>
 
         <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : ?>
-        <section class="<?=get_size_name($tile['size'])?>-tile tile">
+        <section class="<?=get_size_name($tile['size'])?>-tile tile" style="height:<?=$tile['height']?>px">
 	  <input type="hidden" class="tile-size" value="<?=$tile['size']?>"/>
 	  1/<?=$tile['size']?>
 	</section>

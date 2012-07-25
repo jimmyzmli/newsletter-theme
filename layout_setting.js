@@ -9,7 +9,12 @@ $(function() {
     };
 
     $.prototype.resetFloat = function() {
+	var w = $(this).css('width'), h = $(this).css('height');
 	$(this).removeAttr('style').css('position','relative');
+	/*Save special attribute height */
+	if( $(this).is(".tile") ) {
+	    $(this).height(h);
+	}
 	return $(this);
     };
 
@@ -42,7 +47,10 @@ $(function() {
 	    if( parentName == "tile-board" ) {
 		/* Copying tile from building blocks */
 		drag = $(drag).clone();
-		$(drag).draggable(global.tileDraggableProperties).droppable(global.tileDroppableProperties);
+		$(drag)
+		    .draggable(global.tileDraggableProperties)
+		    .droppable(global.tileDroppableProperties)
+		    .resizable(global.tileResizableProperties);
 	    }
 	    if( $(drop).hasClass("tile-cat") ) {
 		/* Dropping tile on category */
@@ -90,10 +98,33 @@ $(function() {
 	}
     };
 
+    global.tileResizableProperties = {
+	handles: 'n,s',
+	start: function() {
+	    if( typeof(this.placeholder) != "undefined" ) {
+		$(this.placeholder).remove();
+		delete this.placeholder;
+	    }
+	    
+	    this.placeholder = $("<div>")
+		.width( $(this).width() ).height( $(this).height() )
+		.css('float', $(this).css('float') ).css('position', 'static' )
+	    	.css('visibility','hidden');
+	    $(this).before( this.placeholder );
+	},
+	stop: function() {
+	    $(this).resetFloat();
+	    $(this.placeholder).remove();
+	    delete this.placeholder;
+	}
+    };
+
     $("#tile-main .tile,#cat-list .tile").draggable(
 	global.tileDraggableProperties
     ).droppable(
 	global.tileDroppableProperties
+    ).resizable(
+	global.tileResizableProperties
     );
 
     /* These are the layout cateogries and */
@@ -165,7 +196,8 @@ $(function() {
 	    };
 	    $(this).children(".tile").each(function() {
 		cat.tiles.push( {
-		    size: $(this).children(".tile-size").attr('value')
+		    size: $(this).children(".tile-size").attr('value'),
+		    height: (+$(this).css("height")) * 2
 		});
 	    });
 	    r.push( cat );
