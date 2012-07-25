@@ -43,6 +43,22 @@ Liscense URI: http://www.gnu.org/licenses/
 #body {
     margin: 180px auto 0px auto;
     width: 960px;
+    background: white;
+}
+
+body,
+header
+{
+    background: #770000;
+}
+
+header * {
+    background: white;
+}
+
+section,
+header div.info-bar{
+    background: white;
 }
 
 /*Top Section
@@ -88,7 +104,8 @@ header .info-bar {
 /*Nav bar
 -------------------------------------- */
 
-#top-nav {
+#top-nav,
+#nav-bar2 {
     border: 1px solid black;
     width: 960px;
     margin: auto auto;
@@ -96,14 +113,25 @@ header .info-bar {
 
 #branding,
 #top-nav .nav-bar-horizontal {
-    float: left;
-    line-height: 30px;
     margin: 0px;
     padding: 0px;
+    float: left;
+}
+
+#branding,
+#top-nav #nav-bar1 {
+    line-height: 30px;
+}
+
+#top-nav #nav-bar2 {
+    line-height: 10px;
+    border: 1px solid red;
+    border-left: 0px;
+    border-right: 0px;
 }
 
 #branding {
-    border-right: 1px solid black;
+    border: 1px solid black;
     width: 20%;
     text-align: center;
     margin-right: 120px;

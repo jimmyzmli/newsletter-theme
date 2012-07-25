@@ -56,13 +56,13 @@ if( is_singular() ) {
   <body>
     <header>
       <div id="top-banner">
-	<img src="noimg"/>
+	<img src="http://placehold.it/960x125"/>
       </div>
       <nav id="top-nav">
 	<div id="branding">
 	  <?php bloginfo('name') ?>
 	</div>
-	<ul class="nav-bar-horizontal">
+	<ul class="nav-bar-horizontal" id="nav-bar1">
 	  <li>News</li>
 	  <li>News</li>
 	  <li>News</li>
@@ -73,6 +73,11 @@ if( is_singular() ) {
 	</div>
 	<div style="clear:both"></div>
       </nav>
+      <nav class="nav-bar-horizontal" id="nav-bar2">
+	<li>Home</li>
+	<li>About</li>
+	<div style="clear:both"></div>
+      </nav>	
       <div class="info-bar">
 	Hey I just met you, and this is crazy... but the server's down, for maintance baby
       </div>
