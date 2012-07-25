@@ -53,32 +53,37 @@ if( is_singular() ) {
     <link rel="alternative" type="application/rss+xml" href="<?php bloginfo('comments_rss2_url') ?>" title="Comments"/>
     <link rel="pingback" href="<?php bloginfo('pingback_url') ?>"/>
   </head>
-  <body>
-    <header>
-      <div id="top-banner">
-	<img src="http://placehold.it/960x125"/>
+  <body id="page">
+      <div id="page-bg">
+        <div class="seg1"/></div>
+        <div class="seg2"/></div>
+        <div class="seg3"></div>
       </div>
-      <nav id="top-nav">
-	<div id="branding">
-	  <?php bloginfo('name') ?>
+      <header>
+	<div id="top-banner">
+	  <img src="http://placehold.it/960x125"/>
 	</div>
-	<ul class="nav-bar-horizontal" id="nav-bar1">
-	  <li>News</li>
-	  <li>News</li>
-	  <li>News</li>
-	  <li>More...</li>
-	</ul>
-	<div id="search-box">
-	  <input type="text"/>
+	<nav id="top-nav">
+	  <div id="branding">
+	    <?php bloginfo('name') ?>
+	  </div>
+	  <ul class="nav-bar-horizontal" id="nav-bar1">
+	    <li>News</li>
+	    <li>News</li>
+	    <li>News</li>
+	    <li>More...</li>
+	  </ul>
+	  <div id="search-box">
+	    <input type="text"/>
+	  </div>
+	  <div style="clear:both"></div>
+	</nav>
+	<nav class="nav-bar-horizontal" id="nav-bar2">
+	  <li>Home</li>
+	  <li>About</li>
+	  <div style="clear:both"></div>
+	</nav>	
+	<div class="info-bar">
+	  Hey I just met you, and this is crazy... but the server's down, for maintance baby
 	</div>
-	<div style="clear:both"></div>
-      </nav>
-      <nav class="nav-bar-horizontal" id="nav-bar2">
-	<li>Home</li>
-	<li>About</li>
-	<div style="clear:both"></div>
-      </nav>	
-      <div class="info-bar">
-	Hey I just met you, and this is crazy... but the server's down, for maintance baby
-      </div>
-    </header>
+      </header>

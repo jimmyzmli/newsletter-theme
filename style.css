@@ -40,35 +40,76 @@ Liscense URI: http://www.gnu.org/licenses/
     text-decoration: underline;
 }
 
-#body {
-    margin: 180px auto 0px auto;
+#page {
+    margin: 0px;
+    position: relative;
+}
+
+header,
+#body,
+footer {
+    margin: 0px auto 0px auto;
     width: 960px;
     background: white;
 }
 
-body,
-header
-{
+/*Site background
+  --------------------------------------------------------- */  
+
+/*
+
+#page-bg {
+    position: relative;
+    z-index: -1000;
+    margin: 0px auto;
+    width: 100%;
+    height: 0px;
+}
+
+*/
+
+#page-bg {
+    width: 1180px;
+    height: 100%;
+    position: absolute;
+     top: 0px;
+     left: 50%;
+    margin-left: -590px;
+    z-index: -1000;
+
     background: #770000;
 }
 
-header * {
-    background: white;
+#page-bg * {
+    position: absolute;
+     left: 0px;
+    width: 100%;
 }
 
-section,
-header div.info-bar{
-    background: white;
+#page-bg .seg1 {
+    top: 0px;
+    height: 125px;
+    background: #FA2062;
+}
+
+#page-bg .seg2 {
+    top: 125px;
+    height: 53px;
+    background: #FA9F20;
+}
+
+#page-bg .seg3 {
+    top: 180px;
+    height: 100px;
+    background: #202928;
 }
 
 /*Top Section
   --------------------------------------------------------- */  
 
 header {
-    position: absolute;
-     top: 0px;
-     left: 0px;
-    width: 100%;
+    margin: auto auto;
+    background: white;
 }
 
 /*Top Info Bar
@@ -80,7 +121,7 @@ header .info-bar {
     border-style: solid;
     border-color: silver;
     height: 1.25em;
-    width: 960px;
+    width: 100%;
     margin: 0px auto 0px auto;
     padding: 0px;
     text-align: center;
@@ -89,9 +130,8 @@ header .info-bar {
 /*Banner
 -------------------------------------- */
 #top-banner {
-    width: 960px;
+    width: 100%;
     height: 125px;
-    margin: auto auto;
     padding: 0px 0px;
 }
 
@@ -107,7 +147,7 @@ header .info-bar {
 #top-nav,
 #nav-bar2 {
     border: 1px solid black;
-    width: 960px;
+    width: 100%;
     margin: auto auto;
 }
 
@@ -255,7 +295,12 @@ header .info-bar {
 
 #about {
     margin: 0px 0px 30px 0px;
+}
+
+#about,
+#about .desc {
     padding: 10px;
+    padding-left: 0px;
 }
 
 #about h2 {
@@ -268,7 +313,6 @@ header .info-bar {
     border: 4px dashed black;
     border-left: 0px;
     border-right: 0px;
-    padding: 10px;
 }
 
 
@@ -336,7 +380,6 @@ header .info-bar {
 /*Footer
   --------------------------------------------------------- */  
 footer {
-    width: 960px;
-    margin: 20px auto 0px auto;
+    margin: 0px auto 0px auto;
     background: lightgrey;
 }
