@@ -17,13 +17,22 @@
 */
 ?>
 <?php get_header() ?>
-       <section id="body">
-	  <?php while( have_posts() ) : the_post() ?>
-          <h2><?php the_title(); ?></h2>
-          <div><?php the_content(); ?></div>
-	  <?php get_template_part( 'content', 'single' ) ?>
-	  <?php previous_post_link( "%link", __('Prev') ) ?>
-	  <?php next_post_link( "%link", __('Next') ) ?>
-          <?php endwhile; ?>
-       </section>
+<section id="body">
+  <section id="main">
+    <?php while( have_posts() ) : the_post() ?>
+    <article class="content">
+      <h2><?=bloginfo('name')?></h2>
+      <a href="<?php the_permalink() ?>"><h3><?php the_title(); ?></h3></a>
+      <div class="story"><?php the_content(); ?></div>
+      <?php get_template_part( 'content', 'single' ) ?>
+      <?php previous_post_link( "%link", __('Prev') ) ?>
+      <?php next_post_link( "%link", __('Next') ) ?>
+    </article>
+    <?php endwhile; ?>
+  </section>
+  <section id="side">
+
+  </section>
+  <div style="clear:both"></div>
+</section>
 <?php get_footer() ?>

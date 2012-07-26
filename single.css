@@ -1,0 +1,14 @@
+
+#side {
+    border: 1px dashed red;
+    min-height: 60px;
+}
+
+#main .content {
+    padding-left: 10px;
+}
+
+#main .story {
+
+    text-indent: 10px;
+}
