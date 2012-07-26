@@ -131,6 +131,11 @@ function posts_custom_column_views($column_name, $id){
     }
 }
 
+/*
+  View Counter System
+  Thanks to wp-snippets.com
+  source: http://wp-snippets.com/post-views-without-plugin/
+*/
 /* function to display number of posts. */
 function getPostViews($postID){
     $count_key = 'post_views_count';
@@ -155,6 +160,137 @@ function setPostViews($postID) {
         $count++;
         update_post_meta($postID, $count_key, $count);
     }
+}
+
+/*
+add_filter('manage_posts_columns', 'posts_column_views');
+add_action('manage_posts_custom_column', 'posts_custom_column_views',5,2);
+function posts_column_views($defaults){
+    $defaults['post_views'] = __('Views');
+    return $defaults;
+}
+function posts_custom_column_views($column_name, $id){
+if($column_name === 'post_views'){
+        echo getPostViews(get_the_ID());
+    }
+}
+*/
+
+
+/*
+  Portable Layout Management System (PLMS)
+  CopyRight JzL (c) 2012
+  All rights Reserved
+  
+  Data structure for layout:
+
+  Unit : <"em" | "px" | "%">
+  
+  box : {
+    type : <"root" | "tile" | "box">
+    w: <n>
+    h: <n>
+    uw: <x>    #Unit for w
+    uh: <x>    #Unit for h
+    children: [ box, box, box, ... ]
+  }
+
+  #Wordpress specific types
+  box.type == "tile" : {
+    func: <"cat" | "widget">
+    id : <n> #An ID to identify the resource involved    
+  }
+
+*/
+
+function print_layout_html( $box, &$p = array() ) {
+  static $ignore_prop = array( "w", "h", "children" );
+
+  $class = is_string($p['box_class']) ? $p['box_class'] : "box";
+  $size = ""; $margin = "";
+    
+  $tabc = &$p['tab_count'];
+  $tabc = is_numeric($tabc) && $tabc > 0 ? $tabc : 0;
+  $tabstr = str_repeat("\t", $tabc++);
+  
+  /* Check if box data is valid */
+  if( is_array($box) ) {
+    if( !is_string($box['type']) || strlen($box['type']) <= 0 )
+      $box['type'] = "box";
+    extract( $box, EXTR_PREFIX_ALL, "b" );
+  } else {
+    return;
+  }
+
+  /* Set size if not container */
+  if( count($b_children) == 0 ) {
+    $size = sprintf('width:%s;height:%s', $b_w, $b_h);
+  }
+
+  /* Set classname */
+  if( $b_type != "box" ) {
+    $c_name = $b_type."_class";
+    if( is_string($p[$c_name]) )
+      $class = "$class ".$p[$c_name];
+  }
+
+  /* Print out element */
+  if( $b_type != "root" ) {
+    ob_start();
+    printf("$tabstr<section class='$class' style='$size' />\n");
+    foreach( $box as $k=>$v ) {
+      /* And each property */
+      if( in_array($k,$ignore_prop) || is_array($v) ) continue;
+      printf("$tabstr\t<input type='hidden' name='%s' value='%s'/>\n", $k, $v);
+    }
+    /* Custom callbacks to display whatever else is needed */
+    $c_name = $b_type."_cb";
+    $r = false;
+    if( is_callable($p[$c_name]) ) {
+      $r = $p[$c_name]( $box, $p );
+      if( is_string($r) ) print $r;
+      print "\n";
+    }
+    /* Output buffered info */
+    if( $r !== false ) {
+      ob_end_flush();
+    }
+  }
+
+  /* Process Children */
+  if( is_array( $b_children ) )
+    foreach( $b_children as $i=>$c ) {
+      print_layout_html( $c, $p );
+    }
+
+  /* Terminate element */
+  printf("%s</section>\n", str_repeat("\t", --$tabc));
+}
+
+function layout_map( $layout, $cb, $args = array() ) {
+  if( is_callable($cb) ) {
+    array_unshift($args,$layout);
+    calL_user_func_array($cb,$args);
+    array_shift($args);
+  } else {
+    return;
+  }
+
+  if( is_array( $layout['children'] ) )
+    foreach( $layout['children'] as $i=>$k )
+      layout_map( $k, $cb, $args );
+}
+
+function get_empty_cat_ids( $layout, &$list = null ) {
+  if( $list === null ) $list = get_all_category_ids();
+  layout_map( $layout, create_function( '$a,&$b',
+					'$i = array_search( $a["id"], $b );'.
+					'if( $a["type"] == "tile" &&'.
+					'    $a["func"] = "cat" &&'.
+					'    is_numeric($i) && $i >= 0 ) {'.
+					'  unset( $b[$i] );}'
+					), array(&$list) );
+  return $list;
 }
 
 
