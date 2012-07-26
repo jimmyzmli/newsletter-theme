@@ -18,6 +18,7 @@
 ?>
       <footer>
 	Copyright (C) 2012 JzL
-      </footer> 
+      </footer>
+      <?php wp_footer() ?>
    </body>
 </html>

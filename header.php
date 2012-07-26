@@ -16,6 +16,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+$prefix = get_template_directory_uri();
+
 function nws_get_title() {
   if( is_single() ) {
     single_post_title();
@@ -45,45 +47,47 @@ if( is_singular() ) {
 <!DOCTYPE html>
 <html <?php language_attributes() ?>>
   <head>
-    <link href="<?php bloginfo('stylesheet_url') ?>" rel="stylesheet"/>
     <meta http-equiv="content-type" content="<?php bloginfo('html_type') ?>" charset="<?php bloginfo('charset') ?>"/>
     <title><?php nws_get_title(); ?></title>
-    <?php wp_head() ?>
     <link rel="alternative" type="application/rss+xml" href="<?php bloginfo('rss2_url') ?>" title="News"/>
     <link rel="alternative" type="application/rss+xml" href="<?php bloginfo('comments_rss2_url') ?>" title="Comments"/>
     <link rel="pingback" href="<?php bloginfo('pingback_url') ?>"/>
+    <!-- Theme Style Loading -->
+    <link href="<?php bloginfo('stylesheet_url') ?>" rel="stylesheet"/> <!-- Main Stylesheet -->
+    <?php if( is_single() ) : ?><link rel="stylesheet" href="<?=$prefix?>/single.css"/><?php endif; ?>
+    <?php wp_head(); ?>
   </head>
   <body id="page">
-      <div id="page-bg">
-        <div class="seg1"/></div>
-        <div class="seg2"/></div>
-        <div class="seg3"></div>
+    <div id="page-bg">
+      <div class="seg1"></div>
+      <div class="seg2"></div>
+      <div class="seg3"></div>
+    </div>
+    <header>
+      <div id="top-banner">
+	<img src="http://placehold.it/960x125"/>
       </div>
-      <header>
-	<div id="top-banner">
-	  <img src="http://placehold.it/960x125"/>
+      <nav id="top-nav">
+	<div id="branding">
+	  <?php bloginfo('name') ?>
 	</div>
-	<nav id="top-nav">
-	  <div id="branding">
-	    <?php bloginfo('name') ?>
-	  </div>
-	  <ul class="nav-bar-horizontal" id="nav-bar1">
-	    <li>News</li>
-	    <li>News</li>
-	    <li>News</li>
-	    <li>More...</li>
-	  </ul>
-	  <div id="search-box">
-	    <input type="text"/>
-	  </div>
-	  <div style="clear:both"></div>
-	</nav>
-	<nav class="nav-bar-horizontal" id="nav-bar2">
-	  <li>Home</li>
-	  <li>About</li>
-	  <div style="clear:both"></div>
-	</nav>	
-	<div class="info-bar">
-	  Hey I just met you, and this is crazy... but the server's down, for maintance baby
+	<ul class="nav-bar-horizontal" id="nav-bar1">
+	  <li>News</li>
+	  <li>News</li>
+	  <li>News</li>
+	  <li>More...</li>
+	</ul>
+	<div id="search-box">
+	  <input type="text"/>
 	</div>
-      </header>
+	<div style="clear:both"></div>
+      </nav>
+      <nav class="nav-bar-horizontal" id="nav-bar2">
+	<li>Home</li>
+	<li>About</li>
+	<div style="clear:both"></div>
+      </nav>	
+      <div class="info-bar">
+	Hey I just met you, and this is crazy... but the server's down, for maintance baby
+      </div>
+    </header>
