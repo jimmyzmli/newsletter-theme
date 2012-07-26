@@ -40,6 +40,10 @@ Liscense URI: http://www.gnu.org/licenses/
     text-decoration: underline;
 }
 
+html {
+    margin-top: 0px !important;
+}
+
 #page {
     margin: 0px;
     position: relative;
@@ -285,7 +289,6 @@ header .info-bar {
 
 #side {
     float: right;
-    /*border: 1px solid black;*/
     width: 300px;
     margin: 0px;
 }

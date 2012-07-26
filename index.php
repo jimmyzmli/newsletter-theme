@@ -36,8 +36,6 @@ function get_posts_for_cat( $cat, $n ) {
   }
 }
 
-$prefix = get_template_directory_uri();
-
 $opts = get_option("layout_opts");
 $opts = is_array($opts) ? $opts : array();
 $layout = is_array( $opts['layout'] ) ? $opts['layout'] : array();
