@@ -2,6 +2,12 @@
   --------------------------------------------------------- */
 @import url('common.css');
 
+.box {
+    border: 1px solid red;
+    background: white;
+    padding: 5px;
+}
+
 #body {
     width: 1024px;
     margin: 20px auto 0px auto;
@@ -17,7 +23,7 @@
 /*Layout Tool
   --------------------------------------------------------- */
 
-.tile-cat {
+.box-cat {
     min-height: 90px;
     float: left;
     margin: 0px 0px 10px 0px;
@@ -25,61 +31,73 @@
     background: lightblue;
 }
 
-.tile-cat .cat-title {
+.box-cat .cat-title {
     margin: 0px;
     font-weight: bold;
     font-size: 20px;
 }
 
-/*Single tiles
+/*Single boxs
   -------------------------------------- */
 
-.tile-cat .tile {
+.box-cat .box {
     border: 1px solid black;
     margin: 10px 0px;
 }
 
-.tile {
+.hover {
+    border: 1px dashed grey;
+}
+
+.box {
     float: left;
     background: lightgrey;
     text-align: center;
     font-size: 30px;
     line-height: 100%;
-    height: 50px;
-    padding: 0px;
+    min-height: 50px;
+    min-width:50px;
 }
 
-.quart-tile {
+.quart-box {
     width: 118px;
 }
-.half-tile {
+.half-box {
     width: 238px;
 }
-.full-tile {
+.full-box {
     width: 478px;
 }
 
-/*Layout tile
+/*Layout box
   -------------------------------------- */
-#tile-main {
+#box-main {
     float: left;
-    width: 484px;
+    width: 1000px;
     min-height: 380px;
     border: 3px dashed grey;
     padding: 0px;
     padding-bottom: 50px;
 }
 
+.box:not(.tile) {
+    background: lightblue;
+}
+
+#box-main {
+    background: white;
+}
+
 /*Building block board
   -------------------------------------- */
 
-#tile-board {
+#box-board {
     width: 500px;
     float: right;
     border: 1px solid black;
 }
 
-#tile-board .tile {
+#box-board .box {
     margin: 10px;
 }
 
@@ -101,7 +119,7 @@
 
 /*Category Check list
   -------------------------------------- */
-#cat-list {
+#box-hidden {
     float: right;
     border: 1px solid black;
     width: 500px;

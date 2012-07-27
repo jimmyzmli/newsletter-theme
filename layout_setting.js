@@ -1,213 +1,375 @@
-$(function() {
+/*
+	Copyright (c) 2012 Jimmy Li (JzL)
 
-    var global = {};
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-    global.lastDrop = 0;
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    global.millitime = function() {
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
+  Data structure for layout:
+
+  Unit : <"em" | "px" | "%">
+  
+  box : {
+    type : <"root" | "tile" | "box">
+    w: <n | "x"> #The special character "x" means extensible
+    h: <n | "x"> 
+    children: [ box, box, box, ... ]
+  }
+
+  #Wordpress specific types
+  box.type == "tile" : {
+    func: <"cat" | "widget">
+    id : <n> #An ID to identify the resource involved    
+  }
+*/
+
+jQuery(function($) {
+
+    var g = {};
+    window.global = g;
+
+    g.tile_class = ".tile";
+    g.cat_class=".cat";
+    
+    g.lastDrop = 0;
+
+    g.millitime = function() {
 	return new Date().getTime();
     };
 
-    $.prototype.resetFloat = function() {
-	var w = $(this).css('width'), h = $(this).css('height');
-	$(this).removeAttr('style').css('position','relative');
-	/*Save special attribute height */
-	if( $(this).is(".tile") ) {
-	    $(this).height(h);
+    $.prototype.layoutAttr = function(a,b) {
+	var n = $(">[name='"+a+"']:first",this)[0];
+	if( typeof(b) == "undefined" ) {
+	    /* Set some defaults */
+	    if( typeof(n) == "undefined" || typeof(n.value) == "undefined" ) {
+		if( a == "type" ) return "box";
+		else return;
+	    }
+	    return n.value;
+	} else {
+	    if( typeof(n) == "undefined" ) {
+		var s = $("<input/>").attr("type","hidden");
+		$(this).prepend( s.attr("name",a).attr("value",b) );
+	    } else {
+		n.value = b;
+	    }
+	    return $(this);
 	}
+    };
+
+    $.prototype.layoutType = function( t ) {
+	return $(this).layoutAttr("type") == t;
+    };
+
+    $.prototype.isSiblingTo = function( tgt ) {
+	var that = this, found = false;
+	$(this).siblings().each( function() {
+	    if( $(this)[0] === $(tgt)[0] ) found = true;
+	    return !found;
+	});
+	return found;
+    };
+
+    $.prototype.resetFloat = function() {
+	var w = $(this).width(), h = $(this).height();
+	$(this).removeAttr('style').removeClass('hover').css('position','relative');
+	/*Save special attribute height */
+	if( $(this).layoutType("tile") )  $(this).height( h );
+	if( 1 ) $(this).width( w );
 	return $(this);
     };
 
-    global.moveTile = function(drop, drag) {
-	if( global.millitime() - global.lastDrop < 150 ) {
+    g.splitTileRows = function( c, cw ) {
+	if( typeof(c) == "undefined" ) return;
+
+	c.rows = []; c.rw = []; c.mw = 0; c.i = 0;
+	var rh = 50; /* no block should be smaller than one row */
+
+	$('>.box',c).each( function() {
+	    var size = $(this).layoutAttr('size');
+	    var n = Math.floor( $(this).height()/rh );
+	    
+	    for(var j=c.i;j<c.i+n;j++) {
+		if( typeof(c.rows[j]) == "undefined" ) { c.rows[j] = []; c.rw[j] = cw; }
+		c.rows[j].push( this );
+	    }
+
+	    if( typeof(size) == "undefined" ) {
+		g.splitTileRows( this, c.rw[c.i] );
+	    } else {
+		if( c.rw[c.i]+(1/+size) >= 1 ) {
+		    c.i++;
+		} else {
+		    c.rw[c.i] += 1/+size;
+		}
+		if( c.rw[c.i]-cw > c.mw ) c.mw = c.rw[c.i]-cw;
+	    }
+	});
+	//if( !$(c).is(".boxroot") ) console.log( c, c.rows );
+    };
+
+    g.resizeTileWidth = function( c, cw ) {
+
+	for( i in c.rows ) {
+	    var w = cw;
+	    //console.log( c.rows[i] );
+	    console.log( "-------------------------------" );
+	    for(var j in c.rows[i] ) {
+		var pad = $(c.rows[i][j]).outerWidth( true ) - $(c.rows[i][j]).width();
+		w -= pad; 
+	    }
+	    for(var j in c.rows[i] ) {
+		console.log( c.rows[i][j] );
+		//if( typeof(k) == "undefined" ) continue;
+		var k = c.rows[i][j];
+		var size = $(k).layoutAttr('size');
+		var r = (1/+size);
+		if( k.resized != 1 ) {
+		    if( typeof(size) == "undefined" ) {
+			//console.log( k, w * k.mw );
+			$(k).width( w * k.mw );
+			console.log("||||||||||||||||||||||||||||||||");
+			g.resizeTileWidth( k, w );
+			console.log("||||||||||||||||||||||||||||||||");
+		    } else {
+			$(k).width( w * r );
+		    }
+		    k.resized = 1;
+		}
+	    }
+	}
+	$(">.box",c).each( function() { delete this.resized; } );
+    };
+
+    g.adjustTileWidth = function( c ) {
+	if( typeof(c) == "undefined" ) return;
+	g.splitTileRows( c, 0 );
+	//console.log( c.rows );
+	g.resizeTileWidth( c, $(c).width() );
+    };
+
+    g.moveBox = function(drop, drag) {
+	if( g.millitime() - g.lastDrop < 150 ) {
 	    /* Probably a duplicate event */
 	    return false;
 	}else {
-	    global.lastDrop = global.millitime();
+	    g.lastDrop = g.millitime();
 	}
 
-	if ($(drag).hasClass("tile-cat")) {
-	    /* Moving an entire category */
-	    if( $(drop).hasClass("tile-cat") ) {
-		/* Dropped category on another category */
-		if( $(drop).index() < $(drag).index() ) {
-		    $(drop).before( $(drag).detach() );
-		}else {
-		    $(drop).after( $(drag).detach() );
-		}
-		$(drag,drop).resetFloat();
-	    }else if( $(drop).hasClass("tile-section") ) {
-		/* Dropping to entire section */
+	/* Check for special draggables */
+	var parentName = $(drag).parents("#box-board").attr('id');
+	if( parentName == "box-board" ) {
+	    /* Copying box from building blocks */
+	    drag = $(drag).clone( );
+	    $(drag)
+		.draggable(g.tileDraggableProperties)
+	    	.resizable( $(drag).layoutType("tile") ?
+			    g.tileResizableProperties : g.boxResizableProperties )
+	    	.droppable(g.tileDroppableProperties);
+	}
+
+	if ( ( $(drag).isSiblingTo(drop) && $(".box",drop).size() > 0 ) ||
+	     $(drop).layoutType("tile") ) {
+	    /* Dropping to sibling */
+	    if( $(drop).index() < $(drag).index() ) {
+		$(drop).before( $(drag).detach() );
+	    }else {
+		$(drop).after( $(drag).detach() );
+	    }
+	}else {
+	    /* Dropping to container */
+	    if( !$(drop).layoutType("tile") ) {
 		$(drop).append( $(drag).detach() );
-		$(drag,drop).resetFloat();
-	    }
-	}else if( $(drag).is(".tile") ) {
-	    /* Moving a tile */
-	    var parentName = $(drag).parents("#tile-main,#tile-board").attr('id');
-	    if( parentName == "tile-board" ) {
-		/* Copying tile from building blocks */
-		drag = $(drag).clone();
-		$(drag)
-		    .draggable(global.tileDraggableProperties)
-		    .droppable(global.tileDroppableProperties)
-		    .resizable(global.tileResizableProperties);
-	    }
-	    if( $(drop).hasClass("tile-cat") ) {
-		/* Dropping tile on category */
-		$(drop).append( $(drag).detach().resetFloat() );
-	    }else if( $(drop).is(".tile") ) {
-		/* Dropping tile on tile */
-		if( $(drop).index() < $(drag).index() ) {
-		    $(drop).before( $(drag).detach() );
-		}else {
-		    $(drop).after( $(drag).detach() );
-		}
-		$(drag,drop).resetFloat();
-	    }else if( $(drop).hasClass("tile-section") ) {
-		/* Dropping tile on entire section */
 	    }
 	}
+
+	$(drag,drop).resetFloat();
+	
+	/* Adjust width to fit */
+	if( $(drop).is(".boxroot") ) {
+	    g.adjustTileWidth( drop );
+	} else {
+	    g.adjustTileWidth( $(drop).parents(".boxroot")[0] );
+	}
     };
+
+
     
-    /* These are the tiles on the building block board */
-    $("#tile-board .tile").draggable({
+    /* These are the boxs on the building block board */
+    $("#box-board .box").draggable({
 	revert: "invalid",
 	helper:"clone",
     });
 
-    /* These are the tiles on the layout panel */
-    global.tileDraggableProperties = {
+    /* These are re-usable properties for clones of the mother tiles (on #box-board) */
+    g.tileDraggableProperties = {
 	revert: "invalid"
     };
     
-    global.tileDroppableProperties = {
+    g.tileDroppableProperties = {
 	greedy: true,
 	tolerance: "pointer",
-	accept: function(drag) {
-	    return !drag.is(".tile-cat")
-	},
 	drop: function(e, ui) {
-	    global.moveTile( this, ui.draggable );
+	    g.moveBox( this, ui.draggable );
 	    $(this).resetFloat();
 	},
 	over: function() {
-	    $(this).css('border','1px dashed grey');
+	    $(this).addClass("hover");
 	},
 	out: function() {
 	    $(this).resetFloat();
 	}
     };
 
-    global.tileResizableProperties = {
-	handles: 'n,s',
-	start: function() {
-	    if( typeof(this.placeholder) != "undefined" ) {
-		$(this.placeholder).remove();
-		delete this.placeholder;
-	    }
-	    
-	    this.placeholder = $("<div>")
-		.width( $(this).width() ).height( $(this).height() )
-		.css('float', $(this).css('float') ).css('position', 'static' )
-	    	.css('visibility','hidden');
-	    $(this).before( this.placeholder );
-	},
-	stop: function() {
-	    $(this).resetFloat();
+    g.resizeStartPlaceholder = function() {
+	if( typeof(this.placeholder) != "undefined" ) {
 	    $(this.placeholder).remove();
 	    delete this.placeholder;
 	}
+	this.placeholder = $("<div>")
+	    .width( $(this).width() ).height( $(this).height() )
+	    .css('float', $(this).css('float') ).css('position', 'static' )
+	    .css('visibility','hidden');
+	$(this).before( this.placeholder );
     };
 
-    $("#tile-main .tile,#cat-list .tile").draggable(
-	global.tileDraggableProperties
-    ).droppable(
-	global.tileDroppableProperties
-    ).resizable(
-	global.tileResizableProperties
-    );
+    g.resizeStopPlaceholder = function() {
+	$(this).resetFloat();
+	$(this.placeholder).remove();
+	delete this.placeholder;
+    };
+    
+    g.tileResizableProperties = {
+	handle: "n,s,w,e",
+	grid: [62,10],
+	start: g.resizeStartPlaceholder,
+	stop: g.resizeStopPlaceholder
+    };
 
-    /* These are the layout cateogries and */
-    /* The category list categories */
 
-    $("#tile-main .tile-cat,#cat-list .tile-cat").draggable({
-	revert: "invalid"
-    });
+    /* All tiles */
+    $("#box-main "+g.tile_class+",#box-hidden "+g.tile_class)
+	.draggable(
+	    g.tileDraggableProperties
+	).droppable(
+	    g.tileDroppableProperties
+	).resizable(
+	    g.tileResizableProperties
+	);
 
-    $("#tile-main .tile-cat,#cat-list .tile-cat").droppable({
-	tolerance: "pointer",
-	drop: function(e, ui) {
-	    global.moveTile( this, ui.draggable );
-	    $(this).resetFloat();
-	},
-	over: function() {
-	    $(this).css('border','1px dashed grey');
-	},
-	out: function() {
-	    $(this).resetFloat();
-	}
-    });
+    /* TL;DR Non-tiles/containers */
+    /* These are the layout and cateogory box containers (including category boxes) */
+    /* Excluding tiles */
+    $("#box-main .box:not("+g.tile_class+"),#box-hidden .box:not("+g.tile_class+")")
+	.draggable({
+	    revert: "invalid"
+	}).droppable({
+	    tolerance: "pointer",
+	    greedy: true,
+	    drop: function(e, ui) {
+		g.moveBox( this, ui.draggable );
+		$(this).resetFloat();
+	    },
+	    over: function() {
+		$(this).addClass("hover");
+	    },
+	    out: function() {
+		$(this).resetFloat();
+	    }
+	});
+    /* Resizable Containers */
+    g.boxResizableProperties = g.tileResizableProperties;
+    
+    $(".box:not("+g.tile_class+")")
+	.filter(function(){ return !$(this).parent().is("#box-board"); })
+	.resizable(
+	    g.boxResizableProperties
+	);
 
-    /* The layout panel */
-    $("#tile-main").droppable({
+    /* The layout (main) panel */
+    $("#box-main").droppable({
 	greedy: true,
-	accept: ".tile-cat",
 	drop: function(e, ui) {
-	    global.moveTile( this, ui.draggable );
+	    g.moveBox( this, ui.draggable );
 	    ui.draggable.resetFloat();
+	    g.adjustTileWidth( this );
 	}
     });
+
 
     /* The category panel */
-    $("#cat-list").droppable({
+    $("#box-hidden").droppable({
 	greedy: true,
-	accept: ".tile-cat",
 	tolerance: "touch",
 	drop: function(e, ui) {
-	    if( ui.draggable.hasClass("tile-cat") ) {
-		/* Dropping a category */
-		global.moveTile( this, ui.draggable );
-	    }
+	    /* Dropping a category */
+	    g.moveBox( this, ui.draggable );
+	    g.adjustTileWidth( this );
 	}
     });
 
-    /* Remove all those that goes out of bounds */
+    /* Remove all that touches trash */
     $("#trash-bin").droppable( {
-	accept: "#cat-list .tile,#tile-main .tile",
+	accept: "#box-hidden .box:not("+g.cat_class+"),#box-main .box:not("+g.cat_class+")",
 	tolerance: "intersect",
 	drop: function(e, ui) {
 	    ui.draggable.remove();
 	}
     });
 
-    global.getLayoutJSON = function( sect ) {
-	var r = [], done = [];
-	$(sect).children(".tile-cat").each( function() {
-	    var catID = $(this).children(".cat_ID").val();
-	    console.log( done );
-	    if( $.inArray(catID,done) >= 0 ) {
-		return;
-	    }else {
-		done.push( catID );
-	    }
-	    var cat = {
-		id: catID,
-		tiles: []
-	    };
-	    $(this).children(".tile").each(function() {
-		cat.tiles.push( {
-		    size: $(this).children(".tile-size").attr('value'),
-		    height: (+$(this).css("height")) * 2
-		});
-	    });
-	    r.push( cat );
+
+
+    g.adjustTileWidth( $("#box-board") );
+    g.adjustTileWidth( $("#box-hidden") );
+    g.adjustTileWidth( $("#box-main") );
+
+    /* Start parsing functions */
+
+    g.getLayoutObject = function( k, r ) {
+	var next_k = $(">.box",k);
+	/* Get property of current DOM object */
+	r.children = [];
+	$(">input[name]",k).each( function() {
+	    r[this.name] = this.value;
 	});
-	return JSON.stringify(r);
+	/* Get special properties */
+	if( $(next_k).size() == 0 ) {
+	    /* r.w = $(k).width(); */
+	    r.w = "0px"; /* Will use propotional width instead */
+	    r.h = $(k).height();
+	} else {
+	    r.w = "0px"; r.h = "0px"; /* Containers are "without dimensions" */
+	}
+	/* Go through child boxes */
+	$(next_k).each( function() {
+	    var p = {};
+	    g.getLayoutObject( this, p );
+	    r.children.push( p );
+	});
+	return r;	
+    }
+
+    g.getLayoutJSON = function( sect ) {
+	var r = {};
+	g.getLayoutObject( sect, r );
+	r.type = "root";
+	return JSON.stringify( r );
     }
     
     $("#form-ctl").bind("submit", function() {
-	$(this).children("#layout_field").val( global.getLayoutJSON("#tile-main") );
-	$(this).children("#hidden_layout_field").val( global.getLayoutJSON("#cat-list") );
+	$(this).children("#layout_field").val( g.getLayoutJSON("#box-main") );
+	$(this).children("#hidden_layout_field").val( g.getLayoutJSON("#box-hidden") );
 	return true;
     });
 

@@ -18,16 +18,50 @@
 ?>
 <?php
 
+function print_tile_html( $tile, &$p ) {
+  static $func_desc = array( "cat"=>"Cateogory Viewer", "widget"=>"Single Widget" );
+  static $catInfo = null;
+  if( $catInfo == null ) {
+    /* Organize Category info for ID lookup */
+    $catInfo = get_categories( array('hide_empty' => 0) );
+    $t = array();
+    foreach( $catInfo as $i=>$cat )
+      $t[$cat->cat_ID] = $cat;
+    $catInfo = $t;
+  }
+  print "1/".$tile["size"];
+  $func = $tile["func"]; $id = $tile["id"];
+  if( !isset($func_desc[$func]) ) {
+    return false;
+  }
+  print "<div class='title' >".$func_desc[$func]."</div>";
+  if( $func == "cat" && isset($catInfo[intval($id)]) ) {
+    $info = $catInfo[$id];
+    printf( "<div>%s</div>", $info->name );
+  } else {
+    return false;
+  }
+  return true;
+}
+
 $prefix = get_template_directory_uri();
 
 $opts = get_option("layout_opts");
 $opts = is_array($opts) ? $opts : array();
-$layout = is_array( $opts['layout'] ) ? $opts['layout'] : array();
-$hlayout = is_array( $opts['hidden_layout'] ) ? $opts['hidden_layout'] : array();
+$layout = is_array( $opts['layout'] ) ? $opts['layout'] : get_empty_layout();
+$hlayout = is_array( $opts['hidden_layout'] ) ? $opts['hidden_layout'] : get_empty_layout();
 
-$cats = get_cats($layout);
-$hcats = get_cats($hlayout);
-$hcats = array_merge($hcats,cat_inverse($hcats,$cats));
+$args = array( "box_class"=>"box", "tab_count" => 1, "tile_class"=>"tile", "cat_class"=>"cat", "tile_cb"=>"print_tile_html" );
+
+
+/* Get the not recorded categories also */
+$empty = get_empty_cat_ids($layout);
+$empty = get_empty_cat_ids($hlayout, $empty);
+if( $hlayout["type"] == "root" && is_array($hlayout["children"]) )
+  foreach( $empty as $i=>$catID ) {
+    $tile = array( "type"=>"tile", "func"=>"cat", "id"=>$catID, "size"=>"2");
+    array_push( $hlayout["children"], $tile);
+  }
 
 ?>
 
@@ -42,54 +76,33 @@ $hcats = array_merge($hcats,cat_inverse($hcats,$cats));
 <section id="body" class="clearfix">
   <section id="layout-panel" class="clearfix">
     <h2 class="title"><?=__("Layout",$theme)?></h2>
-    <section id="tile-main" class="clearfix tile-section">
-      <?php foreach( $cats as $i=>$c ) : ?>
-      <section class="tile-cat clearfix">
-	<h2 class="cat-title"><?=$c->name?></h2>
-	<input type="hidden" class="cat_ID" value="<?=$c->cat_ID?>"/>
-
-        <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : ?>
-        <section class="<?=get_size_name($tile['size'])?>-tile tile" style="height:<?=$tile['height']?>px">
-	  <input type="hidden" class="tile-size" value="<?=$tile['size']?>"/>
-	  1/<?=$tile['size']?>
-	</section>
-	<?php endforeach; ?>
-
-      </section>
-      <?php endforeach; ?>
+    <section id="box-main" class="clearfix box-section boxroot">
+      <?php print_layout_data( $layout, HTML, $args ); ?>
     </section>
-    <section id="tile-board" class="clearfix">
-      <section class="quart-tile tile">
-	<input type="hidden" class="tile-size" value="4"/>
+    <section id="box-board" class="boxroot clearfix">
+      <section class="box">
+	<input type="hidden" name="type" value="box"/>
+      </section>
+      <section class="quart-box box tile">
+	<input type="hidden" name="type" value="tile"/>
+	<input type="hidden" name="size" value="4"/>
 	1/4
       </section>
-      <section class="half-tile tile">
-	<input type="hidden" class="tile-size" value="2"/>
+      <section class="half-box box tile">
+	<input type="hidden" name="type" value="tile"/>
+	<input type="hidden" name="size" value="2"/>
 	1/2
       </section>
-      <section class="full-tile tile">
-	<input type="hidden" class="tile-size" value="1"/>
+      <section class="full-box box tile">
+	<input type="hidden" name="type" value="tile"/>
+	<input type="hidden" name="size" value="1"/>
 	1/1
       </section>
     </section>
     <section id="trash-bin"><?=__("Trash",$theme)?></section>
-    <section id="cat-list" class="clearfix tile-section">
+    <section id="box-hidden" class="clearfix box-section boxroot">
       <h2 class="title"><?=__("Categories",$theme)?></h2>
-      <?php foreach( $hcats as $c ) : ?>
-      <section class="tile-cat">
-
-	<h2 class="cat-title"><?=$c->name?></h2>
-	<input type="hidden" class="cat_ID" value="<?=$c->cat_ID?>"/>
-	
-        <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : ?>
-        <section class="<?=get_size_name($tile['size'])?>-tile tile">
-	  <input type="hidden" class="tile-size" value="<?=$tile['size']?>"/>
-	  1/<?=$tile['size']?>
-	</section>
-	<?php endforeach; ?>	
-
-      </section>
-      <?php endforeach; ?>
+      <?php print_layout_data( $hlayout, HTML, $args ) ?>
     </section>
   </section>
 
