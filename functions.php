@@ -203,7 +203,7 @@ if($column_name === 'post_views'){
 
 */
 
-function print_layout_html( $box, &$p = array() ) {
+function print_layout_data( $box, $mode, &$p = array() ) {
   static $ignore_prop = array( "w", "h", "children" );
 
   $class = is_string($p['box_class']) ? $p['box_class'] : "box";
@@ -223,8 +223,11 @@ function print_layout_html( $box, &$p = array() ) {
   }
 
   /* Set size if not container */
-  if( count($b_children) == 0 ) {
-    $size = sprintf('width:%s;height:%s', $b_w, $b_h);
+  if( strlen(trim($b_w)) > 0 && $b_w > 0 && $b_w != 'x') {
+    $size .= "width:$b_w;";
+  }
+  if( strlen(trim($b_h)) > 0 && $b_h > 0 && $b_h != 'x' ) {
+    $size .= "height:$b_h;";
   }
 
   /* Set classname */
@@ -260,11 +263,15 @@ function print_layout_html( $box, &$p = array() ) {
   /* Process Children */
   if( is_array( $b_children ) )
     foreach( $b_children as $i=>$c ) {
-      print_layout_html( $c, $p );
+      print_layout_data( $c, $mode, $p );
     }
 
   /* Terminate element */
   printf("%s</section>\n", str_repeat("\t", --$tabc));
+}
+
+function get_empty_layout() {
+  return array( 'type'=>"root", "children"=>array() );
 }
 
 function layout_map( $layout, $cb, $args = array() ) {
