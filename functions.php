@@ -15,6 +15,9 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+include("featured_widget.php");
+
 $theme = 'newsletter';
 load_theme_textdomain( $theme, TEMPLATEPATH, '/languages' );
 $locale = get_locale();
@@ -29,9 +32,18 @@ add_theme_support('post-thumbnails');
 /* Add setting pages */
 add_action( 'admin_init', 'theme_options_init' );
 add_action( 'admin_menu', 'theme_options_add_page' );
+add_action( 'widgets_init', 'theme_custom_widget_init' );
+register_sidebar( array(
+			'id' => 'sidebar-landing',
+			'description' => __('The sidebar for the landing page')
+			));
 
 function theme_options_init() {
   register_setting( 'layout_opts', 'layout_opts', 'validate_layout_opts' );
+}
+
+function theme_custom_widget_init() {
+  register_widget("FeaturedWidget");
 }
 
 function validate_layout_opts($opts) {
