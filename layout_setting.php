@@ -32,11 +32,12 @@ $hcats = array_merge($hcats,cat_inverse($hcats,$cats));
 ?>
 
 <link href="<?="$prefix/layout_setting.css"?>" rel="stylesheet"/>
-<link href="<?="$prefix/js/resizable.css"?>" rel="stylesheet"/>
+<link href="<?="$prefix/css/resizable.css"?>" rel="stylesheet"/>
 
 <script type="text/javascript" src="<?="$prefix/js/jquery.min.js"?>"></script>
 <script type="text/javascript" src="<?="$prefix/js/jquery-ui.min.js"?>"></script>
 <script type="text/javascript" src="<?="$prefix/js/json2.js"?>"></script>
+<script type="text/javascript" src="<?="$prefix/utils.js"?>"></script>
 <script type="text/javascript" src="<?="$prefix/layout_setting.js"?>"></script>
 
 <section id="body" class="clearfix">
@@ -46,11 +47,11 @@ $hcats = array_merge($hcats,cat_inverse($hcats,$cats));
       <?php foreach( $cats as $i=>$c ) : ?>
       <section class="tile-cat clearfix">
 	<h2 class="cat-title"><?=$c->name?></h2>
-	<input type="hidden" class="cat_ID" value="<?=$c->cat_ID?>"/>
+	<input type="hidden" name="cat_ID" value="<?=$c->cat_ID?>"/>
 
         <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : ?>
-        <section class="<?=get_size_name($tile['size'])?>-tile tile" style="height:<?=$tile['height']?>px">
-	  <input type="hidden" class="tile-size" value="<?=$tile['size']?>"/>
+        <section class="<?=get_size_name($tile['size'])?>-tile tile" style="height:<?=intval($tile['height'])*50?>px">
+	  <input type="hidden" name="tile-size" value="<?=$tile['size']?>"/>
 	  1/<?=$tile['size']?>
 	</section>
 	<?php endforeach; ?>
@@ -60,15 +61,15 @@ $hcats = array_merge($hcats,cat_inverse($hcats,$cats));
     </section>
     <section id="tile-board" class="clearfix">
       <section class="quart-tile tile">
-	<input type="hidden" class="tile-size" value="4"/>
+	<input type="hidden" name="tile-size" value="4"/>
 	1/4
       </section>
       <section class="half-tile tile">
-	<input type="hidden" class="tile-size" value="2"/>
+	<input type="hidden" name="tile-size" value="2"/>
 	1/2
       </section>
       <section class="full-tile tile">
-	<input type="hidden" class="tile-size" value="1"/>
+	<input type="hidden" name="tile-size" value="1"/>
 	1/1
       </section>
     </section>
@@ -83,7 +84,7 @@ $hcats = array_merge($hcats,cat_inverse($hcats,$cats));
 	
         <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : ?>
         <section class="<?=get_size_name($tile['size'])?>-tile tile">
-	  <input type="hidden" class="tile-size" value="<?=$tile['size']?>"/>
+	  <input type="hidden" name="tile-size" value="<?=$tile['size']?>"/>
 	  1/<?=$tile['size']?>
 	</section>
 	<?php endforeach; ?>	
