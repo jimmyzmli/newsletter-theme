@@ -23,16 +23,15 @@ jQuery( document ).ready( function($)
 				field_id     : field_id,
 				attachment_id: $this.attr('rel')
 			};
+
 		$.post( ajaxurl, data, function( r )
 		{
 			var res = wpAjax.parseAjaxResponse( r, 'ajax-response' );
 			if ( res.errors )
 				alert( res.responses[0].errors[0].message );
-			else {
+			else
 				$parent.remove();
-			}
 		}, 'xml' );
-	        $parent.remove();
 
 		return false;
 	} );
