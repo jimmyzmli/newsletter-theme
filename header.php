@@ -117,13 +117,15 @@ function output_page_nav_menu() {
     <link rel="pingback" href="<?php bloginfo('pingback_url') ?>"/>
     <!-- Theme Style Loading -->
     <link href="<?php bloginfo('stylesheet_url') ?>" rel="stylesheet"/> <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="<?=$prefix?>/slideshow.css"/>
     <?php if( strlen($barname) && file_exists(get_template_directory()."/$barname.css") ) : ?>
     <link rel="stylesheet" href="<?=$prefix.'/'.$barname.'.css'?>"/>
     <?php endif; ?>
     <!-- Script Loading -->
     <script type="text/javascript" src="<?=$prefix?>/js/jquery.min.js"></script>
+    <script type="text/javascript" src="<?=$prefix?>/js/jquery-slides.min.js"></script>
     <script type="text/javascript" src="<?=$prefix?>/utils.js"></script>    
-    <script type="text/javascript" src="<?=$prefix?>/header.js"></script>    
+    <script type="text/javascript" src="<?=$prefix?>/header.js"></script>
     <?php wp_head(); ?>
   </head>
   <body id="page">

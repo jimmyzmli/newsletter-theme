@@ -52,6 +52,10 @@ register_sidebar( array(
 register_nav_menu( 'primary_menu', 'The main menu at top' );
 register_nav_menu( 'secondary_menu', 'A secondary menu' );
 
+
+add_image_size( 'slideshow', 450, 260 , false );
+add_image_size( 'featured_thumb', 70, 70, true );
+
 function theme_custom_metabox_init() {
   $post_fields = array(
 		  array(
