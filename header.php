@@ -121,7 +121,8 @@ function output_page_nav_menu() {
     <?php if( is_single() ) : ?><link rel="stylesheet" href="<?=$prefix?>/single.css"/><?php endif; ?>
     <!-- Script Loading -->
     <script type="text/javascript" src="<?=$prefix?>/js/jquery.min.js"></script>
-    <script type="text/javascript" src="<?=$prefix?>/header.js"></script>
+    <script type="text/javascript" src="<?=$prefix?>/utils.js"></script>    
+    <script type="text/javascript" src="<?=$prefix?>/header.js"></script>    
     <?php wp_head(); ?>
   </head>
   <body id="page">

@@ -16,6 +16,24 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+function get_posts_for_cat( $cat, $n ) {
+  if( !is_numeric($cat) )
+    if( is_string( $cat ) ) 
+      $cat = get_cat_ID( $cat_name );
+  if( is_numeric($cat) ) {
+    $args = array(
+		  'category' => intval($cat),
+		  'numberposts' => $n,
+		  'orderby' => 'post_view_count',
+		  'order' => 'ASC'
+		  );
+    $posts = get_posts( $args );
+    return $posts;
+  }else {
+    return array();
+  }
+}
+
 class FeaturedWidget extends WP_Widget {
   private static $INFO = array(
 			       'classname'=>'FeaturedWidget',
@@ -41,7 +59,7 @@ class FeaturedWidget extends WP_Widget {
 
   function widget( $args, $c ) {
     ?>
-    <section id="top-spotlight">
+    <section class="featured">
       <h2>Featured</h2>
       <?php foreach( get_posts_for_cat('General',2) as $i=>$post ) : setup_postdata($post) ?>
       <article class="promo-story">
@@ -49,7 +67,7 @@ class FeaturedWidget extends WP_Widget {
 	<section class="promo-title">
 	  <a href="<?php the_permalink() ?>"><?php the_title() ?></a>
 	</section>
-	<section class="promo-desc" style="display:none">
+	<section class="promo-desc">
 	  <?php the_excerpt() ?>
 	</section>
 	<div style="clear:both"></div>

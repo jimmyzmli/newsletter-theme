@@ -18,24 +18,6 @@
 ?>
 <?php
 
-function get_posts_for_cat( $cat, $n ) {
-  if( !is_numeric($cat) )
-    if( is_string( $cat ) ) 
-      $cat = get_cat_ID( $cat_name );
-  if( is_numeric($cat) ) {
-    $args = array(
-		  'category' => intval($cat),
-		  'numberposts' => $n,
-		  'orderby' => 'post_view_count',
-		  'order' => 'ASC'
-		  );
-    $posts = get_posts( $args );
-    return $posts;
-  }else {
-    return array();
-  }
-}
-
 $opts = get_option("layout_opts");
 $opts = is_array($opts) ? $opts : array();
 $layout = is_array( $opts['layout'] ) ? $opts['layout'] : array();
@@ -62,7 +44,7 @@ $cats = get_cats($layout);
     <section class="news-promo">
       <h2><?=$c->name?></h2>
       <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : ?>
-      <section class="news-tile-<?=get_size_name($tile['size'])?>">
+      <section class="news-tile-<?=get_size_name($tile['size'])?>" style="height:<?=intval($tile['height'])*150?>px">
 	<?php foreach( get_posts_for_cat($c->cat_ID,1) as $k=>$post ) : setup_postdata($post) ?>
 	<section class="promo-story">
 	  <img src="<?=get_the_post_thumbnail($p->id, array(300,200))?>" class="promo-img"/>

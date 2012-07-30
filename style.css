@@ -50,6 +50,11 @@ Liscense URI: http://www.gnu.org/licenses/
     text-decoration: underline;
 }
 
+.promo-title,
+.promo-desc {
+    overflow: hidden;
+}
+
 html {
     margin-top: 0px !important;
 }
@@ -356,6 +361,14 @@ header .info-bar {
     margin: 0px;
 }
 
+#main .promo-title {
+    height: 30px;
+}
+
+#main .promo-desc {
+    height: 120px;
+}
+
 #main .news-promo > h2 {
     background: #CCFFE6;
 }
@@ -430,42 +443,51 @@ header .info-bar {
 /*Spotlight/Featured
   -------------------------------------- */
 
-#top-spotlight {
+.featured {
     margin: 0px 0px 30px 0px;
 }
 
-#top-spotlight .promo-img {
+.featured .promo-img {
     float: left;
     height: 100px;
     width: 100px;
 }
 
-#top-spotlight .promo-title {
+.featured .promo-title {
     text-decoration: underline;
 }
 
-#top-spotlight .promo-title,
-#top-spotlight .promo-desc {
-    font-size: 21px;
+.featured .promo-title,
+.featured .promo-desc {
+    width: 190px;    
     float: left;
-    width: 190px;
     margin-left: 10px;
 }
 
-#top-spotlight .promo-story {
-    margin: 0px 0px 10px 0px;
+.featured .promo-title {
+    height: 40px;
+    font-size: 21px;
 }
 
-/*Side Updates bar
+.featured .promo-desc {
+    height: 150px;
+    font-size: 13px;
+}
+
+.featured .promo-story {
+    margin: 0px 0px 10px 0px;    
+}
+
+/*Side RSS bar
   -------------------------------------- */
 
-#side .updates {
+#side .widget_rss {
     border: 1px solid black;
     width: 300px;
     margin: 0px 0px 30px 0px;
 }
 
-#side .updates .promo-story {
+#side .widget_rss li {
     border: 1px dashed grey;
     margin: 5px 0px 5px 0px;
     background: lightblue;
@@ -478,15 +500,6 @@ header .info-bar {
 
 #side .updates .promo-desc {
     background: white;
-}
-
-/*Landing page small Widget Bar
-  -------------------------------------- */
-
-#side .survey-bar {
-    border: 1px solid black;
-    padding: 0px;
-    margin: 0px;
 }
 
 /*Footer
