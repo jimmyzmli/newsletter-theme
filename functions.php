@@ -16,7 +16,10 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+defined("ABSPATH") || exit;
+
 include("featured_widget.php");
+include("plugins/meta-box/meta-box.php");
 
 $theme = 'newsletter';
 load_theme_textdomain( $theme, TEMPLATEPATH, '/languages' );
@@ -27,20 +30,56 @@ if( is_readable($locale_file) )
   require_once( $locale_file );
 
 /* Theme Supports */
-add_theme_support('post-thumbnails');
+//add_theme_support('post-thumbnails');
+add_theme_support( 'custom-header' );
 
 /* Add setting pages */
 add_action( 'admin_init', 'theme_options_init' );
 add_action( 'admin_menu', 'theme_options_add_page' );
 add_action( 'widgets_init', 'theme_custom_widget_init' );
+add_action( 'admin_init', 'theme_custom_metabox_init' );
 
 register_sidebar( array(
 			'id' => 'sidebar-landing',
 			'description' => __('The sidebar for the landing page')
 			));
+register_sidebar( array(
+			'id' => 'sidebar-single',
+			'description' => __('The sidebar for a single post view')
+			));
+
 
 register_nav_menu( 'primary_menu', 'The main menu at top' );
 register_nav_menu( 'secondary_menu', 'A secondary menu' );
+
+function theme_custom_metabox_init() {
+  $post_fields = array(
+		  array(
+                        'name'          => 'Post Thumbnail',
+			'desc'          => 'A 70x70 post thumbnail',
+                        'id'            => "post_thumb",
+                        'type'          => 'plupload_image',
+			'multiple'      => false
+			),
+		  array(
+                        'name'          => 'Slideshow Image',
+			'desc'          => 'A 450x259 image for the slide show',
+                        'id'            => "post_banner_image",
+                        'type'          => 'plupload_image',
+			'multiple'      => false
+			)
+		  );
+  $meta_box = array(
+		    'id'            => 'post_thumb',
+		    'title'         => 'Featured Box Thumbnail',
+		    'pages'         => array( 'post' ),
+		    'fields'        => $post_fields
+		    );
+  if ( class_exists( 'RW_Meta_Box' ) ) {
+    new RW_Meta_Box( $meta_box );
+  }
+  
+}
 
 function theme_options_init() {
   register_setting( 'layout_opts', 'layout_opts', 'validate_layout_opts' );
@@ -64,8 +103,9 @@ function validate_layout_opts($opts) {
 
 function theme_options_add_page() {
   //add_utility_page( "Theme Options", "Theme Options", "edit_theme_options", "theme_utility_menu", "theme_options_do_page", "none");
-  add_menu_page( __( 'Theme Options', $theme ), __( "Theme Options", $theme), 'edit_theme_options', 'theme_main_options', "theme_main_menu_render" );
-  add_submenu_page( "theme_main_options", __("Layout",$theme), __("Layout",$theme), "edit_theme_options", "theme_layout_options", "theme_layout_menu_render");
+  //add_menu_page( __( 'Theme Options', $theme ), __( "Theme Options", $theme), 'edit_theme_options', 'theme_main_options', "theme_main_menu_render" );
+  //add_submenu_page( "theme_main_options", __("Layout",$theme), __("Layout",$theme), "edit_theme_options", "theme_layout_options", "theme_layout_menu_render");
+  add_theme_page( __("Layout",$theme), __("Layout",$theme), "edit_theme_options", "theme_layout_options", "theme_layout_menu_render");
 }
 
 function theme_main_menu_render() {
