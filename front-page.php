@@ -81,46 +81,11 @@ $cats = get_cats($layout);
   </section> <!-- #main -->
 
   <section id="side">
-    
     <section id="about">
       <h2>About <?=bloginfo('name')?></h2>
       <div class="desc">About here BLAH BLAH BLAH BLAH BLAH</div>
     </section>
-    
-    <section id="top-spotlight">
-      <h2>Featured</h2>
-      <?php foreach( get_posts_for_cat('General',2) as $i=>$post ) : setup_postdata($post) ?>
-      <article class="promo-story">
-	<img src="http://placehold.it/69x69" class="promo-img"/>
-	<section class="promo-title">
-	  <a href="<?php the_permalink() ?>"><?php the_title() ?></a>
-	</section>
-	<section class="promo-desc">
-	  <?php the_excerpt() ?>
-	</section>
-	<div style="clear:both"></div>
-      </article>
-      <?php endforeach; wp_reset_postdata(); ?>
-    </section>
-
-    <section class="updates">
-      <h2>Updates</h2>
-      <article class="promo-story">
-	<section class="promo-author">JzL</section>
-	<section class="promo-date">Mon Jul 23</section>		
-	<section class="promo-desc">TWITT TWITT. PFFTOOOOT.</section>
-      </article>
-      <article class="promo-story">
-	<section class="promo-author">JzL</section>
-	<section class="promo-date">Mon Jul 23</section>		
-	<section class="promo-desc">TWITT TWITT. PFFTOOOOT.</section>
-      </article>
-    </section>
-
-    <section class="survey-bar">
-      <h2>Surveys</h2>
-      ABCDEFG
-    </section>
+    <?php get_sidebar() ?>
   </section> <!-- #side -->
 <div style="clear:both"></div>
 </section> <!-- #body -->
