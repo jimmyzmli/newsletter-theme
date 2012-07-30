@@ -83,4 +83,24 @@ jQuery(function($) {
                              }
 			 });
     };
+
+
+    $.prototype.layoutAttr = function(a,b) {
+	var n = $(">[name='"+a+"']:first",this)[0];
+	if( typeof(b) == "undefined" ) {
+	    /* Set some defaults */
+	    if( typeof(n) == "undefined" || typeof(n.value) == "undefined" ) {
+		return;
+	    }
+	    return n.value;
+	} else {
+	    if( typeof(n) == "undefined" ) {
+		var s = $("<input/>").attr("type","hidden");
+		$(this).prepend( s.attr("name",a).attr("value",b) );
+	    } else {
+		n.value = b;
+	    }
+	    return $(this);
+	}
+    };
 });

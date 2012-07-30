@@ -28,6 +28,11 @@ $hlayout = is_array( $opts['hidden_layout'] ) ? $opts['hidden_layout'] : array()
 $cats = get_cats($layout);
 $hcats = get_cats($hlayout);
 $hcats = array_merge($hcats,cat_inverse($hcats,$cats));
+/*
+print "<pre>";
+var_dump($layout,$cats);
+print "</pre>";
+*/
 
 ?>
 
@@ -80,7 +85,7 @@ $hcats = array_merge($hcats,cat_inverse($hcats,$cats));
       <section class="tile-cat">
 
 	<h2 class="cat-title"><?=$c->name?></h2>
-	<input type="hidden" class="cat_ID" value="<?=$c->cat_ID?>"/>
+	<input type="hidden" name="cat_ID" value="<?=$c->cat_ID?>"/>
 	
         <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : ?>
         <section class="<?=get_size_name($tile['size'])?>-tile tile">
