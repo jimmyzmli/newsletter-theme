@@ -17,8 +17,11 @@
 */
 ?>
 <?php get_header() ?>
-<section id="body">
+<section id="body" class="clearfix">
   <section id="main">
+    <?php while( have_posts() ) : the_post() ?>
+    <h1><a href="<?=get_permalink(get_the_ID())?>"><?=get_the_title()?></a></h1>
+    <?php endwhile; ?>
   </section>
   <section id="side">
   </section>

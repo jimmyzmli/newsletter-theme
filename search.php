@@ -19,8 +19,13 @@
 <?php get_header() ?>
 <section id="body">
   <section id="main">
+    <h1 class="page-title"><?php printf( __( 'Search Results for: %s'), '<span>' . get_search_query() . '</span>' ); ?></h1>
+    <?php while( have_posts() ) : the_post() ?>
+    <h1><a href="<?=get_permalink(get_the_ID())?>"><?=get_the_title()?></a></h1>
+    <?php endwhile; ?>
   </section>
   <section id="side">
   </section>
+  <div style="clear:both"></div>
 </section>
 <?php get_footer() ?>
