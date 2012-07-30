@@ -21,6 +21,7 @@
   <section id="main">
     <?php while( have_posts() ) : the_post() ?>
     <article class="content">
+      <h2><?php var_dump(get_post_meta( get_the_id(), 'post_thumb', true))?></h2>
       <h2><?=bloginfo('name')?></h2>
       <a href="<?php the_permalink() ?>"><h3><?php the_title(); ?></h3></a>
       <div class="story"><?php the_content(); ?></div>
@@ -31,7 +32,7 @@
     <?php endwhile; ?>
   </section>
   <section id="side">
-
+    <?php get_sidebar() ?>
   </section>
   <div style="clear:both"></div>
 </section>
