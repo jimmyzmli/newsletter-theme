@@ -26,6 +26,12 @@ $slidelist = is_array($slidelist) ? $slidelist : array();
 foreach( $posts as $i=>$post )
     if( in_array( $post->ID, $slidelist ) ) unset($posts[$i]);
 
+function get_post_banner_img( $id ) {
+    $img_ID = get_post_meta( $id, 'post_banner_image', true );
+    $src = wp_get_attachment_image_src( $img_ID, 'full' )[0];
+    return is_string($src) ? $src : "";
+}
+
 ?>
 <style type="text/css">
   #control-board {
@@ -54,8 +60,8 @@ foreach( $posts as $i=>$post )
   .slider {
       margin-top: 30px;
       margin-bottom: 30px;
-      width: 960px;
-      height: 125px;
+      width: 450px;
+      height: 259px;
       border: 1px solid black;
   }
 
@@ -77,6 +83,7 @@ foreach( $posts as $i=>$post )
   }
 </style>
 <script type="text/javascript" src="<?=$prefix?>/js/jquery.min.js"></script>
+<script type="text/javascript" src="<?=$prefix?>/js/jquery-slides.min.js"></script>    
 <script type="text/javascript" src="<?=$prefix?>/js/json2.js"></script>
 <script type="text/javascript" src="<?=$prefix?>/utils.js"></script> 
 <script type="text/javascript">
@@ -84,7 +91,25 @@ foreach( $posts as $i=>$post )
 	var g = window;
 
 	g.updateSlide = function() {
-	    
+	    var info = [], root;
+	    root = $("<div>").addClass("slides_container");
+	    $(".slider").empty().append(root);
+	    $(".post-list:last li").each( function(){
+		var p = {
+		    post_ID : +$(this).layoutAttr("page_ID"),
+		    img: $(this).layoutAttr("img")
+		};
+		info.push( p );
+		$(root).append(
+		    $("<div>").append(
+			$("<img>").attr('src', p.img).width( 450 ).height( 259 )
+		    )
+		);
+	    } );
+
+	    $(".slider").slides({
+		
+	    });
 	};
 
 	$(".post-list li").click( function() {
@@ -111,16 +136,24 @@ foreach( $posts as $i=>$post )
 	    //console.log( JSON.stringify( list ) );
 	    return true;
 	};
+
+	g.updateSlide();
     });
 </script>
 <div class="slider">
+    <div class="promo-story">
+        <h2 class="promo-title"></h2>
+        <div class="promo-desc"></div>
+    </div>
 </div>
 <div id="control-board">
   <ul class="post-list" style="border:1px solid black">
     <h2 class="title">All Posts</h2>
     <?php global $post;  foreach( $posts as $i=>$post ) : setup_postdata( $post ) ?>
     <li>
-      <input type="text" name="img" value="<?=rwmb_meta('post_banner_img', array('type'=>'image'))?>"/>       <input type="hidden" name="post_ID" value="<?=get_the_ID()?>"/>
+
+      <input type="hidden" name="img" value="<?=get_post_banner_img(get_the_ID())?>"/>
+      <input type="hidden" name="post_ID" value="<?=get_the_ID()?>"/>
       <a><?php the_title(); ?></a>
     </li>
     <?php endforeach; ?>
@@ -133,7 +166,7 @@ foreach( $posts as $i=>$post )
     <h2 class="title">Slide Show Posts</h2>    
     <?php foreach( $slidelist as $i=>$post_ID ) : setup_postdata( ($post=get_post($post_ID)) ) ?>
     <li>
-      <input type="text" name="img" value="<?=rwmb_meta('post_banner_img', array('type'=>'image'))?>"/>
+      <input type="hidden" name="img" value="<?=get_post_banner_img(get_the_ID())?>"/>    
       <input type="hidden" name="post_ID" value="<?=get_the_ID()?>"/>
       <a><?php the_title(); ?></a>
     </li>
