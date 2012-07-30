@@ -19,7 +19,7 @@
 $prefix = get_template_directory_uri();
 $barname = null;
 if( is_single() ) {
-  $title = single_post_title();
+  $title = single_post_title("",false);
   $barname = "single";
 }else if( is_home() || is_front_page() ) {
   $title = get_bloginfo('name') . '|' . get_bloginfo('description');
@@ -30,7 +30,7 @@ if( is_single() ) {
 }else if( is_404() ) {
   $title = get_bloginfo('name') . ' | 404 - Not found';
 }else {
-  $title = get_bloginfo('name') . wp_title('|') . get_page_number();
+  $title = get_bloginfo('name') . wp_title('|',false) . get_page_number();
 }
 /* Exported names */
 $GLOBALS["barname"] = $barname;
@@ -61,7 +61,6 @@ class TopMenuWalker extends Walker_Nav_Menu {
 
   function end_lvl( &$out, $depth = 0 ) {
     $out .= '<div style="clear:both"></div>'.'</ul>';
-    //$out .= '</ul>';
   }
 }
 
@@ -118,7 +117,9 @@ function output_page_nav_menu() {
     <link rel="pingback" href="<?php bloginfo('pingback_url') ?>"/>
     <!-- Theme Style Loading -->
     <link href="<?php bloginfo('stylesheet_url') ?>" rel="stylesheet"/> <!-- Main Stylesheet -->
-    <?php if( is_single() ) : ?><link rel="stylesheet" href="<?=$prefix?>/single.css"/><?php endif; ?>
+    <?php if( strlen($barname) && file_exists(get_template_directory()."/$barname.css") ) : ?>
+    <link rel="stylesheet" href="<?=$prefix.'/'.$barname.'.css'?>"/>
+    <?php endif; ?>
     <!-- Script Loading -->
     <script type="text/javascript" src="<?=$prefix?>/js/jquery.min.js"></script>
     <script type="text/javascript" src="<?=$prefix?>/utils.js"></script>    
