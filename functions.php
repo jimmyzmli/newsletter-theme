@@ -33,10 +33,14 @@ add_theme_support('post-thumbnails');
 add_action( 'admin_init', 'theme_options_init' );
 add_action( 'admin_menu', 'theme_options_add_page' );
 add_action( 'widgets_init', 'theme_custom_widget_init' );
+
 register_sidebar( array(
 			'id' => 'sidebar-landing',
 			'description' => __('The sidebar for the landing page')
 			));
+
+register_nav_menu( 'primary_menu', 'The main menu at top' );
+register_nav_menu( 'secondary_menu', 'A secondary menu' );
 
 function theme_options_init() {
   register_setting( 'layout_opts', 'layout_opts', 'validate_layout_opts' );
