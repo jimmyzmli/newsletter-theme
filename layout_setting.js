@@ -1,15 +1,15 @@
 $(function() {
 
-    var global = {};
+    var g = {};
+    g.lastDrop = 0;
+    g.tileHeightUnit = 50;
 
-    global.lastDrop = 0;
-
-    global.millitime = function() {
+    g.millitime = function() {
 	return new Date().getTime();
     };
 
     $.prototype.resetFloat = function() {
-	var w = $(this).css('width'), h = $(this).css('height');
+	var w = $(this).width(), h = $(this).height();
 	$(this).removeAttr('style').css('position','relative');
 	/*Save special attribute height */
 	if( $(this).is(".tile") ) {
@@ -18,12 +18,32 @@ $(function() {
 	return $(this);
     };
 
-    global.moveTile = function(drop, drag) {
-	if( global.millitime() - global.lastDrop < 150 ) {
+    $.prototype.layoutAttr = function(a,b) {
+	var n = $(">[name='"+a+"']:first",this)[0];
+	if( typeof(b) == "undefined" ) {
+	    /* Set some defaults */
+	    if( typeof(n) == "undefined" || typeof(n.value) == "undefined" ) {
+		if( a == "type" ) return "box";
+		else return;
+	    }
+	    return n.value;
+	} else {
+	    if( typeof(n) == "undefined" ) {
+		var s = $("<input/>").attr("type","hidden");
+		$(this).prepend( s.attr("name",a).attr("value",b) );
+	    } else {
+		n.value = b;
+	    }
+	    return $(this);
+	}
+    };
+
+    g.moveTile = function(drop, drag) {
+	if( g.millitime() - g.lastDrop < 150 ) {
 	    /* Probably a duplicate event */
 	    return false;
 	}else {
-	    global.lastDrop = global.millitime();
+	    g.lastDrop = g.millitime();
 	}
 
 	if ($(drag).hasClass("tile-cat")) {
@@ -48,9 +68,9 @@ $(function() {
 		/* Copying tile from building blocks */
 		drag = $(drag).clone();
 		$(drag)
-		    .draggable(global.tileDraggableProperties)
-		    .droppable(global.tileDroppableProperties)
-		    .resizable(global.tileResizableProperties);
+		    .draggable(g.tileDraggableProperties)
+		    .droppable(g.tileDroppableProperties)
+		    .resizable(g.tileResizableProperties);
 	    }
 	    if( $(drop).hasClass("tile-cat") ) {
 		/* Dropping tile on category */
@@ -76,18 +96,18 @@ $(function() {
     });
 
     /* These are the tiles on the layout panel */
-    global.tileDraggableProperties = {
+    g.tileDraggableProperties = {
 	revert: "invalid"
     };
     
-    global.tileDroppableProperties = {
+    g.tileDroppableProperties = {
 	greedy: true,
 	tolerance: "pointer",
 	accept: function(drag) {
 	    return !drag.is(".tile-cat")
 	},
 	drop: function(e, ui) {
-	    global.moveTile( this, ui.draggable );
+	    g.moveTile( this, ui.draggable );
 	    $(this).resetFloat();
 	},
 	over: function() {
@@ -98,8 +118,9 @@ $(function() {
 	}
     };
 
-    global.tileResizableProperties = {
+    g.tileResizableProperties = {
 	handles: 'n,s',
+	grid: [g.tileHeightUnit,g.tileHeightUnit],
 	start: function() {
 	    if( typeof(this.placeholder) != "undefined" ) {
 		$(this.placeholder).remove();
@@ -120,11 +141,11 @@ $(function() {
     };
 
     $("#tile-main .tile,#cat-list .tile").draggable(
-	global.tileDraggableProperties
+	g.tileDraggableProperties
     ).droppable(
-	global.tileDroppableProperties
+	g.tileDroppableProperties
     ).resizable(
-	global.tileResizableProperties
+	g.tileResizableProperties
     );
 
     /* These are the layout cateogries and */
@@ -137,7 +158,7 @@ $(function() {
     $("#tile-main .tile-cat,#cat-list .tile-cat").droppable({
 	tolerance: "pointer",
 	drop: function(e, ui) {
-	    global.moveTile( this, ui.draggable );
+	    g.moveTile( this, ui.draggable );
 	    $(this).resetFloat();
 	},
 	over: function() {
@@ -153,7 +174,7 @@ $(function() {
 	greedy: true,
 	accept: ".tile-cat",
 	drop: function(e, ui) {
-	    global.moveTile( this, ui.draggable );
+	    g.moveTile( this, ui.draggable );
 	    ui.draggable.resetFloat();
 	}
     });
@@ -166,7 +187,7 @@ $(function() {
 	drop: function(e, ui) {
 	    if( ui.draggable.hasClass("tile-cat") ) {
 		/* Dropping a category */
-		global.moveTile( this, ui.draggable );
+		g.moveTile( this, ui.draggable );
 	    }
 	}
     });
@@ -180,11 +201,10 @@ $(function() {
 	}
     });
 
-    global.getLayoutJSON = function( sect ) {
+    g.getLayoutJSON = function( sect ) {
 	var r = [], done = [];
 	$(sect).children(".tile-cat").each( function() {
-	    var catID = $(this).children(".cat_ID").val();
-	    console.log( done );
+	    var catID = $(this).layoutAttr("cat_ID");
 	    if( $.inArray(catID,done) >= 0 ) {
 		return;
 	    }else {
@@ -196,19 +216,24 @@ $(function() {
 	    };
 	    $(this).children(".tile").each(function() {
 		cat.tiles.push( {
-		    size: $(this).children(".tile-size").attr('value'),
-		    height: (+$(this).css("height")) * 2
+		    size: $(this).layoutAttr("tile-size"),
+		    height: (+$(this).height())/g.tileHeightUnit
 		});
 	    });
 	    r.push( cat );
 	});
+	//console.log( JSON.stringify(r) );
 	return JSON.stringify(r);
     }
     
     $("#form-ctl").bind("submit", function() {
-	$(this).children("#layout_field").val( global.getLayoutJSON("#tile-main") );
-	$(this).children("#hidden_layout_field").val( global.getLayoutJSON("#cat-list") );
+	$(this).children("#layout_field").val( g.getLayoutJSON("#tile-main") );
+	$(this).children("#hidden_layout_field").val( g.getLayoutJSON("#cat-list") );
 	return true;
     });
+
+    /* Fit category titles */
+    $(".cat-title").scaleFontToFit();
+
 
 });
