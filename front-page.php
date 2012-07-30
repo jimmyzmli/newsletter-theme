@@ -18,28 +18,53 @@
 ?>
 <?php
 
+function get_post_banner_img( $id, $type = 'full') {
+    $img_ID = get_post_meta( $id, 'post_banner_image', true );
+    $src = wp_get_attachment_image_src( $img_ID, $type )[0];
+    return is_string($src) ? $src : "";
+}
+
 $opts = get_option("layout_opts");
 $opts = is_array($opts) ? $opts : array();
 $layout = is_array( $opts['layout'] ) ? $opts['layout'] : array();
 
 $cats = get_cats($layout);
 
+$posts = get_posts( array('meta_key' => 'post_banner_image') );
+$slidelist = get_option( 'slide_opts' );
+$slidelist = is_array($slidelist) ? $slidelist : array();
+
+foreach( $posts as $i=>$post )
+    if( in_array( $post->ID, $slidelist ) ) unset($posts[$i]);
+
+$slides = array();
+foreach( $slidelist as $i=>$postID ) {
+  $post = get_post( $postID );
+  $p = new stdClass;
+  $catID = wp_get_post_categories( get_the_ID() )[0];
+  $catID = is_numeric($catID) && $catID >= 0 ? $catID : 0;
+  $catName = get_category( $catID )->name;
+  
+  setup_postdata( $post );
+  $p->img = get_post_banner_img($postID,'slideshow');
+  $p->post_ID = $postID;
+  $p->title = get_the_title();
+  $p->cat = $catName;
+  $p->desc = get_the_excerpt();
+
+  array_push( $slides, $p );
+}
 ?>
 <?php get_header(); ?>
+<script type="text/javascript">
+  var slidesInfo=<?=json_encode($slides)?>;
+  jQuery(function($) {
+      $(".slider").jslides( slidesInfo, {start:1} );
+  });
+</script>
 <section id="body">
   <section id="main">
-    <section id="top-promo">
-      <h2>Top News Story</h2>
-      <section class="promo-title">
-	<h2>News Title</h2>
-	<article class="promo-desc">
-	  NEWS NEWS NEWS NEWS NEWS LOL
-	</article>
-      </section>
-      <img src="http://placehold.it/450x259" class="promo-img"/>
-      <div style="clear:both"></div>
-    </section>
-
+    <section id="top-promo" class="slider"></section>
     <?php foreach( $cats as $i=>$c ) : ?>
     <section class="news-promo">
       <h2><?=$c->name?></h2>

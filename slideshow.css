@@ -1,0 +1,105 @@
+
+.slider {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 624px;
+    border: 1px solid red;
+    position: relative;
+}
+
+.slider .promo-story {
+    width: 624px;
+    height: 259px;
+    background: blue;
+}
+.slider .promo-title,
+.slider .promo-desc {
+    float: left;
+    width: 170px;
+    background: black;
+    color: white;
+}
+
+.slider .promo-title {
+    font-weight: bold;
+    height: 40px;
+}
+
+.slider .promo-desc {
+    height: 220px;
+}  
+
+.slider .promo-img{
+    float: right;
+    width: 450px;
+    height: 259px;
+    margin: 0px;
+}
+
+.slider .next,
+.slider .prev {
+    display: block;
+    position: absolute;
+    top: 50%;
+    height: 50px;
+    width: 50px;
+    margin-top: -25px;
+    z-index: 1000000;
+    
+    background: #707070;
+    text-indent: -100000px;
+    color:white;
+}
+.slider .next {
+    right: 0px;
+}
+.slider .prev {
+    left: 0px;
+}
+
+
+
+.slider .slider-topic {
+    display: block;
+    height: 30px;
+    width: 100%;
+
+    background: gainsboro;
+    line-height: 30px;
+    font-size: 20px;
+    color: #174F82;
+}
+
+.pagination {
+    height: 20px;
+    line-height: 20px;
+    margin: 0px;
+}
+
+.pagination li {
+    float: left;
+    margin: 0px;
+    margin-top: 10px;
+}
+
+.pagination li.current a {
+    background: black;
+}
+
+.pagination li a {
+    display: block;
+    text-indent: -10000px;
+    width: 10px;
+    height: 10px;
+    background:red;
+    margin: 0px;
+    margin-left: 3px;
+}
+
+.pagination {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 30px;
+    margin-right: 10px;
+}

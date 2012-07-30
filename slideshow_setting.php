@@ -26,9 +26,9 @@ $slidelist = is_array($slidelist) ? $slidelist : array();
 foreach( $posts as $i=>$post )
     if( in_array( $post->ID, $slidelist ) ) unset($posts[$i]);
 
-function get_post_banner_img( $id ) {
+function get_post_banner_img( $id, $type = 'full') {
     $img_ID = get_post_meta( $id, 'post_banner_image', true );
-    $src = wp_get_attachment_image_src( $img_ID, 'full' )[0];
+    $src = wp_get_attachment_image_src( $img_ID, $type )[0];
     return is_string($src) ? $src : "";
 }
 
@@ -57,13 +57,6 @@ function get_post_banner_img( $id ) {
        height: 30px;
       margin: auto auto;
   }
-  .slider {
-      margin-top: 30px;
-      margin-bottom: 30px;
-      width: 450px;
-      height: 259px;
-      border: 1px solid black;
-  }
 
   .post-list li {
       border: 1px dashed black;
@@ -81,7 +74,9 @@ function get_post_banner_img( $id ) {
       margin: auto auto;
       margin-top: 30px;
   }
+  
 </style>
+<link rel="stylesheet" href="<?=$prefix?>/slideshow.css"/>
 <script type="text/javascript" src="<?=$prefix?>/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?=$prefix?>/js/jquery-slides.min.js"></script>    
 <script type="text/javascript" src="<?=$prefix?>/js/json2.js"></script>
@@ -89,28 +84,6 @@ function get_post_banner_img( $id ) {
 <script type="text/javascript">
     jQuery( function($) {
 	var g = window;
-
-	g.updateSlide = function() {
-	    var info = [], root;
-	    root = $("<div>").addClass("slides_container");
-	    $(".slider").empty().append(root);
-	    $(".post-list:last li").each( function(){
-		var p = {
-		    post_ID : +$(this).layoutAttr("page_ID"),
-		    img: $(this).layoutAttr("img")
-		};
-		info.push( p );
-		$(root).append(
-		    $("<div>").append(
-			$("<img>").attr('src', p.img).width( 450 ).height( 259 )
-		    )
-		);
-	    } );
-
-	    $(".slider").slides({
-		
-	    });
-	};
 
 	$(".post-list li").click( function() {
 	    $(this).toggleClass("selected-post");
@@ -136,27 +109,45 @@ function get_post_banner_img( $id ) {
 	    //console.log( JSON.stringify( list ) );
 	    return true;
 	};
-
-	g.updateSlide();
+	var info = [];
+	
+	$(".post-list:last li").each( function(){
+					  var p = {
+					      post_ID : +$(this).layoutAttr("page_ID"),
+					      img: $(this).layoutAttr("img"),
+					      title: $(this).layoutAttr("title"),
+					      desc: $(this).layoutAttr("excerpt"),
+					      cat: $(this).layoutAttr("cat")
+					  };
+					  info.push( p );
+				      } );
+					  
+	$(".slider").jslides(info,{ start: 1 });
     });
 </script>
-<div class="slider">
-    <div class="promo-story">
-        <h2 class="promo-title"></h2>
-        <div class="promo-desc"></div>
-    </div>
-</div>
+<?php
+function print_post() {
+  global $post;
+  $catID = wp_get_post_categories( get_the_ID() )[0];
+  $catID = is_numeric($catID) && $catID >= 0 ? $catID : 0;
+  $catName = get_category( $catID )->name;
+?>
+  <li>
+     <input type="hidden" name="img" value="<?=get_post_banner_img(get_the_ID(),'slideshow')?>"/>    
+     <input type="hidden" name="post_ID" value="<?=get_the_ID()?>"/>
+     <input type="hidden" name="title" value="<?=get_the_title()?>"/>
+     <input type="hidden" name="cat" value="<?=$catName?>"/>
+     <input type="hidden" name="excerpt" value="<?=get_the_excerpt()?>"/>
+     <a><?php the_title(); ?></a>
+  </li>
+<?php
+}
+?>
+<div class="slider"></div>
 <div id="control-board">
   <ul class="post-list" style="border:1px solid black">
     <h2 class="title">All Posts</h2>
-    <?php global $post;  foreach( $posts as $i=>$post ) : setup_postdata( $post ) ?>
-    <li>
-
-      <input type="hidden" name="img" value="<?=get_post_banner_img(get_the_ID())?>"/>
-      <input type="hidden" name="post_ID" value="<?=get_the_ID()?>"/>
-      <a><?php the_title(); ?></a>
-    </li>
-    <?php endforeach; ?>
+    <?php global $post;  foreach( $posts as $i=>$post ) { setup_postdata( $post ); print_post(); } ?>
   </ul>
   <div id="btn-list">
     <input type="button" value=">>" />
@@ -164,13 +155,7 @@ function get_post_banner_img( $id ) {
   </div>
   <ul class="post-list" style="border:1px solid black">
     <h2 class="title">Slide Show Posts</h2>    
-    <?php foreach( $slidelist as $i=>$post_ID ) : setup_postdata( ($post=get_post($post_ID)) ) ?>
-    <li>
-      <input type="hidden" name="img" value="<?=get_post_banner_img(get_the_ID())?>"/>    
-      <input type="hidden" name="post_ID" value="<?=get_the_ID()?>"/>
-      <a><?php the_title(); ?></a>
-    </li>
-    <?php endforeach; ?>
+    <?php foreach( $slidelist as $i=>$post_ID ) { setup_postdata( ($post=get_post($post_ID)) ); print_post(); } ?>
   </ul>
   <div style="clear:both"></div>
   <form action="options.php" method="POST">

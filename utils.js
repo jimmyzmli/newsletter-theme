@@ -103,4 +103,44 @@ jQuery(function($) {
 	    return $(this);
 	}
     };
+
+    $.prototype.jslides = function(info, args) {
+	var root, slider = this;
+	root = $("<div>").addClass("slides_container");
+
+	$(info).each( function(i,p) {
+	    $(slider).empty()
+		.append($("<div>").addClass("slider-topic"))
+		.append(root);
+	    $(root).append(
+		$("<div>").append(
+		    $("<div>")
+			.append(
+			    $("<div>").text(p.title).addClass("promo-title")
+			)
+			.append(
+			    $("<img>").attr('src', p.img).addClass("promo-img")
+			).addClass("clearfix").addClass("promo-story")
+			.append(
+			    $("<div>").text(p.desc).addClass("promo-desc")
+			)			
+		)
+	    );
+	} );
+	var start = typeof(args.start) == "undefined" ? 1 : args.start;
+	var name_cat = function(k) {
+	    $(".slider-topic", slider).text( info[k-1].cat );
+	};
+	
+	name_cat(start);
+	$(".slider").slides({
+	    generateNextPrev: true,
+	    start: start,
+	    animationComplete: name_cat
+	});
+	
+	/* Fix floats */
+	$(".pagination",slider).addClass("clearfix");
+	$(slider).addClass("clearfix");
+    };    
 });

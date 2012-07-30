@@ -332,20 +332,10 @@ header .info-bar {
 #top-promo {
     width: 100%;
     border: 1px solid black;
-    padding: 10px;
 }
 
-#top-promo .promo-title {
-    float: left;
-    width: 174px;
-    margin: 0px;
-}
-
-#top-promo .promo-img {
-    float: left;
-    width: 450px;
-    height: 259px;
-    margin: 0px;
+#top-promo div.promo-desc {
+    height: 229px;
 }
 
 /*News Tiles
