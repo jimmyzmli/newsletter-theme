@@ -83,6 +83,7 @@ function theme_custom_metabox_init() {
 
 function theme_options_init() {
   register_setting( 'layout_opts', 'layout_opts', 'validate_layout_opts' );
+  register_setting( 'slide_opts', 'slide_opts', 'validate_slide_opts' );
 }
 
 function theme_custom_widget_init() {
@@ -101,15 +102,20 @@ function validate_layout_opts($opts) {
   return $opts;
 }
 
-function theme_options_add_page() {
-  //add_utility_page( "Theme Options", "Theme Options", "edit_theme_options", "theme_utility_menu", "theme_options_do_page", "none");
-  //add_menu_page( __( 'Theme Options', $theme ), __( "Theme Options", $theme), 'edit_theme_options', 'theme_main_options', "theme_main_menu_render" );
-  //add_submenu_page( "theme_main_options", __("Layout",$theme), __("Layout",$theme), "edit_theme_options", "theme_layout_options", "theme_layout_menu_render");
-  add_theme_page( __("Layout",$theme), __("Layout",$theme), "edit_theme_options", "theme_layout_options", "theme_layout_menu_render");
+function validate_slide_opts( $opts ) {
+  $old = get_option('slide_opts');
+  $list = json_decode($opts,true);
+  /* var_dump($list);exit(0); */
+  return is_array($list) ? $list : $old;
 }
 
-function theme_main_menu_render() {
-  echo "HI";
+function theme_options_add_page() {
+  add_theme_page( __("Layout",$theme), __("Layout",$theme), "edit_theme_options", "theme_layout_options", "theme_layout_menu_render");
+  add_theme_page( __("Slideshow",$theme), __("Slideshow",$theme), "edit_theme_options", "theme_slideshow_options", "theme_slideshow_menu_render");  
+}
+
+function theme_slideshow_menu_render() {
+  include "slideshow_setting.php";
 }
 
 function theme_layout_menu_render() {
