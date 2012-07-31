@@ -15,3 +15,14 @@
  
 .my_meta_control h4
 { color:#999; font-size:1em; margin:15px 6px; text-transform:uppercase; }
+
+.mupload_img_holder {
+    display: block;
+    width: 800px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.at-delete_image_button {
+    min-width: 100px;
+}
