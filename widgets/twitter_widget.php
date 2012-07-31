@@ -114,7 +114,8 @@ JSCRIPT;
 	      }
 	}).render().setList('$p_list[0]', '$p_list[1]').start();
     </script>
-</section>    
+    <noscript><a href="http://api.twitter.com/1/lists/statuses.atom?slug=$p_list[1]&owner_screen_name=$p_list[0]" target="_blank">Twitter Link</a></noscript>
+</section> 
 HTML;
   }
 }
