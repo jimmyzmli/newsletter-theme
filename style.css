@@ -404,6 +404,10 @@ header .info-bar {
     margin: 0px;
 }
 
+.widget {
+    list-style: none;
+}
+
 /*About
   -------------------------------------- */
 
@@ -468,8 +472,28 @@ header .info-bar {
     margin: 0px 0px 10px 0px;    
 }
 
-/*Side RSS bar
+/*Side RSS/Twitter bar
   -------------------------------------- */
+
+.updates .twtr-widget,
+.updates .twtr-doc {
+    height: 300px !important;
+}
+
+.updates .twtr-hd {
+    height: 30px;
+    padding: 5px;
+}
+
+.updates .twtr-bd,
+.updates .twtr-timeline,
+.updates .twtr-tweets {
+    height: 230px !important;
+}
+
+.updates .twtr_ft {
+    height: 30px;
+}
 
 #side .widget_rss {
     border: 1px solid black;
