@@ -23,6 +23,7 @@ require_once("meta.php");
 
 /* Custom Widget integerated with the theme */
 require_once("widgets/featured_widget.php");
+require_once("widgets/twitter_widget.php");
 
 $theme = 'newsletter';
 load_theme_textdomain( $theme, TEMPLATEPATH, '/languages' );
@@ -59,6 +60,7 @@ add_image_size( 'featured_thumb', 70, 70, true );
 
 function theme_custom_widget_init() {
   register_widget("FeaturedWidget");
+  register_widget("TwitterWidget");
 }
 
 function get_page_number() {

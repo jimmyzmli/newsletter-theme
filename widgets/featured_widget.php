@@ -37,9 +37,9 @@ function get_posts_for_cat( $cat, $n ) {
 
 class FeaturedWidget extends WP_Widget {
   private static $INFO = array(
-			       'classname'=>'FeaturedWidget',
-			       'description'=>'Displays Top Featured Posts'
-			       );
+    'classname'=>'FeaturedWidget',
+    'description'=>'Displays Top Featured Posts'
+  );
     
   function __construct() {
     parent::__construct( self::$INFO['classname'], 'Featured Widget', self::$INFO );
@@ -76,7 +76,8 @@ class FeaturedWidget extends WP_Widget {
     foreach( get_posts_for_cat('General',$p_show) as $i=>$post ) {
       setup_postdata($post);
       $thumb = get_post_meta_img(get_the_ID(),'featured_thumb');
-      $thumb = strlen($thumb) > 0 ? $thumb : get_cat_meta_img(wp_get_post_categories(get_the_ID())[0],'featured_thumb');
+      foreach( wp_get_post_categories(get_the_ID()) as $cat_ID )
+	$thumb = strlen($thumb) > 0 ? $thumb : get_cat_meta_img($cat_ID,'featured_thumb');
       echo $before_widget;
     ?>
       <article class="promo-story">
@@ -92,32 +93,9 @@ class FeaturedWidget extends WP_Widget {
    <?php } wp_reset_postdata(); ?>
     </section>
    <?php
-    echo $after_widget;										    
+    echo $after_widget;
   }
   
 }
 
-?>
-
-<?php
-/*
-<section class="updates">
-      <h2>Updates</h2>
-      <article class="promo-story">
-	<section class="promo-author">JzL</section>
-	<section class="promo-date">Mon Jul 23</section>		
-	<section class="promo-desc">TWITT TWITT. PFFTOOOOT.</section>
-      </article>
-      <article class="promo-story">
-	<section class="promo-author">JzL</section>
-	<section class="promo-date">Mon Jul 23</section>		
-	<section class="promo-desc">TWITT TWITT. PFFTOOOOT.</section>
-      </article>
-    </section>
-
-    <section class="survey-bar">
-      <h2>Surveys</h2>
-      ABCDEFG
-    </section>
-*/
 ?>
