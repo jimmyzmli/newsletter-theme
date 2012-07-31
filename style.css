@@ -62,7 +62,7 @@ html {
 #page {
     margin: 0px;
     position: relative;
-    background: #770000;
+    background: gainsboro;
 }
 
 header,
@@ -76,17 +76,13 @@ footer {
 /*Site background
   --------------------------------------------------------- */  
 
-
 #page-bg {
     position: relative;
     z-index: -1000;
     margin: 0px auto;
     width: 100%;
     height: 0px;
-    background: #770000;
 }
-
-
 
 /*
 #page-bg {
@@ -111,19 +107,19 @@ footer {
 #page-bg .seg1 {
     top: 0px;
     height: 125px;
-    background: #FA2062;
+    /* background: #FA2062; */
 }
 
 #page-bg .seg2 {
     top: 125px;
     height: 53px;
-    background: #FA9F20;
+    /* background: #FA9F20; */
 }
 
 #page-bg .seg3 {
     top: 180px;
     height: 100px;
-    background: #202928;
+    /* background: #202928; */
 }
 
 /*Top Section
