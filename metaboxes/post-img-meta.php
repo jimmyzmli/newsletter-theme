@@ -1,4 +1,16 @@
 <?php global $ma; ?>
+<script type="text/javascript">
+  jQuery(function($) {
+      function changeDetect() {
+	  $("input[class|='mediafield']").each( function() {
+	      if( this.oldvalue != this.value )
+		  $(this).siblings("img").attr('src',this.value);
+	      this.oldvalue = this.value;
+	  });
+      }
+      setInterval( changeDetect, 1000 );
+  });
+</script>
 <div class="my_meta_control metabox">
   
   <?php $mb->the_field('desc'); ?>
