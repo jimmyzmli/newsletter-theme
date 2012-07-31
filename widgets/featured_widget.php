@@ -17,6 +17,7 @@
 */
 
 function get_posts_for_cat( $cat, $n ) {
+  if( $n <= 0 ) return array();
   if( !is_numeric($cat) )
     if( is_string( $cat ) ) 
       $cat = get_cat_ID( $cat_name );
@@ -41,29 +42,45 @@ class FeaturedWidget extends WP_Widget {
 			       );
     
   function __construct() {
-    parent::__construct( self::$INFO['classname'], 'Featured', self::$INFO );
+    parent::__construct( self::$INFO['classname'], 'Featured Widget', self::$INFO );
   }
   
   function form( $c ) {
-    $c = wp_parse_args( (array)$c, array( 'show'=>3 ) );
+    $p_show = wp_parse_args( (array)$c, array( 'show'=>3 ) );
+    if( strlen($this->errmsg) > 0 ) printf('<p style="color:red">%s</p>',$this->errmsg);
     printf('<label for="%1$s">Number of posts shown:</label>'.
-	   '<input type="widefat" id="%1$s" name="%1$s" value="%2$s"/>',
-	   $this->get_field_id('show'), attribute_escape($c['show']) );
+	   '<input type="text" id="%1$s" name="%2$s" value="%3$d"/>',
+	   $this->get_field_id('show'), $this->get_field_name('show'), esc_attr($p_show['show']) );
   }
 
   function update( $new_c, $old_c ) {
     $c = $old_c;
-    $c['show'] = $new_c['show'];
+    $this->errmsg = "";
+    if( is_numeric($new_c['show']) )
+      if( $new_c['show'] >= 0 && $new_c['show'] <= 30 )
+	$c['show'] = $new_c['show'];
+      else
+	$this->errmsg = "Post number in unreasonable bounds";
+    else $this->errmsg = 'Not a numeric value';
     return $c;
   }
 
   function widget( $args, $c ) {
+    extract( $args, EXTR_OVERWRITE );
+    extract( $c, EXTR_PREFIX_ALL, 'p' );
+    if( $p_show <= 0 ) return;
+  ?>
+<section class="featured">
+  <h2><?=$before_widget.(empty($title)?"Featured":$title).$after_widget?></h2>
+  <?php    
+    foreach( get_posts_for_cat('General',$p_show) as $i=>$post ) {
+      setup_postdata($post);
+      $thumb = get_post_meta_img(get_the_ID(),'featured_thumb');
+      $thumb = strlen($thumb) > 0 ? $thumb : get_cat_meta_img(wp_get_post_categories(get_the_ID())[0],'featured_thumb');
+      echo $before_widget;
     ?>
-    <section class="featured">
-      <h2>Featured</h2>
-      <?php foreach( get_posts_for_cat('General',2) as $i=>$post ) : setup_postdata($post) ?>
       <article class="promo-story">
-	<img src="http://placehold.it/69x69" class="promo-img"/>
+	<img src="<?=$thumb?>" class="promo-img"/>
 	<section class="promo-title">
 	  <a href="<?php the_permalink() ?>"><?php the_title() ?></a>
 	</section>
@@ -72,9 +89,10 @@ class FeaturedWidget extends WP_Widget {
 	</section>
 	<div style="clear:both"></div>
       </article>
-      <?php endforeach; wp_reset_postdata(); ?>
+   <?php } wp_reset_postdata(); ?>
     </section>
    <?php
+    echo $after_widget;										    
   }
   
 }
