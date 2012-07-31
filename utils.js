@@ -15,10 +15,10 @@ jQuery(function($) {
 	/* @TODO Optimize */
 	/* Note: This function is fairly expensive, do not use extensively */
 	var box = this[0], lim;
-	if( box.style.fontSize == '' ) {
+	if( $(box).css('font-size') == '' ) {
 	    lim = Math.round( $(box).width()/5 );
 	}else {
-	    lim = parseInt(box.style.fontSize);
+	    lim = parseInt($(box).css('font-size'));
 	}
 	box.style.fontSize = lim+'px';
 	var search = function( a, b, f ) {

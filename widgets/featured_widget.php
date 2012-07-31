@@ -71,19 +71,20 @@ class FeaturedWidget extends WP_Widget {
     if( $p_show <= 0 ) return;
   ?>
 <section class="featured">
-  <h2><?=$before_widget.(empty($title)?"Featured":$title).$after_widget?></h2>
-  <?php    
+  <h2><?=$before_title.(empty($title)?"Featured":$title).$after_title?></h2>
+  <?php
+    echo $before_widget;
+    global $post;
     foreach( get_posts_for_cat('General',$p_show) as $i=>$post ) {
       setup_postdata($post);
       $thumb = get_post_meta_img(get_the_ID(),'featured_thumb');
       foreach( wp_get_post_categories(get_the_ID()) as $cat_ID )
 	$thumb = strlen($thumb) > 0 ? $thumb : get_cat_meta_img($cat_ID,'featured_thumb');
-      echo $before_widget;
     ?>
       <article class="promo-story">
 	<img src="<?=$thumb?>" class="promo-img"/>
 	<section class="promo-title">
-	  <a href="<?php the_permalink() ?>"><?php the_title() ?></a>
+	  <a href="<?php the_permalink()?>"><?=get_the_title()?></a>
 	</section>
 	<section class="promo-desc">
 	  <?php the_excerpt() ?>
