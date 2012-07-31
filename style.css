@@ -377,7 +377,7 @@ header .info-bar {
 [class|=news-tile] {
     border: 1px solid black;
     float: left;
-    text-align: center;
+    text-align: left;
     margin: 4px;
     padding: 0px;
 }

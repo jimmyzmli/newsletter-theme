@@ -18,12 +18,6 @@
 ?>
 <?php
 
-function get_post_banner_img( $id, $type = 'full') {
-    $img_ID = get_post_meta( $id, 'post_banner_image', true );
-    $src = wp_get_attachment_image_src( $img_ID, $type )[0];
-    return is_string($src) ? $src : "";
-}
-
 $opts = get_option("layout_opts");
 $opts = is_array($opts) ? $opts : array();
 $layout = is_array( $opts['layout'] ) ? $opts['layout'] : array();
@@ -46,7 +40,7 @@ foreach( $slidelist as $i=>$postID ) {
   $catName = get_category( $catID )->name;
   
   setup_postdata( $post );
-  $p->img = get_post_banner_img($postID,'slideshow');
+  $p->img = get_post_meta_img($postID,'slideshow');
   $p->post_ID = $postID;
   $p->title = get_the_title();
   $p->cat = $catName;
