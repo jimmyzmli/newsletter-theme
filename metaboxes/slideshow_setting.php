@@ -19,18 +19,12 @@
 <?php
 $prefix = get_template_directory_uri();
 
-$posts = get_posts( array('meta_key' => 'post_banner_image') );
+$posts = get_posts( array('meta_key' => METAPREF.'_slideshow_img') );
 $slidelist = get_option( 'slide_opts' );
 $slidelist = is_array($slidelist) ? $slidelist : array();
 
 foreach( $posts as $i=>$post )
     if( in_array( $post->ID, $slidelist ) ) unset($posts[$i]);
-
-function get_post_banner_img( $id, $type = 'full') {
-    $img_ID = get_post_meta( $id, 'post_banner_image', true );
-    $src = wp_get_attachment_image_src( $img_ID, $type )[0];
-    return is_string($src) ? $src : "";
-}
 
 ?>
 <style type="text/css">
@@ -73,8 +67,7 @@ function get_post_banner_img( $id, $type = 'full') {
       width: 100px;
       margin: auto auto;
       margin-top: 30px;
-  }
-  
+  }  
 </style>
 <link rel="stylesheet" href="<?=$prefix?>/slideshow.css"/>
 <script type="text/javascript" src="<?=$prefix?>/js/jquery.min.js"></script>
@@ -85,18 +78,33 @@ function get_post_banner_img( $id, $type = 'full') {
     jQuery( function($) {
 	var g = window;
 
+	g.updateSlider = function() {
+	    var info = [];	
+	    $(".post-list:last li").each( function(){
+					      var p = {
+						  post_ID : +$(this).layoutAttr("page_ID"),
+						  img: $(this).layoutAttr("img"),
+						  title: $(this).layoutAttr("title"),
+						  desc: $(this).layoutAttr("excerpt"),
+						  cat: $(this).layoutAttr("cat")
+					      };
+					      info.push( p );
+					  } );
+	    $(".slider").jslides(info,{ start: 1 });
+	};
+
 	$(".post-list li").click( function() {
 	    $(this).toggleClass("selected-post");
 	});
 	$("#btn-list input:first").click( function() {
 	    $(".post-list:last").append( $(".post-list:first .selected-post")
 					 .detach().toggleClass("selected-post") );
-	    g.updateSlide();
+	    g.updateSlider();
 	});
 	$("#btn-list input:last").click( function() {
 	    $(".post-list:first").append( $(".post-list:last .selected-post")
 					  .detach().toggleClass("selected-post") );
-	    g.updateSlide();
+	    g.updateSlider();	    
 	});
 
 	$("#submit-btn").parent()[0].onsubmit = function() {
@@ -106,23 +114,10 @@ function get_post_banner_img( $id, $type = 'full') {
 		if( typeof(post_ID) != "undefined" ) list.push( +post_ID );
 	    });
 	    $("#slidelist-field").val( JSON.stringify( list ) );
-	    //console.log( JSON.stringify( list ) );
 	    return true;
 	};
-	var info = [];
-	
-	$(".post-list:last li").each( function(){
-					  var p = {
-					      post_ID : +$(this).layoutAttr("page_ID"),
-					      img: $(this).layoutAttr("img"),
-					      title: $(this).layoutAttr("title"),
-					      desc: $(this).layoutAttr("excerpt"),
-					      cat: $(this).layoutAttr("cat")
-					  };
-					  info.push( p );
-				      } );
-					  
-	$(".slider").jslides(info,{ start: 1 });
+
+	g.updateSlider();
     });
 </script>
 <?php
@@ -133,7 +128,7 @@ function print_post() {
   $catName = get_category( $catID )->name;
 ?>
   <li>
-     <input type="hidden" name="img" value="<?=get_post_banner_img(get_the_ID(),'slideshow')?>"/>    
+     <input type="hidden" name="img" value="<?=get_post_meta_img(get_the_ID(),'slideshow')?>"/>    
      <input type="hidden" name="post_ID" value="<?=get_the_ID()?>"/>
      <input type="hidden" name="title" value="<?=get_the_title()?>"/>
      <input type="hidden" name="cat" value="<?=$catName?>"/>

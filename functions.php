@@ -18,8 +18,11 @@
 
 defined("ABSPATH") || exit;
 
-include("featured_widget.php");
-include("plugins/meta-box/meta-box.php");
+/* Register Admin stuff */
+require_once("meta.php");
+
+/* Custom Widget integerated with the theme */
+require_once("widgets/featured_widget.php");
 
 $theme = 'newsletter';
 load_theme_textdomain( $theme, TEMPLATEPATH, '/languages' );
@@ -34,19 +37,16 @@ if( is_readable($locale_file) )
 add_theme_support( 'custom-header' );
 
 /* Add setting pages */
-add_action( 'admin_init', 'theme_options_init' );
-add_action( 'admin_menu', 'theme_options_add_page' );
 add_action( 'widgets_init', 'theme_custom_widget_init' );
-add_action( 'admin_init', 'theme_custom_metabox_init' );
 
 register_sidebar( array(
-			'id' => 'sidebar-landing',
-			'description' => __('The sidebar for the landing page')
-			));
+  'id' => 'sidebar-landing',
+  'description' => __('The sidebar for the landing page')
+));
 register_sidebar( array(
-			'id' => 'sidebar-single',
-			'description' => __('The sidebar for a single post view')
-			));
+  'id' => 'sidebar-single',
+  'description' => __('The sidebar for a single post view')
+));
 
 
 register_nav_menu( 'primary_menu', 'The main menu at top' );
@@ -56,74 +56,9 @@ register_nav_menu( 'secondary_menu', 'A secondary menu' );
 add_image_size( 'slideshow', 450, 260 , false );
 add_image_size( 'featured_thumb', 70, 70, true );
 
-function theme_custom_metabox_init() {
-  $post_fields = array(
-		  array(
-                        'name'          => 'Post Thumbnail',
-			'desc'          => 'A 70x70 post thumbnail',
-                        'id'            => "post_thumb",
-                        'type'          => 'plupload_image',
-			'multiple'      => false
-			),
-		  array(
-                        'name'          => 'Slideshow Image',
-			'desc'          => 'A 450x259 image for the slide show',
-                        'id'            => "post_banner_image",
-                        'type'          => 'plupload_image',
-			'multiple'      => false
-			)
-		  );
-  $meta_box = array(
-		    'id'            => 'post_thumb',
-		    'title'         => 'Featured Box Thumbnail',
-		    'pages'         => array( 'post' ),
-		    'fields'        => $post_fields
-		    );
-  if ( class_exists( 'RW_Meta_Box' ) ) {
-    new RW_Meta_Box( $meta_box );
-  }
-  
-}
-
-function theme_options_init() {
-  register_setting( 'layout_opts', 'layout_opts', 'validate_layout_opts' );
-  register_setting( 'slide_opts', 'slide_opts', 'validate_slide_opts' );
-}
 
 function theme_custom_widget_init() {
   register_widget("FeaturedWidget");
-}
-
-function validate_layout_opts($opts) {
-  $old = get_option('layout_opts');
-  $layout = json_decode($opts['layout'],true);
-  $hlayout = json_decode($opts['hidden_layout'],true);
-  $opts = &$old;
-  
-  if( $layout !== null ) $opts['layout'] = $layout;
-  if( $hlayout !== null ) $opts['hidden_layout'] = $hlayout;
-  
-  return $opts;
-}
-
-function validate_slide_opts( $opts ) {
-  $old = get_option('slide_opts');
-  $list = json_decode($opts,true);
-  /* var_dump($list);exit(0); */
-  return is_array($list) ? $list : $old;
-}
-
-function theme_options_add_page() {
-  add_theme_page( __("Layout",$theme), __("Layout",$theme), "edit_theme_options", "theme_layout_options", "theme_layout_menu_render");
-  add_theme_page( __("Slideshow",$theme), __("Slideshow",$theme), "edit_theme_options", "theme_slideshow_options", "theme_slideshow_menu_render");  
-}
-
-function theme_slideshow_menu_render() {
-  include "slideshow_setting.php";
-}
-
-function theme_layout_menu_render() {
-  include "layout_setting.php";
 }
 
 function get_page_number() {
@@ -188,40 +123,42 @@ function get_size_name($n) {
 add_filter('manage_posts_columns', 'posts_column_views');
 add_action('manage_posts_custom_column', 'posts_custom_column_views',5,2);
 function posts_column_views($defaults){
-    $defaults['post_views'] = __('Views');
-    return $defaults;
+  $defaults['post_views'] = __('Views');
+  return $defaults;
 }
 function posts_custom_column_views($column_name, $id){
-	if($column_name === 'post_views'){
-        echo getPostViews(get_the_ID());
-    }
+  if($column_name === 'post_views'){
+    echo getPostViews(get_the_ID());
+  }
 }
 
 /* function to display number of posts. */
 function getPostViews($postID){
-    $count_key = 'post_views_count';
-    $count = get_post_meta($postID, $count_key, true);
-    if($count==''){
-        delete_post_meta($postID, $count_key);
-        add_post_meta($postID, $count_key, '0');
-        return "0 View";
-    }
-    return $count.' Views';
+  $count_key = 'post_views_count';
+  $count = get_post_meta($postID, $count_key, true);
+  if($count==''){
+    delete_post_meta($postID, $count_key);
+    add_post_meta($postID, $count_key, '0');
+    return "0 View";
+  }
+  return $count.' Views';
 }
 
 /* function to count views. */
 function setPostViews($postID) {
-    $count_key = 'post_views_count';
-    $count = get_post_meta($postID, $count_key, true);
-    if($count==''){
-        $count = 0;
-        delete_post_meta($postID, $count_key);
-        add_post_meta($postID, $count_key, '0');
-    }else{
-        $count++;
-        update_post_meta($postID, $count_key, $count);
-    }
+  $count_key = 'post_views_count';
+  $count = get_post_meta($postID, $count_key, true);
+  if($count==''){
+    $count = 0;
+    delete_post_meta($postID, $count_key);
+    add_post_meta($postID, $count_key, '0');
+  }else{
+    $count++;
+    update_post_meta($postID, $count_key, $count);
+  }
 }
+
+
 
 
 ?>

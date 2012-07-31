@@ -36,14 +36,14 @@ print "</pre>";
 
 ?>
 
-<link href="<?="$prefix/layout_setting.css"?>" rel="stylesheet"/>
+<link href="<?="$prefix/metaboxes/layout_setting.css"?>" rel="stylesheet"/>
 <link href="<?="$prefix/css/resizable.css"?>" rel="stylesheet"/>
 
 <script type="text/javascript" src="<?="$prefix/js/jquery.min.js"?>"></script>
 <script type="text/javascript" src="<?="$prefix/js/jquery-ui.min.js"?>"></script>
 <script type="text/javascript" src="<?="$prefix/js/json2.js"?>"></script>
 <script type="text/javascript" src="<?="$prefix/utils.js"?>"></script>
-<script type="text/javascript" src="<?="$prefix/layout_setting.js"?>"></script>
+<script type="text/javascript" src="<?="$prefix/metaboxes/layout_setting.js"?>"></script>
 
 <section id="body" class="clearfix">
   <section id="layout-panel" class="clearfix">
