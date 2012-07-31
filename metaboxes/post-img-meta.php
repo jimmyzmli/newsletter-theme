@@ -1,9 +1,12 @@
 <?php global $ma; ?>
 <div class="my_meta_control metabox">
+  
   <?php $mb->the_field('desc'); ?>
   <p>
+    A short description of the post (If not filled the default excerpt will be used)
     <textarea name="<?=$mb->get_the_name()?>"><?=( $mb->get_the_value() )?></textarea>
   </p>  
+
   <?php $mb->the_field('featured_thumb_img'); ?>  
   <?php $ma->setGroupName('nn')->setInsertButtonLabel('Insert'); ?>
   <p>
@@ -11,6 +14,7 @@
     <?php echo $ma->getField(array('name' => $mb->get_the_name(), 'value' => $mb->get_the_value())); ?>
     <?php echo $ma->getButton(); ?>
   </p>
+
   <?php $mb->the_field('slideshow_img'); ?>
   <?php $ma->setGroupName('nn2')->setInsertButtonLabel('Insert This')->setTab('gallery'); ?>
   <p>

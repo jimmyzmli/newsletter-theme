@@ -20,6 +20,12 @@ defined("ABSPATH") || exit;
 
 define( 'METAPREF', 'nws' );
 
+$meta_defaults = array(
+  'misc_opts' => array(
+    'show_comments' => true
+  )
+);
+
 /* Meta value accessors */
 function get_post_meta_img( $id, $type = 'full') {
   $src = get_post_meta( $id, METAPREF."_$type"."_img", true );
@@ -30,6 +36,20 @@ function get_cat_meta_img( $id, $type = 'full' ) {
   $img = get_tax_meta( $id, METAPREF."_$type"."_img" );
   $src = $img["src"];
   return is_string($src) ? $src : "";  
+}
+
+function should_show_post( $pid, $opt = -1 ) {
+  global $meta_defaults;
+  /* Get values */
+  $g = get_option( "misc_opts" )['show_comments'];
+  if( $g !== true && $g !== false ) $g = $meta_defaults['misc_opts']['show_comments'];
+  if( $opt === -1 ) $opt = get_post_meta( $pid, METAPREF."_show_comments", true );
+  
+  /* If post has same global value, then good */
+  if( $opt === $g ) return $g;
+  /* If post is unset, take global value. */
+  if( $opt != "yes" && $opt != "no" ) return $g;
+  return $opt == "yes" ? true: false;
 }
 
 /* Load WP plugin dependencies */
@@ -56,16 +76,28 @@ $ma = new WPAlchemy_MediaAccess();
 $post_metabox = new WPAlchemy_MetaBox(
   array(
     'id'=>'post_img_meta_box',
-    'title'=>'Thumbnail Image',
+    'title'=>'Post Images',
     'template'=> get_template_directory().'/metaboxes/post-img-meta.php',
-    'types'=>array('post','page'),
+    'types'=>array('post'),
     'context'=>'normal',
     'mode'=>WPALCHEMY_MODE_EXTRACT,
     'prefix'=>METAPREF."_"
   )
 );
 
-
+/* Display details */
+$misc_metabox = new WPAlchemy_MetaBox(
+  array(
+    'id'=>'misc_meta_box',
+    'title'=>'Display details',
+    'template'=> get_template_directory().'/metaboxes/misc-meta.php',
+    'types'=>array('post','page'),
+    'context'=>'normal',
+    'mode'=>WPALCHEMY_MODE_EXTRACT,
+    'prefix'=>METAPREF."_",
+    'save_filter'=>'validate_misc_meta_box'
+  )
+);
 
 /* Meta boxes for the category/taxonomy editor */
 $cat_meta = new Tax_Meta_Class(
@@ -86,9 +118,17 @@ $cat_meta->Finish();
 function theme_settings_init() {
   register_setting( 'layout_opts', 'layout_opts', 'validate_layout_opts' );
   register_setting( 'slide_opts', 'slide_opts', 'validate_slide_opts' );
+  register_setting( 'misc_opts', 'misc_opts', 'validate_misc_opts' );
 }
 
 function theme_settings_add_pages() {
+  add_theme_page(
+    __("Misc"),
+    __("Misc"),
+    "edit_theme_options",
+    "theme_misc_options",
+    create_function('','require_once("metaboxes/misc_setting.php");')
+  );  
   add_theme_page(
     __("Layout"),
     __("Layout"),
@@ -105,6 +145,22 @@ function theme_settings_add_pages() {
   );
 }
 
+/* A basic function used to translate input values */
+function validate_misc_meta_box( $meta, $pid ) {
+  $checkboxes = array( 'show_comments' );
+  $meta = is_array($meta) ? $meta : array();
+  foreach( $meta as $k=>$v  ) {
+    $i = array_search( $k, $checkboxes );
+    if( $i >= 0 ) {
+      unset($checkboxes[$i]);
+      $meta[$k] = "yes";
+    }
+  }
+  foreach( $checkboxes as $i=>$k )
+    $meta[$k] = "no";
+  return $meta;
+}
+
 /* Validates layout editor data */
 function validate_layout_opts($opts) {
   $old = get_option('layout_opts');
@@ -114,7 +170,7 @@ function validate_layout_opts($opts) {
   
   if( $layout !== null ) $opts['layout'] = $layout;
   if( $hlayout !== null ) $opts['hidden_layout'] = $hlayout;
-  
+
   return $opts;
 }
 
@@ -122,8 +178,22 @@ function validate_layout_opts($opts) {
 function validate_slide_opts( $opts ) {
   $old = get_option('slide_opts');
   $list = json_decode($opts,true);
-  /* var_dump($list);exit(0); */
   return is_array($list) ? $list : $old;
 }
 
+function validate_bool( &$opt ) {
+  if( $opt === "yes" ) $opt = true;
+  else $opt = false;
+}
+
+/* Validate miscellaneous values */
+function validate_misc_opts( $opts ) {
+  $old = get_option("misc_opts");
+  validate_bool( $opts['show_comments'] );
+  if( $old['show_comments'] !== $opts['show_comments'] ) {
+    /* Delete post meta data */
+    delete_metadata( 'post', 0, METAPREF."_show_comments", "", true );
+  }
+  return $opts;
+}
 ?>
