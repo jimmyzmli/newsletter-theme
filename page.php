@@ -20,6 +20,7 @@
 <section id="body" class="clearfix">
   <section id="main">
     <?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
+    <span>Viewed <?=increPostViews(get_the_ID());?> Times</span>
     <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
       <?php if ( is_front_page() ) { ?>
       <h2 class="entry-title"><?php the_title(); ?></h2>

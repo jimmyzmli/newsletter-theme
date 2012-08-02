@@ -1,0 +1,84 @@
+/*
+	Copyright (c) 2012 Jimmy Li (JzL)
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*Top Story
+  -------------------------------------- */
+
+#top-promo {
+    width: 100%;
+    border: 1px solid black;
+}
+
+#top-promo div.promo-desc {
+    height: 229px;
+}
+
+/*News Tiles
+  -------------------------------------- */
+#main .news-tile-full {
+    width: 100%;
+}
+
+#main .news-promo {
+    background: #E6FFCC;
+    float: left;
+    padding: 0px;
+    margin: 0px;
+}
+
+#main .promo-title {
+    height: 30px;
+}
+
+#main .promo-desc {
+    height: 120px;
+}
+
+#main .news-promo > h2 {
+    background: #CCFFE6;
+}
+
+[class|=news-tile] .promo-img,
+[class|=news-tile] .promo-desc,
+[class|=news-tile] .promo-title {
+    width: 100%;
+}
+
+[class|=news-tile] .promo-story {
+    padding: 0px;
+    margin: 0px;
+}
+
+[class|=news-tile] {
+    border: 1px solid black;
+    float: left;
+    text-align: left;
+    margin: 4px;
+    padding: 0px;
+}
+
+.news-tile-full {
+    width: 100%;
+}
+
+#main .news-tile-half {
+    width: 302px;
+}
+
+.news-tile-quart {
+    width: 146px;
+}
