@@ -26,35 +26,17 @@ class TwitterWidget extends WP_Widget {
 
   function __construct() {
     parent::__construct( self::$INFO['classname'], 'Twitter Widget', self::$INFO );
-    wp_enqueue_script('farbtastic');
-    wp_enqueue_style('farbtastic');
   }
 
   function form( $c ) {
-    echo
-<<<JSCRIPT
-<script type="text/javascript">
-jQuery(function(\$){\$('.cw-color-picker').each(function(){\$(this).farbtastic('#' + \$(this).attr('rel'));});});
-</script>
-JSCRIPT;
-    $c = wp_parse_args( (array)$c, array(
-      'show'=>3, 'list'=>array('user-name','list-name'), 'heading'=>'Recent Tweets',
-      'colour'=>'#000000'
-    ) ); 
-    if( strlen($this->errmsg) > 0 ) printf('<p style="color:red">%s</p>',$this->errmsg);    
-    printf('<label for="%1$s">Heading:</label><br/>'.
-	   '<input type="text" id="%1$s" name="%2$s" value="%3$s"/><br/>',
-	   $this->get_field_id('heading'), $this->get_field_name('heading'), esc_attr($c['heading']));
-    printf('<label for="%1$s">Number of posts shown:</label><br/>'.
-	   '<input type="text" id="%1$s" name="%2$s" value="%3$d"/><br/>',
-	   $this->get_field_id('show'), $this->get_field_name('show'), esc_attr($c['show']) );
-    printf('<label for="%1$s">Twitter list:</label><br/>'.
-	   '<input type="text" id="%1$s" name="%2$s" value="%3$s"/><br/>',
-	   $this->get_field_id('list'), $this->get_field_name('list'), esc_attr(implode(':',$c['list'])));
-    printf('<label for="%1$s">Background Colour</label><br/>'.
-	   '<input type="text" id="%1$s" name="%2$s" value="%3$s"/><br/>'.
-	   '<div class="cw-color-picker" rel="%1$s" onload="jQuery(this).farbtastic(\'#%1$s\');"></div>',
-	   $this->get_field_id('colour'), $this->get_field_name('colour'), esc_attr($c['colour']));
+    if( strlen($this->errmsg) > 0 ) printf('<p style="color:red">%s</p>',$this->errmsg);
+    
+    widget_form( $this, $c, array(
+      'heading'=>array('type'=>'text','default'=>'Recent Tweets','label'=>'Heading'),
+      'show'=>array('type'=>'number','default'=>3,'label'=>'Number of posts to show'),
+      'list'=>array('type'=>'text','default'=>array('user-name','list-name'),'label'=>'Twitter list'),
+      'colour'=>array('type'=>'colour','default'=>'#000000','label'=>'Background Colour')
+    ));
   }
 
   function update( $new_c , $old_c ) {

@@ -16,7 +16,6 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 class FeaturedWidget extends WP_Widget {
   private static $INFO = array(
     'classname'=>'FeaturedWidget',
@@ -28,22 +27,29 @@ class FeaturedWidget extends WP_Widget {
   }
   
   function form( $c ) {
-    $p_show = wp_parse_args( (array)$c, array( 'show'=>3 ) );
     if( strlen($this->errmsg) > 0 ) printf('<p style="color:red">%s</p>',$this->errmsg);
-    printf('<label for="%1$s">Number of posts shown:</label>'.
-	   '<input type="text" id="%1$s" name="%2$s" value="%3$d"/>',
-	   $this->get_field_id('show'), $this->get_field_name('show'), esc_attr($p_show['show']) );
+    widget_form( $this, $c, array(
+      'show'=>array('default'=>3,'type'=>'number','label'=>'Number of posts you wish to show'),
+      'rollup_days'=>array('default'=>1,'type'=>'number','label'=>'Round down date to nearest N days')
+    ));
   }
 
   function update( $new_c, $old_c ) {
     $c = $old_c;
     $this->errmsg = "";
-    if( is_numeric($new_c['show']) )
-      if( $new_c['show'] >= 0 && $new_c['show'] <= 30 )
-	$c['show'] = $new_c['show'];
+    extract( $new_c, EXTR_PREFIX_ALL, 'n' );
+    /* Check post number */
+    if( is_numeric($n_show) )
+      if( $n_show >= 0 && $n_show <= 30 )
+	$c['show'] = $n_show;
       else
 	$this->errmsg = "Post number in unreasonable bounds";
     else $this->errmsg = 'Not a numeric value';
+    /* Check rollup day */
+    if( is_numeric($n_rollup_days) && $n_rollup_days >= 1 )
+      $c['rollup_days'] = $n_rollup_days;
+    else
+      $this->errmsg = "Can only round to nearest postive integer day";
     return $c;
   }
 
@@ -57,7 +63,7 @@ class FeaturedWidget extends WP_Widget {
   <?php
     echo $before_widget;
     global $post;
-    foreach( get_featured_posts( array( 'numberposts'=>$p_show, 'rollup_days'=>1 ) ) as $i=>$post ) {
+    foreach( get_featured_posts( array( 'numberposts'=>$p_show, 'rollup_days'=>$p_rollup_days ) ) as $i=>$post ) {
       setup_postdata($post);
       $thumb = get_post_meta_img(get_the_ID(),'featured_thumb');
       foreach( wp_get_post_categories(get_the_ID()) as $cat_ID )

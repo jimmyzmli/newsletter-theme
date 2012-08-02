@@ -135,6 +135,45 @@ function get_featured_posts( $args ) {
 
 }
 
+/*
+  Here's a little form generating function for (simple) widget forms
+  Form is in the format of:
+  array( 'field_name' => array('label'=>'Label Text', 'type'=>'Input Type', 'default'=>'Default value') )
+  The user of this function have no power over the styling.
+  There is _no_garentee_ that the DOM will stay the same.
+*/
+function widget_form( &$widget, &$c, $form ) {
+  static $script_loaded = false;
+  /* Load Script Dependencies */
+  if( !$script_loaded ) {
+    $script_loaded = true;    
+    wp_enqueue_script('farbtastic');
+    wp_enqueue_style('farbtastic');    
+    print
+<<<HTML
+    <script type="text/javascript">jQuery(function(\$){\$('.cw-color-picker').each(function(){\$(this).farbtastic('#' + \$(this).attr('rel'));});});</script>
+HTML;
+  }
+  
+  foreach( $form as $k=>$info ) {
+    extract( $info, EXTR_PREFIX_ALL, 'p' );
+    if( !isset($c[$k]) && isset($p_default) ) $c[$k] = $p_default;
+    printf( "<label for=\"%1\$s\">$p_label</label><br/><input type=\"$p_type\" id=\"%1\$s\" name=\"%2\$s\" value=\"%3\$s\"/><br/>",
+	    $widget->get_field_id($k),
+	    $widget->get_field_name($k),
+	    esc_attr( is_array($c[$k]) ? implode(':',$c[$k]) : $c[$k] )
+    );
+
+    /* Special cases */
+    if( $p_type == 'colour' ) {
+      printf( '<div class="cw-color-picker" rel="%1$s" onload="jQuery(this).farbtastic(\'#%1$s\');"></div>', $widget->get_field_id($k) );
+    }
+    
+  }
+}
+
+
+
 function get_page_number() {
   $p = get_query_var('paged');
   if( $p ) {
