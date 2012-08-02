@@ -64,7 +64,7 @@ foreach( $slidelist as $i=>$postID ) {
       <h2><?=$c->name?></h2>
       <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : ?>
       <section class="news-tile-<?=get_size_name($tile['size'])?>" style="height:<?=intval($tile['height'])*150?>px">
-	<?php foreach( get_posts_for_cat($c->cat_ID,1) as $k=>$post ) : setup_postdata($post) ?>
+	<?php foreach( get_featured_posts( array( 'category'=>$c->cat_ID, 'numberposts'=>1 ) ) as $k=>$post ) : setup_postdata($post) ?>
 	<section class="promo-story">
 	  <img src="<?=get_the_post_thumbnail($p->id, array(300,200))?>" class="promo-img"/>
 	  <div class="promo-title">

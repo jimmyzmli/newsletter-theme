@@ -36,8 +36,12 @@ $beg = $p-$half; $end = $p+$half;
 $beg = $beg <= 0 ? 0 : $beg;
 $end = $end >= $t ? $t : $end;
 
-add_filter('posts_orderby','posts_orderby_query');
-add_filter('posts_join','posts_join_query');
+$f_orderby = create_query_function( 'cast(wp_postmeta.meta_value as SIGNED) desc, ${q}' );
+$f_join = create_query_function( '${q} LEFT JOIN wp_postmeta on (wp_postmeta.meta_key=\'post_views_count\' and wp_postmeta.post_id=wp_posts.ID)' );
+
+add_filter('posts_orderby',$f_orderby);
+add_filter('posts_join', $f_join);
+
 $posts = get_posts( array(
   'post_type' => 'any',
   'numberposts' => POSTS_PER_PAGE,
@@ -46,8 +50,9 @@ $posts = get_posts( array(
   'orderby' => 'post_date',
   'suppress_filters' => false
 ));
-remove_filter('posts_join','posts_join_query');
-remove_filter('posts_orderby','posts_orderby_query');
+
+remove_filter('posts_join', $f_orderby);
+remove_filter('posts_orderby', $f_join);
 
 ?>
 <style type="text/css">
