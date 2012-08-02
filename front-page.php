@@ -80,14 +80,7 @@ foreach( $slidelist as $i=>$postID ) {
     <?php endforeach; ?>
     <div style="clear:both"></div>
   </section> <!-- #main -->
-
-  <section id="side">
-    <section id="about">
-      <h2>About <?=bloginfo('name')?></h2>
-      <div class="desc">About here BLAH BLAH BLAH BLAH BLAH</div>
-    </section>
-    <?php get_sidebar() ?>
-  </section> <!-- #side -->
+  <?php get_sidebar() ?>
 <div style="clear:both"></div>
 </section> <!-- #body -->
 <div style="clear:both"></div>

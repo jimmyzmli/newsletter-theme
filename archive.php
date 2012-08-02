@@ -20,10 +20,9 @@
 <section id="body" class="clearfix">
   <section id="main">
     <?php while( have_posts() ) : the_post() ?>
-    <h1><a href="<?=get_permalink(get_the_ID())?>"><?=get_the_title()?></a></h1>
+    <?php get_template_part("content", get_post_format() ); ?>
     <?php endwhile; ?>
   </section>
-  <section id="side">
-  </section>
+  <?php get_sidebar() ?>
 </section>
 <?php get_footer() ?>

@@ -23,12 +23,15 @@ if( is_single() ) {
   $barname = "single";
 }else if( is_home() || is_front_page() ) {
   $title = get_bloginfo('name') . '|' . get_bloginfo('description');
-  $barname = "landing";
+  $barname = "front-page";
 }else if( is_search() ) {
   $title = sprintf( 'Search Results for %s - %d ', wp_specialchars($s), get_page_number() );
   $barname = "search";
 }else if( is_404() ) {
   $title = get_bloginfo('name') . ' | 404 - Not found';
+}else if( is_page() ) {
+  $title = get_bloginfo('name') . '|' . get_bloginfo('description');
+  $barname = "page";
 }else {
   $title = get_bloginfo('name') . wp_title('|',false) . get_page_number();
 }
@@ -135,9 +138,11 @@ function output_page_nav_menu() {
       <div class="seg3"></div>
     </div>
     <header>
+      <?php if( ($himg=get_header_image())!="" ) : ?>
       <a id="top-banner" href="<?=site_url()?>">
-	<img src="http://placehold.it/960x125"/>
+	<img src="<?=$himg?>"/>
       </a>
+      <?php endif; ?>      
       <nav id="top-nav">
 	<a id="branding" href="<?=site_url()?>">
 	  <img alt="<?=get_bloginfo('name')?>" src="http://placehold.it/200x32"/>

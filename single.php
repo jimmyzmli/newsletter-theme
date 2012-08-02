@@ -20,6 +20,7 @@
 <section id="body">
   <section id="main">
     <?php while( have_posts() ) : the_post() ?>
+    <span>Viewed <?=increPostViews(get_the_ID());?> Times</span>
     <article class="content">
       <h2><?php var_dump(get_post_meta( get_the_id(), 'post_thumb', true))?></h2>
       <h2><?=bloginfo('name')?></h2>
@@ -31,9 +32,7 @@
     </article>
     <?php endwhile; ?>
   </section>
-  <section id="side">
-    <?php get_sidebar() ?>
-  </section>
+  <?php get_sidebar() ?>
   <div style="clear:both"></div>
 </section>
 <?php get_footer() ?>
