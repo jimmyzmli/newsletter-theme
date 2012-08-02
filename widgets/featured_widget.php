@@ -16,19 +16,34 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+function posts_orderby_query( $q ) {
+  return "cast(wp_postmeta.meta_value as SIGNED) desc, $q";
+}
+
+function posts_join_query( $q ) {
+  global $wpdb;
+  return sprintf('%2$s LEFT JOIN %1$spostmeta on (%1$spostmeta.meta_key=\'post_views_count\' and %1$spostmeta.post_id = %1$sposts.ID)', $wpdb->base_prefix, $q);  
+}
+
+
 function get_posts_for_cat( $cat, $n ) {
   if( $n <= 0 ) return array();
   if( !is_numeric($cat) )
     if( is_string( $cat ) ) 
       $cat = get_cat_ID( $cat_name );
   if( is_numeric($cat) ) {
+    add_filter('posts_orderby','posts_orderby_query');
+    add_filter('posts_join','posts_join_query');    
     $args = array(
-		  'category' => intval($cat),
-		  'numberposts' => $n,
-		  'orderby' => 'post_view_count',
-		  'order' => 'ASC'
-		  );
-    $posts = get_posts( $args );
+      'post_type'=>'post',
+      'category' => intval($cat),
+      'numberposts' => $n,
+      'order' => 'desc',
+      'suppress_filters' => false
+    );
+    $posts = get_posts( $args );    
+    remove_filter('posts_orderby','posts_orderby_query');
+    remove_filter('posts_join','posts_join_query');    
     return $posts;
   }else {
     return array();

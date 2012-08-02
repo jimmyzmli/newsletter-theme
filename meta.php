@@ -143,6 +143,14 @@ function theme_settings_add_pages() {
     "theme_slideshow_options",
     create_function('','require_once("metaboxes/slideshow_setting.php");')
   );
+  add_submenu_page(
+    'tools.php',
+    __("View Counts"),
+    __("View Counts"),
+    "edit_theme_options",
+    "theme_postsview_options",
+    create_function('','require_once("metaboxes/postsview_setting.php");')
+  );  
 }
 
 /* A basic function used to translate input values */
@@ -189,11 +197,16 @@ function validate_bool( &$opt ) {
 /* Validate miscellaneous values */
 function validate_misc_opts( $opts ) {
   $old = get_option("misc_opts");
-  validate_bool( $opts['show_comments'] );
-  if( $old['show_comments'] !== $opts['show_comments'] ) {
-    /* Delete post meta data */
-    delete_metadata( 'post', 0, METAPREF."_show_comments", "", true );
+  if( $opts['reset_post_views'] == "yes" ) {
+    delete_metadata( 'post', 0, 'post_views_count', "", true );
+  } else {
+    validate_bool( $opts['show_comments'] );
+    if( $old['show_comments'] !== $opts['show_comments'] ) {
+      /* Delete post meta data */
+      delete_metadata( 'post', 0, METAPREF."_show_comments", "", true );
+    }
+    $old = $opts;
   }
-  return $opts;
+  return $old;
 }
 ?>
