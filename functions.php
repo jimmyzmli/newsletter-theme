@@ -41,7 +41,7 @@ add_theme_support( 'custom-header' );
 add_action( 'widgets_init', 'theme_custom_widget_init' );
 
 register_sidebar( array(
-  'id' => 'sidebar-landing',
+  'id' => 'sidebar-front-page',
   'description' => __('The sidebar for the landing page')
 ));
 register_sidebar( array(
@@ -141,23 +141,24 @@ function getPostViews($postID){
   if($count==''){
     delete_post_meta($postID, $count_key);
     add_post_meta($postID, $count_key, '0');
-    return "0 View";
+    return 0;
   }
-  return $count.' Views';
+  return $count;
 }
 
 /* function to count views. */
-function setPostViews($postID) {
+function increPostViews($postID) {
   $count_key = 'post_views_count';
   $count = get_post_meta($postID, $count_key, true);
   if($count==''){
-    $count = 0;
+    $count = 1;
     delete_post_meta($postID, $count_key);
-    add_post_meta($postID, $count_key, '0');
+    add_post_meta($postID, $count_key, "$count");
   }else{
     $count++;
     update_post_meta($postID, $count_key, $count);
   }
+  return $count;
 }
 
 
