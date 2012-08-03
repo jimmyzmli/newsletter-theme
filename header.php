@@ -26,7 +26,10 @@ if( is_single() ) {
   $barname = "front-page";
 }else if( is_search() ) {
   $title = sprintf( 'Search Results for %s - %d ', wp_specialchars($s), get_page_number() );
-  $barname = "search";
+  $barname = "archive";
+}else if( is_category() ) {
+  $title = wp_title('',false);
+  $barname = "archive";
 }else if( is_404() ) {
   $title = get_bloginfo('name') . ' | 404 - Not found';
 }else if( is_page() ) {
@@ -127,6 +130,8 @@ function output_page_nav_menu() {
     <!-- Script Loading -->
     <script type="text/javascript" src="<?=$prefix?>/js/jquery.min.js"></script>
     <script type="text/javascript" src="<?=$prefix?>/js/jquery-slides.min.js"></script>
+    <script type="text/javascript" src="<?=$prefix?>/js/jquery-marquee.min.js"></script>
+    <script type="text/javascript" src="<?=$prefix?>/js/weather.js"></script>    
     <script type="text/javascript" src="<?=$prefix?>/utils.js"></script>    
     <script type="text/javascript" src="<?=$prefix?>/header.js"></script>
     <?php wp_head(); ?>
@@ -156,6 +161,7 @@ function output_page_nav_menu() {
       <nav class="nav-bar-horizontal clearfix" id="nav-bar1-expand"></nav>
   <?php wp_nav_menu( array_merge( array("theme_location"=>"secondary_menu",'walker'=>new TopMenuWalker(1000),"fallback_cb"=>'output_page_nav_menu'), $navmenu_opts) ); ?>
       <div class="info-bar">
-	Hey I just met you, and this is crazy... but the server's down, for maintance baby
+	<span style="color:white;background:red;">Website launch will be very soon</span>
+	<span class="weather-bar" style="background:gainsboro"></span>
       </div>
     </header>

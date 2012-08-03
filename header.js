@@ -54,4 +54,12 @@ jQuery(function($) {
     /* Scale/Trim fonts */
     $("#side .promo-title").each( function(){ $(this).scaleFontToFit(); } );
     //$(".promo-desc").trimTextToFit();
+
+    /* Marquee */
+    var loc = get_weather();
+    $(".weather-bar")
+	.append( $("<span>").text( loc.city + ", " + loc.region ).css("margin-right", "10px") )
+	.append( $("<span>").text( loc.country ).css("margin-right", "10px") )
+	.append( $("<span>").html( loc.temp + "&deg;C" + "/" + loc.humidity + "% humidity" ) );
+    $(".info-bar").marquee();
 });
