@@ -1,4 +1,3 @@
-<?php
 /*
 	Copyright (c) 2012 Jimmy Li (JzL)
 
@@ -15,18 +14,11 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-?>
-<?php get_header() ?>
-<section id="body" class="clearfix">
-  <section id="main">
-    <?php while( have_posts() ) : the_post() ?>
-    <div class="promo-story clearfix">
-      <a href="<?=get_permalink(get_the_ID())?>"><img src="<?=get_post_thumb( get_the_ID() )?>" class="promo-img" style="width:70px;height:70px;"/></a>
-      <h1><a href="<?=get_permalink(get_the_ID())?>" class="promo-title"><?=get_the_title()?></a></h1>
-      <div class="promo-desc"><?=get_the_excerpt()?></div>
-    </div>
-    <?php endwhile; ?>
-  </section>
-  <?php get_sidebar() ?>
-</section>
-<?php get_footer() ?>
+
+.promo-img {
+    float: left;
+}
+
+.promo-desc {
+
+}
