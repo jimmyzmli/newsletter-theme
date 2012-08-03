@@ -26,6 +26,8 @@ function pdefault( $a, $v ) {
 
 $keys = array(
   'show_comments' => array('Theme should show comments','checkbox'),
+  'show_weather_bar' => array('Show a weather bar','checkbox'),  
+  'global_msg' => array('Global header annoncement','text')
 );
 $opts = get_option("misc_opts");
 $opts = is_array($opts) ? $opts : array();

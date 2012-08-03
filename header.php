@@ -16,6 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+$misc = get_option('misc_opts');   
 $prefix = get_template_directory_uri();
 $barname = null;
 if( is_single() ) {
@@ -111,6 +112,7 @@ function output_page_nav_menu() {
   $k->end_lvl( $out, -1 );
   print '<div class="nav-bar-horizontal" id="nav-bar2">'.$out.'</div>';
 }
+  
 
 ?>
 <!DOCTYPE html>
@@ -161,7 +163,7 @@ function output_page_nav_menu() {
       <nav class="nav-bar-horizontal clearfix" id="nav-bar1-expand"></nav>
   <?php wp_nav_menu( array_merge( array("theme_location"=>"secondary_menu",'walker'=>new TopMenuWalker(1000),"fallback_cb"=>'output_page_nav_menu'), $navmenu_opts) ); ?>
       <div class="info-bar">
-	<span style="color:white;background:red;">Website launch will be very soon</span>
-	<span class="weather-bar" style="background:gainsboro"></span>
+	<span style="color:white;background:red;"><?=$misc['global_msg']?></span>
+	<?php if( $misc['show_weather_bar'] ) : ?><span class="weather-bar" style="background:gainsboro"></span><?php endif; ?>
       </div>
     </header>
