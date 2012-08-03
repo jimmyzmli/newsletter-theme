@@ -20,9 +20,9 @@
 <section id="body">
   <section id="main">
     <?php while( have_posts() ) : the_post() ?>
-    <span>Viewed <?=increPostViews(get_the_ID());?> Times</span>
+    <div>Viewed <?=increPostViews(get_the_ID());?> Times</div>
+    <div><?=wp_count_comments( get_the_ID() )->approved?> Comments</div>
     <article class="content">
-      <h2><?php var_dump(get_post_meta( get_the_id(), 'post_thumb', true))?></h2>
       <h2><?=bloginfo('name')?></h2>
       <a href="<?php the_permalink() ?>"><h3><?php the_title(); ?></h3></a>
       <div class="story"><?php the_content(); ?></div>
@@ -30,6 +30,7 @@
       <?php previous_post_link( "%link", __('Prev') ) ?>
       <?php next_post_link( "%link", __('Next') ) ?>
     </article>
+    <?php if( should_show_comments(get_the_ID()) ) comments_template( '', true ); ?>
     <?php endwhile; ?>
   </section>
   <?php get_sidebar() ?>

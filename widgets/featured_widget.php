@@ -65,9 +65,7 @@ class FeaturedWidget extends WP_Widget {
     global $post;
     foreach( get_featured_posts( array( 'numberposts'=>$p_show, 'rollup_days'=>$p_rollup_days ) ) as $i=>$post ) {
       setup_postdata($post);
-      $thumb = get_post_meta_img(get_the_ID(),'featured_thumb');
-      foreach( wp_get_post_categories(get_the_ID()) as $cat_ID )
-	$thumb = strlen($thumb) > 0 ? $thumb : get_cat_meta_img($cat_ID,'featured_thumb');
+      $thumb = get_post_thumb( get_the_ID() );
     ?>
       <article class="promo-story">
 	<img src="<?=$thumb?>" class="promo-img"/>

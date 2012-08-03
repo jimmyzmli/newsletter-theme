@@ -32,13 +32,20 @@ function get_post_meta_img( $id, $type = 'full') {
   return is_string($src) ? $src : "";
 }
 
+function get_post_thumb( $id ) {
+  $thumb = get_post_meta_img( $id, 'featured_thumb' );
+  foreach( wp_get_post_categories($id) as $cat_ID )
+    $thumb = strlen($thumb) > 0 ? $thumb : get_cat_meta_img($cat_ID,'featured_thumb');
+  return $thumb;
+}
+
 function get_cat_meta_img( $id, $type = 'full' ) {
   $img = get_tax_meta( $id, METAPREF."_$type"."_img" );
   $src = $img["src"];
   return is_string($src) ? $src : "";  
 }
 
-function should_show_post( $pid, $opt = -1 ) {
+function should_show_comments( $pid, $opt = -1 ) {
   global $meta_defaults;
   /* Get values */
   $g = get_option( "misc_opts" )['show_comments'];

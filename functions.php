@@ -41,13 +41,21 @@ add_theme_support( 'custom-header' );
 add_action( 'widgets_init', 'theme_custom_widget_init' );
 
 register_sidebar( array(
+  'name'=>'Front Page Sidebar',
   'id' => 'sidebar-front-page',
   'description' => __('The sidebar for the landing page')
 ));
 register_sidebar( array(
+  'name'=>'Single Post Sidebar',
   'id' => 'sidebar-single',
   'description' => __('The sidebar for a single post view')
 ));
+register_sidebar( array(
+  'name'=>'Archive (Category, Search) Sidebar',
+  'id' => 'sidebar-archive',
+  'description' => __('Sidebar for archive views')
+));
+
 
 
 register_nav_menu( 'primary_menu', 'The main menu at top' );

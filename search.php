@@ -21,11 +21,14 @@
   <section id="main">
     <h1 class="page-title"><?php printf( __( 'Search Results for: %s'), '<span>' . get_search_query() . '</span>' ); ?></h1>
     <?php while( have_posts() ) : the_post() ?>
-    <h1><a href="<?=get_permalink(get_the_ID())?>"><?=get_the_title()?></a></h1>
+    <div class="promo-story clearfix">
+      <a href="<?=get_permalink(get_the_ID())?>"><img src="<?=get_post_thumb( get_the_ID() )?>" class="promo-img" style="width:70px;height:70px;"/></a>
+      <h1><a href="<?=get_permalink(get_the_ID())?>" class="promo-title"><?=get_the_title()?></a></h1>
+      <div class="promo-desc"><?=get_the_excerpt()?></div>
+    </div>
     <?php endwhile; ?>
   </section>
-  <section id="side">
-  </section>
+  <?php get_sidebar() ?>
   <div style="clear:both"></div>
 </section>
 <?php get_footer() ?>

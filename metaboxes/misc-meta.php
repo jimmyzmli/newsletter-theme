@@ -23,7 +23,7 @@
     <table>
       <tr>
 	<td><label for="<?=$mb->get_the_name()?>" style="width:300px">Show Comment Section</label></td>
-	<td><input type="checkbox" id="<?=$mb->get_the_name()?>" name="<?=$mb->get_the_name()?>" value="yes" <?=should_show_post(0,$mb->get_the_value()) ? 'checked="checked"' : ''?>/></td>
+	<td><input type="checkbox" id="<?=$mb->get_the_name()?>" name="<?=$mb->get_the_name()?>" value="yes" <?=should_show_comments(0,$mb->get_the_value()) ? 'checked="checked"' : ''?>/></td>
       </tr>
     </table>
   </p>  
