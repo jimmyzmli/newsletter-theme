@@ -22,11 +22,37 @@ define( 'METAPREF', 'nws' );
 
 $meta_defaults = array(
   'misc_opts' => array(
-    'show_comments' => true
+    'show_comments' => true,
+    'show_weather_bar' => true,
+    'marquee_info_bar' => false,
+    'global_msg' => ""
   )
 );
 
 /* Meta value accessors */
+function get_meta_option( $sect, $k = null ) {
+  static $cache = array();
+  global $meta_defaults;
+
+  $cache[$sect] = isset($cache[$sect]) ? $cache[$sect] :  get_option($sect);
+  
+  if( $k === null ) {
+    return $cache[$sect];
+  } else { 
+    $v = $cache[$sect][$k];
+    if( !isset($v) ) {
+      $v = $meta_defaults[$sect][$k];
+      if( isset($v) ) {
+	$cache[$sect][$k] = $v;
+	update_option( $sect, $cache[$sect] );
+      } else {
+	$v = "";
+      }
+    }
+    return $v;
+  }
+}
+
 function get_post_meta_img( $id, $type = 'full') {
   $src = get_post_meta( $id, METAPREF."_$type"."_img", true );
   return is_string($src) ? $src : "";
@@ -127,6 +153,7 @@ function theme_settings_init() {
   register_setting( 'layout_opts', 'layout_opts', 'validate_layout_opts' );
   register_setting( 'slide_opts', 'slide_opts', 'validate_slide_opts' );
   register_setting( 'misc_opts', 'misc_opts', 'validate_misc_opts' );
+  register_setting( 'style_opts', 'style_opts', 'validate_style_opts' );  
 }
 
 function theme_settings_add_pages() {
@@ -151,6 +178,13 @@ function theme_settings_add_pages() {
     "theme_slideshow_options",
     create_function('','require_once("metaboxes/slideshow_setting.php");')
   );
+  add_theme_page(
+    __("Stylesheets"),
+    __("Stylesheets"),
+    "edit_theme_options",
+    "theme_stylesheets_options",
+    create_function('','require_once("metaboxes/stylesheets_setting.php");')
+  );  
   add_submenu_page(
     'tools.php',
     __("View Counts"),
@@ -158,7 +192,7 @@ function theme_settings_add_pages() {
     "edit_theme_options",
     "theme_postsview_options",
     create_function('','require_once("metaboxes/postsview_setting.php");')
-  );  
+  );
 }
 
 /* A basic function used to translate input values */
@@ -200,6 +234,12 @@ function validate_slide_opts( $opts ) {
 function validate_bool( &$opt ) {
   if( $opt === "yes" ) $opt = true;
   else $opt = false;
+}
+
+/* Validate custom stylesheet data */
+function validate_style_opts( $c ) {
+  $opts = get_option('style_opts');
+  return $opts;
 }
 
 /* Validate miscellaneous values */

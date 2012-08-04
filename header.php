@@ -16,7 +16,6 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-$misc = get_option('misc_opts');   
 $prefix = get_template_directory_uri();
 $barname = null;
 if( is_single() ) {
@@ -118,8 +117,10 @@ function output_page_nav_menu() {
 <!DOCTYPE html>
 <html <?php language_attributes() ?>>
   <head>
+    <!-- Meta tags -->
     <meta http-equiv="content-type" content="<?php bloginfo('html_type') ?>" charset="<?php bloginfo('charset') ?>"/>
     <title><?php echo $title?></title>
+    <!-- Miscellaneous Wordpress stuff -->
     <link rel="alternative" type="application/rss+xml" href="<?php bloginfo('rss2_url') ?>" title="News"/>
     <link rel="alternative" type="application/rss+xml" href="<?php bloginfo('comments_rss2_url') ?>" title="Comments"/>
     <link rel="pingback" href="<?php bloginfo('pingback_url') ?>"/>
@@ -132,10 +133,25 @@ function output_page_nav_menu() {
     <!-- Script Loading -->
     <script type="text/javascript" src="<?php echo $prefix?>/js/jquery.min.js"></script>
     <script type="text/javascript" src="<?php echo $prefix?>/js/jquery-slides.min.js"></script>
-    <script type="text/javascript" src="<?php echo $prefix?>/js/jquery-marquee.min.js"></script>
-    <script type="text/javascript" src="<?php echo $prefix?>/js/weather.js"></script>    
-    <script type="text/javascript" src="<?php echo $prefix?>/utils.js"></script>    
+    <?php if( get_meta_option('misc_opts', 'marquee_info_bar') ) : ?><script type="text/javascript" src="<?php echo $prefix?>/js/jquery-marquee.min.js"></script><?php endif; ?>    
+    <script type="text/javascript" src="<?php echo $prefix?>/js/weather.js"></script>
+    <script type="text/javascript" src="<?php echo $prefix?>/utils.js"></script>
     <script type="text/javascript" src="<?php echo $prefix?>/header.js"></script>
+    <script type="text/javascript">
+      /* Generate JS based on settings */
+      jQuery(function($) {
+	  <?php if( get_meta_option('misc_opts', 'marquee_info_bar') ) : ?>
+	      $(".info-bar").marquee();
+	  <?php endif; ?>
+	  <?php if( get_meta_option('misc_opts', 'show_weather_bar') ) : ?>
+	      var loc = get_weather();
+	      $(".weather-bar")
+	          .append( $("<span>").text( loc.city + ", " + loc.region ).css("margin-right", "10px") )
+	          .append( $("<span>").text( loc.country ).css("margin-right", "10px") )
+	          .append( $("<span>").html( loc.temp + "&deg;C" + "/" + loc.humidity + "% humidity" ) );
+	  <?php endif; ?>
+      });
+    </script>
     <?php wp_head(); ?>
   </head>
   <body id="page">
@@ -145,11 +161,12 @@ function output_page_nav_menu() {
       <div class="seg3"></div>
     </div>
     <header>
-      <?php if( ($himg=get_header_image())!="" ) : ?>
+      <?php if( ($himg=get_header_image())!="" || ($clr=get_header_textcolor())!="blank" ) : ?>
       <a id="top-banner" href="<?php echo site_url()?>">
-	<img src="<?php echo $himg?>"/>
+	<?php if( $himg != "" ) : ?><img src="<?php echo $himg?>" class="site-header-img" alt="<?php bloginfo('name') ?>"/><?php endif; ?>
+	<?php if( $himg == "" && $clr!="blank" ) : ?><div style="color:#<?php echo $clr ?>" class="site-header-text"><?php bloginfo('name') ?></div><?php endif; ?>
       </a>
-      <?php endif; ?>      
+      <?php endif; ?>            
       <nav id="top-nav">
 	<a id="branding" href="<?php echo site_url()?>">
 	  <img alt="<?php echo get_bloginfo('name')?>" src="http://placehold.it/200x32"/>
@@ -163,7 +180,7 @@ function output_page_nav_menu() {
       <nav class="nav-bar-horizontal clearfix" id="nav-bar1-expand"></nav>
   <?php wp_nav_menu( array_merge( array("theme_location"=>"secondary_menu",'walker'=>new TopMenuWalker(1000),"fallback_cb"=>'output_page_nav_menu'), $navmenu_opts) ); ?>
       <div class="info-bar">
-	<span style="color:white;background:red;"><?php echo $misc['global_msg']?></span>
-	<?php if( $misc['show_weather_bar'] ) : ?><span class="weather-bar" style="background:gainsboro"></span><?php endif; ?>
+	<span style="color:white;background:red;"><?php echo get_meta_option('misc_opts','global_msg') ?></span>
+        <span class="weather-bar" style="background:gainsboro"></span>
       </div>
     </header>
