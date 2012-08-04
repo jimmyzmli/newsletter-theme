@@ -93,14 +93,13 @@ function posts_custom_column_views($column_name, $id){
   The algorithm is simple: For all posts this N-days, arrange by views
 */
 function create_query_function( $str ) {
-  return create_function( '$q',
-			  'global $wpdb;'.
-			  '$rplcmnts = array( "wp_" => $wpdb->prefix, "\${q}" => $q );'.
-			  '$str = '.json_encode("".$str).';'.
-			  'foreach( $rplcmnts as $t=>$r ) $str = str_replace($t, $r, $str);'.
-			  /*'var_dump($str);'.*/
-			  'return $str;'
-  );
+  global $wpdb;
+
+  $str = str_replace('$','\$',json_encode($str));  
+  $rplcmnts = array( "wp_" => $wpdb->prefix, '\${q}' => '$q' );
+  foreach( $rplcmnts as $t=>$r ) $str = str_replace($t, $r, $str);
+
+  return create_function( '$q', 'return '.$str.';' );
 }
 
 function get_featured_posts( $args ) {
