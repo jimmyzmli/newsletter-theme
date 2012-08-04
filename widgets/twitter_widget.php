@@ -34,7 +34,7 @@ class TwitterWidget extends WP_Widget {
     widget_form( $this, $c, array(
       'heading'=>array('type'=>'text','default'=>'Recent Tweets','label'=>'Heading'),
       'show'=>array('type'=>'number','default'=>3,'label'=>'Number of posts to show'),
-      'list'=>array('type'=>'text','default'=>array('user-name','list-name'),'label'=>'Twitter list'),
+      'list'=>array('type'=>'text','default'=>array('user-name','list-name'),'label'=>'Twitter list (<a href="http://support.twitter.com/articles/76460-how-to-use-twitter-lists" target="_blank">Help</a>)'),
       'colour'=>array('type'=>'colour','default'=>'#000000','label'=>'Background Colour')
     ));
   }

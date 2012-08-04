@@ -63,13 +63,18 @@ foreach( $slidelist as $i=>$postID ) {
     <?php foreach( $cats as $i=>$c ) : ?>
     <section class="news-promo">
       <h2><?php echo $c->name?></h2>
-      <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : $i = 0; ?>
-      <section class="news-tile-<?php echo get_size_name($tile['size'])?> clearfix" style="height:<?php echo 110+intval($tile['height'])*30?>px">
+    <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : ?>
+    <?php
+       $n = intval($tile['height']);
+       $imgh = round(1/$tile['size'] * 260);
+       $i = 0;
+    ?>
+      <section class="news-tile-<?php echo get_size_name($tile['size'])?> clearfix" style="height:<?php echo $imgh+$n*73?>px">
 	<?php
 		global $post;
-		foreach( get_featured_posts( array( 'category'=>$c->cat_ID, 'numberposts'=>intval($tile['height']) ) ) as $k=>$post ) :
+		foreach( get_featured_posts( array( 'category'=>$c->cat_ID, 'numberposts'=>$n ) ) as $k=>$post ) :
 		setup_postdata($post); $i++;
-		$imgh = round(1/$tile['size'] * 260);
+		
 	?>
 	<section class="promo-story">
 	  <div class="promo-title">
