@@ -48,7 +48,8 @@ function get_cat_meta_img( $id, $type = 'full' ) {
 function should_show_comments( $pid, $opt = -1 ) {
   global $meta_defaults;
   /* Get values */
-  $g = get_option( "misc_opts" )['show_comments'];
+  $g = get_option( "misc_opts" );
+  $g = $g['show_comments'];
   if( $g !== true && $g !== false ) $g = $meta_defaults['misc_opts']['show_comments'];
   if( $opt === -1 ) $opt = get_post_meta( $pid, METAPREF."_show_comments", true );
   

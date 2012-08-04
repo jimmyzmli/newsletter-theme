@@ -35,7 +35,8 @@ $slides = array();
 foreach( $slidelist as $i=>$postID ) {
   $post = get_post( $postID );
   $p = new stdClass;
-  $catID = wp_get_post_categories( get_the_ID() )[0];
+  $catID = wp_get_post_categories( get_the_ID() );
+  $catID = $catID[0];
   $catID = is_numeric($catID) && $catID >= 0 ? $catID : 0;
   $catName = get_category( $catID )->name;
   
