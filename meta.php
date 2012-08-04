@@ -25,8 +25,13 @@ $meta_defaults = array(
     'show_comments' => true,
     'show_weather_bar' => true,
     'marquee_info_bar' => false,
+    'bg_colour' => '#000000',
+    'menu_colour' => 'gold',
     'global_msg' => ""
-  )
+  ),
+  'layout_opts' => array(),
+  'slide_opts' => array(),
+  'style_opts' => array()
 );
 
 /* Meta value accessors */
@@ -53,6 +58,12 @@ function get_meta_option( $sect, $k = null ) {
   }
 }
 
+function get_cat_meta_img( $id, $type = 'full' ) {
+  $img = get_tax_meta( $id, METAPREF."_$type"."_img" );
+  $src = $img["src"];
+  return is_string($src) ? $src : "";  
+}
+
 function get_post_meta_img( $id, $type = 'full') {
   $src = get_post_meta( $id, METAPREF."_$type"."_img", true );
   return is_string($src) ? $src : "";
@@ -63,12 +74,6 @@ function get_post_thumb( $id ) {
   foreach( wp_get_post_categories($id) as $cat_ID )
     $thumb = strlen($thumb) > 0 ? $thumb : get_cat_meta_img($cat_ID,'featured_thumb');
   return $thumb;
-}
-
-function get_cat_meta_img( $id, $type = 'full' ) {
-  $img = get_tax_meta( $id, METAPREF."_$type"."_img" );
-  $src = $img["src"];
-  return is_string($src) ? $src : "";  
 }
 
 function should_show_comments( $pid, $opt = -1 ) {
@@ -244,6 +249,17 @@ function validate_style_opts( $c ) {
 
 /* Validate miscellaneous values */
 function validate_misc_opts( $opts ) {
+  global $meta_defaults;
+  /* Special case, delete settings */
+  if( isset($opts['btn_reset_all']) ) {
+    foreach( $meta_defaults as $k=>$def )
+      delete_option( $k );
+    return "";
+  } elseif( isset($opts['btn_reset_misc']) ) {
+    return "";
+  }
+  
+  /* General option parsing */
   $old = get_option("misc_opts");
   if( $opts['reset_post_views'] == "yes" ) {
     delete_metadata( 'post', 0, 'post_views_count', "", true );

@@ -19,6 +19,9 @@
 <?php
 global $meta_defaults;
 
+wp_enqueue_script('farbtastic');
+wp_enqueue_style('farbtastic');
+
 function pdefault( $a, $v ) {
   if( $a === null || !isset($a) ) $a = $v;
   return $a;
@@ -29,27 +32,117 @@ $keys = array(
   'show_weather_bar' => array('Show a weather bar','checkbox'),
   'marquee_info_bar' => array('Apply marquee effect on the info bar','checkbox'),
   'global_msg' => array('Global header annoncement','text'),
+  'colours' => array('%s Colour', array(
+    'type'=>'selector',
+    'bg_colour'=>array('Background','colour'),
+    'menu_colour'=>array('Menu','colour')
+  )),
+  'resets' => array('Reset', array(
+    'type'=>'row',
+    'btn_reset_all'=>array('All','button'),
+    'btn_reset_misc'=>array('Miscellaneous','button')
+  ))
 );
+
+$field_input_type = array(
+    'text' => 'text',
+    'checkbox' => 'checkbox',
+    'radio' => 'radio',
+    'colour' => 'text',
+    'button' => 'Submit'
+);
+
+
 $opts = get_option("misc_opts");
 $opts = is_array($opts) ? $opts : array();
 $nopts = array();
 foreach( $keys as $k=>$t ) {
-  $nopts[$k] = pdefault( $opts[$k], $meta_defaults['misc_opts'][$k] );
+  if( is_array($t[1]) ) {
+    foreach( $t[1] as $kk=>$tt )
+      if( $kk != 'type' )
+	$nopts[$kk] = pdefault( $opts[$kk], $meta_defaults['misc_opts'][$kk] );
+  } else {
+    $nopts[$k] = pdefault( $opts[$k], $meta_defaults['misc_opts'][$k] );
+  }
 }
-extract( $nopts, EXTR_PREFIX_ALL, 'p' );
 
 ?>
+<style type="text/css">
+    div.farbtastic {
+	position: fixed;
+	display: none;
+	top: 28px;
+	left: 146px;
+    }
+    td {
+	width: 200px;
+    }
+    td.input-box {
+	width: 350px;
+    }
+    .text-box input {
+	width: 100%;
+    }
+</style>
+<script type="text/javascript">
+    jQuery(function($){
+	/* Handles selector events for showing/hiding elements in row */
+	$('.option-switch').change(function(e) {
+	    var i = e.target.selectedIndex;
+	    var s =  $('>td.input-box',$(this).parents("tr"));
+	    $(s).css('display','none');
+	    $($(s).get(i)).removeAttr('style');
+	}).trigger( 'change' );
+	/* Creates farbtastic colour wheels */
+	$('.colour-box input').each(function(){
+	    $(this).after( $("<div>").farbtastic(this) );
+	}).focus(function() {
+	    $('+div>.farbtastic',this).css('display','block');
+	}).blur(function() {
+	    $('+div>.farbtastic',this).removeAttr('style');
+	});
+    });
+</script>
 <form action="options.php" method="POST">
   <?php settings_fields("misc_opts") ?>
   <table>
     <?php foreach( $keys as $k=>$info ) : ?>
     <tr>
-      <td><label><?php echo $info[0]?></label></td>
-      <td><input type="<?php echo $info[1]?>" name="misc_opts[<?php echo $k?>]"
-		 value="<?php echo ($info[1]=='checkbox'?'yes':$nopts[$k])?>"
-		 <?php echo ($info[1]=='checkbox'&&$nopts[$k]?'checked="checked"':'')?>
-		 />
+      <?php  
+         if( is_array($info[1]) ){
+	   $label = $info[0];
+	   $fields = $info[1];
+	   $nhtml = '';	   
+	   $t = $fields['type'];
+	   unset($fields['type']);
+	    
+	   if( $t == 'selector' ) {
+	      $nhtml .= '<select class="option-switch">';
+	      foreach( $fields as $j=>$ele ) {
+		$nhtml .= '<option>'.$ele[0].'</option>';
+	      }
+	      $nhtml .= '</select>';
+	   }
+	    
+	 } else {
+	   $label = $info[0];
+	   $nhtml = '';
+	    $fields = array( $k => $info );
+	 }
+      ?> 
+      <td><label><?php printf( $label, $nhtml ); ?></label></td>
+      <?php foreach( $fields as $key=>$field ) : ?>
+      <td class="<?php echo $field[1] ?>-box input-box">
+	<input
+	   type="<?php echo $field_input_type[$field[1]]?>" name="misc_opts[<?php echo $key?>]"
+	   value="<?php switch($field[1]) :
+		  case 'checkbox': echo 'yes'; break;
+		  case 'button': echo $field[0]; break;
+		  default: echo $nopts[$key]; break; endswitch;?>"
+	   <?php echo ($field[1]=='checkbox'&&$nopts[$key]?'checked="checked"':'')?>
+         />
       </td>
+      <?php endforeach; ?>
     </tr>
     <?php endforeach; ?>
   </table>
