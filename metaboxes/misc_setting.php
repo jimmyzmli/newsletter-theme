@@ -43,10 +43,10 @@ extract( $nopts, EXTR_PREFIX_ALL, 'p' );
   <table>
     <?php foreach( $keys as $k=>$info ) : ?>
     <tr>
-      <td><label><?=$info[0]?></label></td>
-      <td><input type="<?=$info[1]?>" name="misc_opts[<?=$k?>]"
-		 value="<?=($info[1]=='checkbox'?'yes':$nopts[$k])?>"
-		 <?=($info[1]=='checkbox'&&$nopts[$k]?'checked="checked"':'')?>
+      <td><label><?php echo $info[0]?></label></td>
+      <td><input type="<?php echo $info[1]?>" name="misc_opts[<?php echo $k?>]"
+		 value="<?php echo ($info[1]=='checkbox'?'yes':$nopts[$k])?>"
+		 <?php echo ($info[1]=='checkbox'&&$nopts[$k]?'checked="checked"':'')?>
 		 />
       </td>
     </tr>

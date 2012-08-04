@@ -59,7 +59,7 @@ class FeaturedWidget extends WP_Widget {
     if( $p_show <= 0 ) return;
   ?>
 <section class="featured">
-  <h2><?=$before_title.(empty($title)?"Featured":$title).$after_title?></h2>
+  <h2><?php echo $before_title.(empty($title)?"Featured":$title).$after_title?></h2>
   <?php
     echo $before_widget;
     global $post;
@@ -68,9 +68,9 @@ class FeaturedWidget extends WP_Widget {
       $thumb = get_post_thumb( get_the_ID() );
     ?>
       <article class="promo-story">
-	<img src="<?=$thumb?>" class="promo-img"/>
+	<img src="<?php echo $thumb?>" class="promo-img"/>
 	<section class="promo-title">
-	  <a href="<?php the_permalink()?>"><?=get_the_title()?></a>
+	  <a href="<?php the_permalink()?>"><?php echo get_the_title()?></a>
 	</section>
 	<section class="promo-desc">
 	  <?php the_excerpt() ?>

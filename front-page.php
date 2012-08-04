@@ -51,7 +51,7 @@ foreach( $slidelist as $i=>$postID ) {
 ?>
 <?php get_header(); ?>
 <script type="text/javascript">
-  var slidesInfo=<?=json_encode($slides)?>;
+  var slidesInfo=<?php echo json_encode($slides)?>;
   jQuery(function($) {
       $(".slider").jslides( slidesInfo, {start:1} );
   });
@@ -61,12 +61,12 @@ foreach( $slidelist as $i=>$postID ) {
     <section id="top-promo" class="slider"></section>
     <?php foreach( $cats as $i=>$c ) : ?>
     <section class="news-promo">
-      <h2><?=$c->name?></h2>
+      <h2><?php echo $c->name?></h2>
       <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : ?>
-      <section class="news-tile-<?=get_size_name($tile['size'])?>" style="height:<?=intval($tile['height'])*150?>px">
+      <section class="news-tile-<?php echo get_size_name($tile['size'])?>" style="height:<?php echo intval($tile['height'])*150?>px">
 	<?php foreach( get_featured_posts( array( 'category'=>$c->cat_ID, 'numberposts'=>1 ) ) as $k=>$post ) : setup_postdata($post) ?>
 	<section class="promo-story">
-	  <img src="<?=get_the_post_thumbnail($p->id, array(300,200))?>" class="promo-img"/>
+	  <img src="<?php echo get_the_post_thumbnail($p->id, array(300,200))?>" class="promo-img"/>
 	  <div class="promo-title">
 	    <a href="<?php the_permalink() ?>"><?php the_title() ?></a>
           </div>

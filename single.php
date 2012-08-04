@@ -20,10 +20,10 @@
 <section id="body">
   <section id="main">
     <?php while( have_posts() ) : the_post() ?>
-    <div>Viewed <?=increPostViews(get_the_ID());?> Times</div>
-    <div><?=wp_count_comments( get_the_ID() )->approved?> Comments</div>
+    <div>Viewed <?php echo increPostViews(get_the_ID());?> Times</div>
+    <div><?php echo wp_count_comments( get_the_ID() )->approved?> Comments</div>
     <article class="content">
-      <h2><?=bloginfo('name')?></h2>
+      <h2><?php echo bloginfo('name')?></h2>
       <a href="<?php the_permalink() ?>"><h3><?php the_title(); ?></h3></a>
       <div class="story"><?php the_content(); ?></div>
       <?php get_template_part( 'content', 'single' ) ?>

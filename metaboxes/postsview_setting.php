@@ -75,7 +75,7 @@ remove_filter('posts_orderby', $f_join);
 
   .linklist {
       display: block;
-      width: <?=($end-$beg+1)*12?>px;
+      width: <?php echo ($end-$beg+1)*12?>px;
       margin: auto auto;
   }
 
@@ -98,22 +98,22 @@ remove_filter('posts_orderby', $f_join);
 <?php global $post; foreach( $posts as $i=>$post ) : setup_postdata($post) ?>
 <?php $pid = intval(get_the_ID()); ?>
   <tr>
-     <td class="name"><a href="<?php the_permalink()?>" target="_blank"><?=get_the_title()?></a></td>
-     <td class="views"><?=getPostViews($pid)?> Views</td>
+     <td class="name"><a href="<?php the_permalink()?>" target="_blank"><?php echo get_the_title()?></a></td>
+     <td class="views"><?php echo getPostViews($pid)?> Views</td>
   </tr>
 <?php endforeach; ?>
 </table>
 <ul class="page-nav">
     <?php if( $p > 0 ) : ?>
-    <li class="last"><a href="<?=get_postviews_page_uri($p-1)?>">Last</a></li>
+    <li class="last"><a href="<?php echo get_postviews_page_uri($p-1)?>">Last</a></li>
     <?php endif; ?>
     <?php if( count($posts) >= POSTS_PER_PAGE ) : ?>
-    <li class="next"><a href="<?=get_postviews_page_uri($p+1)?>">Next</a></li>
+    <li class="next"><a href="<?php echo get_postviews_page_uri($p+1)?>">Next</a></li>
     <?php endif; ?>
     <ul class="linklist">
       <?php for($i=$beg;$i<=$end;$i++) : ?>
-	    <li class="pagelink <?=($i==$p?' current':'')?>" >
-	      <a <?=($i==$p?'':'href='.get_postviews_page_uri($i))?> ><?=$i+1?></a>
+	    <li class="pagelink <?php echo ($i==$p?' current':'')?>" >
+	      <a <?php echo ($i==$p?'':'href='.get_postviews_page_uri($i))?> ><?php echo $i+1?></a>
 	    </li>
     <?php endfor; ?>
     </ul>

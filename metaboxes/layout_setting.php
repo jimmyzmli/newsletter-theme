@@ -36,28 +36,28 @@ print "</pre>";
 
 ?>
 
-<link href="<?="$prefix/metaboxes/layout_setting.css"?>" rel="stylesheet"/>
-<link href="<?="$prefix/css/resizable.css"?>" rel="stylesheet"/>
+<link href="<?php echo "$prefix/metaboxes/layout_setting.css"?>" rel="stylesheet"/>
+<link href="<?php echo "$prefix/css/resizable.css"?>" rel="stylesheet"/>
 
-<script type="text/javascript" src="<?="$prefix/js/jquery.min.js"?>"></script>
-<script type="text/javascript" src="<?="$prefix/js/jquery-ui.min.js"?>"></script>
-<script type="text/javascript" src="<?="$prefix/js/json2.js"?>"></script>
-<script type="text/javascript" src="<?="$prefix/utils.js"?>"></script>
-<script type="text/javascript" src="<?="$prefix/metaboxes/layout_setting.js"?>"></script>
+<script type="text/javascript" src="<?php echo "$prefix/js/jquery.min.js"?>"></script>
+<script type="text/javascript" src="<?php echo "$prefix/js/jquery-ui.min.js"?>"></script>
+<script type="text/javascript" src="<?php echo "$prefix/js/json2.js"?>"></script>
+<script type="text/javascript" src="<?php echo "$prefix/utils.js"?>"></script>
+<script type="text/javascript" src="<?php echo "$prefix/metaboxes/layout_setting.js"?>"></script>
 
 <section id="body" class="clearfix">
   <section id="layout-panel" class="clearfix">
-    <h2 class="title"><?=__("Layout",$theme)?></h2>
+    <h2 class="title"><?php echo __("Layout",$theme)?></h2>
     <section id="tile-main" class="clearfix tile-section">
       <?php foreach( $cats as $i=>$c ) : ?>
       <section class="tile-cat clearfix">
-	<h2 class="cat-title"><?=$c->name?></h2>
-	<input type="hidden" name="cat_ID" value="<?=$c->cat_ID?>"/>
+	<h2 class="cat-title"><?php echo $c->name?></h2>
+	<input type="hidden" name="cat_ID" value="<?php echo $c->cat_ID?>"/>
 
         <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : ?>
-        <section class="<?=get_size_name($tile['size'])?>-tile tile" style="height:<?=intval($tile['height'])*50?>px">
-	  <input type="hidden" name="tile-size" value="<?=$tile['size']?>"/>
-	  1/<?=$tile['size']?>
+        <section class="<?php echo get_size_name($tile['size'])?>-tile tile" style="height:<?php echo intval($tile['height'])*50?>px">
+	  <input type="hidden" name="tile-size" value="<?php echo $tile['size']?>"/>
+	  1/<?php echo $tile['size']?>
 	</section>
 	<?php endforeach; ?>
 
@@ -78,19 +78,19 @@ print "</pre>";
 	1/1
       </section>
     </section>
-    <section id="trash-bin"><?=__("Trash",$theme)?></section>
+    <section id="trash-bin"><?php echo __("Trash",$theme)?></section>
     <section id="cat-list" class="clearfix tile-section">
-      <h2 class="title"><?=__("Categories",$theme)?></h2>
+      <h2 class="title"><?php echo __("Categories",$theme)?></h2>
       <?php foreach( $hcats as $c ) : ?>
       <section class="tile-cat">
 
-	<h2 class="cat-title"><?=$c->name?></h2>
-	<input type="hidden" name="cat_ID" value="<?=$c->cat_ID?>"/>
+	<h2 class="cat-title"><?php echo $c->name?></h2>
+	<input type="hidden" name="cat_ID" value="<?php echo $c->cat_ID?>"/>
 	
         <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : ?>
-        <section class="<?=get_size_name($tile['size'])?>-tile tile">
-	  <input type="hidden" name="tile-size" value="<?=$tile['size']?>"/>
-	  1/<?=$tile['size']?>
+        <section class="<?php echo get_size_name($tile['size'])?>-tile tile">
+	  <input type="hidden" name="tile-size" value="<?php echo $tile['size']?>"/>
+	  1/<?php echo $tile['size']?>
 	</section>
 	<?php endforeach; ?>	
 

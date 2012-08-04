@@ -69,11 +69,11 @@ foreach( $posts as $i=>$post )
       margin-top: 30px;
   }  
 </style>
-<link rel="stylesheet" href="<?=$prefix?>/slideshow.css"/>
-<script type="text/javascript" src="<?=$prefix?>/js/jquery.min.js"></script>
-<script type="text/javascript" src="<?=$prefix?>/js/jquery-slides.min.js"></script>    
-<script type="text/javascript" src="<?=$prefix?>/js/json2.js"></script>
-<script type="text/javascript" src="<?=$prefix?>/utils.js"></script> 
+<link rel="stylesheet" href="<?php echo $prefix?>/slideshow.css"/>
+<script type="text/javascript" src="<?php echo $prefix?>/js/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo $prefix?>/js/jquery-slides.min.js"></script>    
+<script type="text/javascript" src="<?php echo $prefix?>/js/json2.js"></script>
+<script type="text/javascript" src="<?php echo $prefix?>/utils.js"></script> 
 <script type="text/javascript">
     jQuery( function($) {
 	var g = window;
@@ -128,11 +128,11 @@ function print_post() {
   $catName = get_category( $catID )->name;
 ?>
   <li>
-     <input type="hidden" name="img" value="<?=get_post_meta_img(get_the_ID(),'slideshow')?>"/>    
-     <input type="hidden" name="post_ID" value="<?=get_the_ID()?>"/>
-     <input type="hidden" name="title" value="<?=get_the_title()?>"/>
-     <input type="hidden" name="cat" value="<?=$catName?>"/>
-     <input type="hidden" name="excerpt" value="<?=get_the_excerpt()?>"/>
+     <input type="hidden" name="img" value="<?php echo get_post_meta_img(get_the_ID(),'slideshow')?>"/>    
+     <input type="hidden" name="post_ID" value="<?php echo get_the_ID()?>"/>
+     <input type="hidden" name="title" value="<?php echo get_the_title()?>"/>
+     <input type="hidden" name="cat" value="<?php echo $catName?>"/>
+     <input type="hidden" name="excerpt" value="<?php echo get_the_excerpt()?>"/>
      <a><?php the_title(); ?></a>
   </li>
 <?php

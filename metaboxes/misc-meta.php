@@ -22,8 +22,8 @@
   <p>
     <table>
       <tr>
-	<td><label for="<?=$mb->get_the_name()?>" style="width:300px">Show Comment Section</label></td>
-	<td><input type="checkbox" id="<?=$mb->get_the_name()?>" name="<?=$mb->get_the_name()?>" value="yes" <?=should_show_comments(0,$mb->get_the_value()) ? 'checked="checked"' : ''?>/></td>
+	<td><label for="<?php echo $mb->get_the_name()?>" style="width:300px">Show Comment Section</label></td>
+	<td><input type="checkbox" id="<?php echo $mb->get_the_name()?>" name="<?php echo $mb->get_the_name()?>" value="yes" <?php echo should_show_comments(0,$mb->get_the_value()) ? 'checked="checked"' : ''?>/></td>
       </tr>
     </table>
   </p>  

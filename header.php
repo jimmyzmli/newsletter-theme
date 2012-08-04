@@ -119,23 +119,23 @@ function output_page_nav_menu() {
 <html <?php language_attributes() ?>>
   <head>
     <meta http-equiv="content-type" content="<?php bloginfo('html_type') ?>" charset="<?php bloginfo('charset') ?>"/>
-    <title><?=$title?></title>
+    <title><?php echo $title?></title>
     <link rel="alternative" type="application/rss+xml" href="<?php bloginfo('rss2_url') ?>" title="News"/>
     <link rel="alternative" type="application/rss+xml" href="<?php bloginfo('comments_rss2_url') ?>" title="Comments"/>
     <link rel="pingback" href="<?php bloginfo('pingback_url') ?>"/>
     <!-- Theme Style Loading -->
     <link href="<?php bloginfo('stylesheet_url') ?>" rel="stylesheet"/> <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="<?=$prefix?>/slideshow.css"/>
+    <link rel="stylesheet" href="<?php echo $prefix?>/slideshow.css"/>
     <?php if( strlen($barname) && file_exists(get_template_directory()."/$barname.css") ) : ?>
-    <link rel="stylesheet" href="<?=$prefix.'/'.$barname.'.css'?>"/>
+    <link rel="stylesheet" href="<?php echo $prefix.'/'.$barname.'.css'?>"/>
     <?php endif; ?>
     <!-- Script Loading -->
-    <script type="text/javascript" src="<?=$prefix?>/js/jquery.min.js"></script>
-    <script type="text/javascript" src="<?=$prefix?>/js/jquery-slides.min.js"></script>
-    <script type="text/javascript" src="<?=$prefix?>/js/jquery-marquee.min.js"></script>
-    <script type="text/javascript" src="<?=$prefix?>/js/weather.js"></script>    
-    <script type="text/javascript" src="<?=$prefix?>/utils.js"></script>    
-    <script type="text/javascript" src="<?=$prefix?>/header.js"></script>
+    <script type="text/javascript" src="<?php echo $prefix?>/js/jquery.min.js"></script>
+    <script type="text/javascript" src="<?php echo $prefix?>/js/jquery-slides.min.js"></script>
+    <script type="text/javascript" src="<?php echo $prefix?>/js/jquery-marquee.min.js"></script>
+    <script type="text/javascript" src="<?php echo $prefix?>/js/weather.js"></script>    
+    <script type="text/javascript" src="<?php echo $prefix?>/utils.js"></script>    
+    <script type="text/javascript" src="<?php echo $prefix?>/header.js"></script>
     <?php wp_head(); ?>
   </head>
   <body id="page">
@@ -146,13 +146,13 @@ function output_page_nav_menu() {
     </div>
     <header>
       <?php if( ($himg=get_header_image())!="" ) : ?>
-      <a id="top-banner" href="<?=site_url()?>">
-	<img src="<?=$himg?>"/>
+      <a id="top-banner" href="<?php echo site_url()?>">
+	<img src="<?php echo $himg?>"/>
       </a>
       <?php endif; ?>      
       <nav id="top-nav">
-	<a id="branding" href="<?=site_url()?>">
-	  <img alt="<?=get_bloginfo('name')?>" src="http://placehold.it/200x32"/>
+	<a id="branding" href="<?php echo site_url()?>">
+	  <img alt="<?php echo get_bloginfo('name')?>" src="http://placehold.it/200x32"/>
 	</a>
   <?php wp_nav_menu( array_merge( array("theme_location"=>"primary_menu",'walker'=>new TopMenuWalker(4),"fallback_cb"=>'output_cat_nav_menu'), $navmenu_opts) ); ?>
 	<div id="search-box">
@@ -163,7 +163,7 @@ function output_page_nav_menu() {
       <nav class="nav-bar-horizontal clearfix" id="nav-bar1-expand"></nav>
   <?php wp_nav_menu( array_merge( array("theme_location"=>"secondary_menu",'walker'=>new TopMenuWalker(1000),"fallback_cb"=>'output_page_nav_menu'), $navmenu_opts) ); ?>
       <div class="info-bar">
-	<span style="color:white;background:red;"><?=$misc['global_msg']?></span>
+	<span style="color:white;background:red;"><?php echo $misc['global_msg']?></span>
 	<?php if( $misc['show_weather_bar'] ) : ?><span class="weather-bar" style="background:gainsboro"></span><?php endif; ?>
       </div>
     </header>
