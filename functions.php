@@ -18,6 +18,8 @@
 
 defined("ABSPATH") || exit;
 
+ini_set('display_errors', 'On');
+
 /* Register Admin stuff */
 require_once("meta.php");
 
