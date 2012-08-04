@@ -29,12 +29,19 @@ Liscense: GPL v3
 Liscense URI: http://www.gnu.org/licenses/
 
 */
-
-
+@import url(http://fonts.googleapis.com/css?family=Amarante);
+@import url(http://fonts.googleapis.com/css?family=Quando);
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro&subset=latin,latin-ext);
+@import url(http://fonts.googleapis.com/css?family=Lusitana);
 @import url('reset.css');
 
 /*Global
   --------------------------------------------------------- */  
+
+.promo-story,
+.promo-title {
+font-family: 'Source Sans Pro', sans-serif;
+}
 
 .clearfix:after {
     content: ".";
@@ -62,7 +69,7 @@ html {
 #page {
     margin: 0px;
     position: relative;
-    background: gainsboro;
+    background: #640404;
 }
 
 header,
@@ -137,7 +144,7 @@ header .info-bar {
     background: #f3f9ff;
     border-width: 2px 0px 2px 0px;
     border-style: solid;
-    border-color: silver;
+    border-color: maroon;
     height: 1.25em;
     width: 100%;
     margin: 0px auto 0px auto;
@@ -163,9 +170,24 @@ header .info-bar {
 /*Nav bar
 -------------------------------------- */
 
+#nav-bar1 a,
+#nav-bar2 a,
+#nav-bar1-expand a {
+	background:gold;
+	color: #CD0404;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 14px;
+	font-family: 'Lusitana', serif;
+}
+
+#nav-expand-btn a {
+	padding-bottom: 3px;
+}
+
 #top-nav,
 #nav-bar2 {
-    border: 1px solid black;
+    border: 0px solid maroon;
     width: 100%;
     margin: auto auto;
 }
@@ -187,7 +209,7 @@ header .info-bar {
 
 #top-nav #nav-bar2 {
     line-height: 10px;
-    border: 1px solid red;
+    border: 0px solid maroon;
     border-left: 0px;
     border-right: 0px;
 }
@@ -195,7 +217,7 @@ header .info-bar {
 #branding {
     line-height: 0px;
     display: block;
-    border: 1px solid black;
+    border: 0px solid maroon;
     width: 200px;
     text-align: center;
     margin-right: 120px;
@@ -207,8 +229,8 @@ header .info-bar {
 }
 
 .nav-bar-horizontal li {
-    border-left: 1px dashed black;
-    border-right: 1px dashed black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
     display: block;
     float: left;
     list-style: none;

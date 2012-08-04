@@ -80,7 +80,7 @@ $navmenu_opts = array(
 function output_cat_nav_menu() {
   global $navmenu_opts;
   $out = "";
-  $k = new TopMenuWalker(4);
+  $k = new TopMenuWalker(7);
   $header_cat = get_all_category_ids();
   
   $k->start_lvl( $out, -1 );
@@ -168,10 +168,12 @@ function output_page_nav_menu() {
       </a>
       <?php endif; ?>            
       <nav id="top-nav">
+<!--
 	<a id="branding" href="<?php echo site_url()?>">
 	  <img alt="<?php echo get_bloginfo('name')?>" src="http://placehold.it/200x32"/>
 	</a>
-  <?php wp_nav_menu( array_merge( array("theme_location"=>"primary_menu",'walker'=>new TopMenuWalker(4),"fallback_cb"=>'output_cat_nav_menu'), $navmenu_opts) ); ?>
+-->
+  <?php wp_nav_menu( array_merge( array("theme_location"=>"primary_menu",'walker'=>new TopMenuWalker(7),"fallback_cb"=>'output_cat_nav_menu'), $navmenu_opts) ); ?>
 	<div id="search-box">
 	  <?php get_search_form(); ?>
 	</div>

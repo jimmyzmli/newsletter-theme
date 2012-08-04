@@ -22,9 +22,10 @@
     <?php while( have_posts() ) : the_post() ?>
     <div>Viewed <?php echo increPostViews(get_the_ID());?> Times</div>
     <div><?php echo wp_count_comments( get_the_ID() )->approved?> Comments</div>
-    <article class="content">
+    <article class="content clearfix">
       <h2><?php echo bloginfo('name')?></h2>
       <a href="<?php the_permalink() ?>"><h3><?php the_title(); ?></h3></a>
+      <img src="<?php echo get_post_thumb( get_the_ID() ); ?>" style="width:140px;height:140px;float:left;"/>
       <div class="story"><?php the_content(); ?></div>
       <?php get_template_part( 'content', 'single' ) ?>
       <?php previous_post_link( "%link", __('Prev') ) ?>

@@ -40,6 +40,7 @@
   <?php $mb->the_field('featured_thumb_img'); ?>  
   <?php $ma->setGroupName('nn')->setInsertButtonLabel('Insert'); ?>
   <p>
+    <div>Thumbnail Image</div><br/>
     <img src="<?php echo $mb->get_the_value()?>" style="width:70px;height:70px;"/>
     <?php echo $ma->getField(array('name' => $mb->get_the_name(), 'value' => $mb->get_the_value())); ?>
     <?php echo $ma->getButton(); ?>
@@ -48,6 +49,7 @@
   <?php $mb->the_field('slideshow_img'); ?>
   <?php $ma->setGroupName('nn2')->setInsertButtonLabel('Insert This')->setTab('gallery'); ?>
   <p>
+    <div>Slideshow Image</div><br/>
     <img src="<?php echo $mb->get_the_value()?>" style="width:225px;height:130px;"/>
     <?php echo  $ma->getField(array('name' => $mb->get_the_name(), 'value' => $mb->get_the_value())); ?>
     <?php echo $ma->getButton(array('label' => 'Add Image From Library')); ?>

@@ -20,7 +20,7 @@
 
 #top-promo {
     width: 100%;
-    border: 1px solid black;
+    border: 0px solid maroon;
 }
 
 #top-promo div.promo-desc {
@@ -33,23 +33,42 @@
     width: 100%;
 }
 
+#main .news-promo .promo-img {
+	height: 70px;
+}
+
 #main .news-promo {
     background: #E6FFCC;
-    float: left;
     padding: 0px;
     margin: 0px;
+    float: left;
 }
 
 #main .promo-title {
     height: 30px;
+	line-height: 30px;
 }
 
 #main .promo-desc {
-    height: 120px;
+    height: 33px;
+    display: block;
+	margin: 0px 0px 10px 0px;
+}
+
+#main .news-promo .promo-title {
+	margin-bottom: 10px;
 }
 
 #main .news-promo > h2 {
     background: #CCFFE6;
+	font-size: 30px;
+	color: white;
+	background: black;
+}
+
+#main .news-promo .promo-img {
+	display: block;
+	float: left;
 }
 
 [class|=news-tile] .promo-img,
@@ -64,7 +83,7 @@
 }
 
 [class|=news-tile] {
-    border: 1px solid black;
+    border: 0px solid maroon;
     float: left;
     text-align: left;
     margin: 4px;

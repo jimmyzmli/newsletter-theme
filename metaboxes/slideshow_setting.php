@@ -123,7 +123,8 @@ foreach( $posts as $i=>$post )
 <?php
 function print_post() {
   global $post;
-  $catID = wp_get_post_categories( get_the_ID() )[0];
+  $catID = wp_get_post_categories( get_the_ID() );
+  $catID = $catID[0];
   $catID = is_numeric($catID) && $catID >= 0 ? $catID : 0;
   $catName = get_category( $catID )->name;
 ?>

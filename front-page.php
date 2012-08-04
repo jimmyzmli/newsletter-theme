@@ -63,15 +63,24 @@ foreach( $slidelist as $i=>$postID ) {
     <?php foreach( $cats as $i=>$c ) : ?>
     <section class="news-promo">
       <h2><?php echo $c->name?></h2>
-      <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : ?>
-      <section class="news-tile-<?php echo get_size_name($tile['size'])?>" style="height:<?php echo intval($tile['height'])*150?>px">
-	<?php foreach( get_featured_posts( array( 'category'=>$c->cat_ID, 'numberposts'=>1 ) ) as $k=>$post ) : setup_postdata($post) ?>
+      <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : $i = 0; ?>
+      <section class="news-tile-<?php echo get_size_name($tile['size'])?> clearfix" style="height:<?php echo 110+intval($tile['height'])*30?>px">
+	<?php
+		global $post;
+		foreach( get_featured_posts( array( 'category'=>$c->cat_ID, 'numberposts'=>intval($tile['height']) ) ) as $k=>$post ) :
+		setup_postdata($post); $i++;
+		$imgh = round(1/$tile['size'] * 260);
+	?>
 	<section class="promo-story">
-	  <img src="<?php echo get_the_post_thumbnail($p->id, array(300,200))?>" class="promo-img"/>
 	  <div class="promo-title">
 	    <a href="<?php the_permalink() ?>"><?php the_title() ?></a>
           </div>
-	  <section class="promo-desc"><?php the_excerpt() ?></section>
+	  <section class="promo-desc" <?php echo ($i==1?'style="padding-bottom: '.$imgh.'px;"':'');?>>
+		<?php if( $i==1 ) : ?>
+	   	<img src="<?php echo get_post_thumb(get_the_ID())?>" class="promo-img" style="height:<?php echo $imgh ?>PX;"/>
+		<?php endif; ?>
+	  	<?php the_excerpt() ?>
+	  </section>
 	</section>
         <?php endforeach; wp_reset_postdata(); ?>
       </section>
