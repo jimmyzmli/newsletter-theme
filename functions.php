@@ -58,8 +58,6 @@ register_sidebar( array(
   'description' => __('Sidebar for archive views')
 ));
 
-
-
 register_nav_menu( 'primary_menu', 'The main menu at top' );
 register_nav_menu( 'secondary_menu', 'A secondary menu' );
 
@@ -70,6 +68,30 @@ add_image_size( 'featured_thumb', 70, 70, true );
 function theme_custom_widget_init() {
   register_widget("FeaturedWidget");
   register_widget("TwitterWidget");
+}
+
+/* Template name remapping */
+
+$tname_map = array(
+  'post' => 'single',
+  'page' => 'page',
+  'category' => 'archive'
+);
+$current_template = null;
+
+add_filter( 'template_include', create_function('$t','global $current_template; $current_template = basename($t); remove_filter("template_include",__FUNCTION__); return $t;'), 1000 );
+
+function get_theme_template_name( $name = null ) {
+  global $current_template, $tname_map;
+
+  if( $name === null ) $name = $current_template;
+
+  if( strtolower(end(explode('.',$name))) == 'php' )
+    $name = substr($name,0,-4);
+
+  if( isset($tname_map[$name]) ) $name = $tname_map[$name];
+
+  return $name;
 }
 
 /* Add to WP-Admin post listing */
@@ -261,6 +283,7 @@ function getPostViews($postID){
 function increPostViews($postID) {
   $count_key = 'post_views_count';
   $count = get_post_meta($postID, $count_key, true);
+  if( isset($_REQUEST['preview']) ) return $count;  
   if($count==''){
     $count = 1;
     delete_post_meta($postID, $count_key);
@@ -272,6 +295,76 @@ function increPostViews($postID) {
   return $count;
 }
 
+
+
+
+
+
+
+/**
+   Prints out Custom header structure.
+   With the help of header.js, it creates the header of the theme.
+**/
+
+class TopMenuWalker extends Walker_Nav_Menu {
+  private $i = 0, $limit = 1;
+  public function __construct( $n ) {
+    $this->limit = $n-1;
+  }
+  function start_el( &$out, $item, $depth ) {
+    if( $depth == 0 ) $this->i++;
+    if( $depth == 0 && $this->i == $this->limit+1 )
+      $out .= '<li id="nav-expand-btn"><a href="#">More</a></li>';    
+    $out .= sprintf( '<li%3$s><a href="%2$s">%1$s</a>',
+		     esc_attr($item->title),
+		     esc_attr($item->url),
+		     ($this->i > $this->limit && $depth == 0) ?
+		     ' style="display:none" class="hidden-nav-section" ' : '');
+  }
+
+  function start_lvl( &$out, $depth = 0 ) {
+    $out .= sprintf('<ul%s>', ($depth >= 0) ? ' class="nav-dropmenu" ' : '') ;
+  }
+
+  function end_lvl( &$out, $depth = 0 ) {
+    $out .= '<div style="clear:both"></div>'.'</ul>';
+  }
+}
+
+function output_cat_nav_menu() {
+  global $navmenu_opts;
+  $out = "";
+  $k = new TopMenuWalker(7);
+  $header_cat = get_all_category_ids();
+  
+  $k->start_lvl( $out, -1 );
+  foreach( $header_cat as $i=>$cat_ID ) {
+    $item = new stdClass;
+    $c =  get_category( $cat_ID );
+    $item->url = get_category_link($cat_ID);
+    $item->title = $c->name;
+    $k->start_el( $out, $item, 0 );
+    $k->end_el( $out, $item, 0 );    
+  }
+  $k->end_lvl( $out, -1 );
+  print '<div class="nav-bar-horizontal" id="nav-bar1"><ul class="clearfix">'.$out.'</ul></div>';
+}
+
+function output_page_nav_menu() {
+  $out = "";
+  $k = new TopMenuWalker(10000);
+  $pagelist = get_pages();
+  $k->start_lvl( $out, -1 );
+  foreach( $pagelist as $i=>$p ) {
+    $item = new stdClass;
+    $item->url = get_permalink( $p->ID );
+    $item->title = $p->post_title;
+    $k->start_el( $out, $item, 0 );
+    $k->end_el( $out, $item, 0 );    
+  }
+  $k->end_lvl( $out, -1 );
+  print '<div class="nav-bar-horizontal" id="nav-bar2">'.$out.'</div>';
+}
 
 
 

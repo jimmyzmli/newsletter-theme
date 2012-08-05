@@ -15,7 +15,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-$(function() {
+jQuery(function($) {
 
     var g = {};
     g.lastDrop = 0;
@@ -230,7 +230,7 @@ $(function() {
     });
 
     /* Fit category titles */
-    $(".cat-title").scaleFontToFit();
-
+    $(".cat-title").each( function() { $(this).scaleFontToFit(); } );
+    
 
 });

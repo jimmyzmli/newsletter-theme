@@ -20,18 +20,34 @@ defined("ABSPATH") || exit;
 
 define( 'METAPREF', 'nws' );
 
+/*
+  This is a list of default meta values. If the meta value is not yet set, this value is used.
+*/
 $meta_defaults = array(
   'misc_opts' => array(
     'show_comments' => true,
     'show_weather_bar' => true,
     'marquee_info_bar' => false,
-    'bg_colour' => '#000000',
+    'bg_colour' => '#640404',
     'menu_colour' => 'gold',
-    'global_msg' => ""
+    'menu_font_colour' => '#CD0404',
+    'global_msg' => "Example Notice - Theodore Pees his pants",
+    'footer_msg' => 'Copyright (c) JzL 2012'
   ),
   'layout_opts' => array(),
   'slide_opts' => array(),
   'style_opts' => array()
+);
+
+/*
+  Only these listed template names will have custom styles loaded.
+*/
+$allowed_custom_styles = array(
+    'front-page'=>"Front Page",
+    'single'=>"Post",
+    'archive'=>"Archive Page",
+    'search'=>null,
+    '404'=>null
 );
 
 /* Meta value accessors */
@@ -40,10 +56,11 @@ function get_meta_option( $sect, $k = null ) {
   global $meta_defaults;
 
   $cache[$sect] = isset($cache[$sect]) ? $cache[$sect] :  get_option($sect);
+  $cache[$sect] = $cache[$sect] === "" ? array() : $cache[$sect];
   
   if( $k === null ) {
     return $cache[$sect];
-  } else { 
+  } else {
     $v = $cache[$sect][$k];
     if( !isset($v) ) {
       $v = $meta_defaults[$sect][$k];
@@ -56,6 +73,10 @@ function get_meta_option( $sect, $k = null ) {
     }
     return $v;
   }
+}
+
+function get_meta_style( $template ) {
+  return get_meta_option( 'style_opts', $template );
 }
 
 function get_cat_meta_img( $id, $type = 'full' ) {
@@ -163,15 +184,15 @@ function theme_settings_init() {
 
 function theme_settings_add_pages() {
   add_theme_page(
-    __("Misc"),
-    __("Misc"),
+    __("General"),
+    __("General"),
     "edit_theme_options",
     "theme_misc_options",
     create_function('','require_once("metaboxes/misc_setting.php");')
   );  
   add_theme_page(
-    __("Layout"),
-    __("Layout"),
+    __("News Tiles"),
+    __("News Tiles"),
     "edit_theme_options",
     "theme_layout_options",
     create_function('','require_once("metaboxes/layout_setting.php");')
@@ -219,10 +240,11 @@ function validate_misc_meta_box( $meta, $pid ) {
 /* Validates layout editor data */
 function validate_layout_opts($opts) {
   $old = get_option('layout_opts');
+  $old = is_array($old) ? $old : array();
+
   $layout = json_decode($opts['layout'],true);
   $hlayout = json_decode($opts['hidden_layout'],true);
-  $opts = &$old;
-  
+  $opts = $old;
   if( $layout !== null ) $opts['layout'] = $layout;
   if( $hlayout !== null ) $opts['hidden_layout'] = $hlayout;
 
@@ -232,22 +254,28 @@ function validate_layout_opts($opts) {
 /* Validates slide editor data */
 function validate_slide_opts( $opts ) {
   $old = get_option('slide_opts');
-  $list = json_decode($opts,true);
+  if( is_string($opts) ) $list = json_decode($opts,true);
   return is_array($list) ? $list : $old;
 }
 
+
+/* Validate custom stylesheet data */
+function validate_style_opts( $c ) {
+  $opts = get_option('style_opts');
+  if( is_array($c) )
+    foreach( $c as $gname=>$content ) {
+      if( is_string($gname) )
+	$opts[$gname] = $content;
+    }
+  return $opts;
+}
+
+/* Validate miscellaneous values */
 function validate_bool( &$opt ) {
   if( $opt === "yes" ) $opt = true;
   else $opt = false;
 }
 
-/* Validate custom stylesheet data */
-function validate_style_opts( $c ) {
-  $opts = get_option('style_opts');
-  return $opts;
-}
-
-/* Validate miscellaneous values */
 function validate_misc_opts( $opts ) {
   global $meta_defaults;
   /* Special case, delete settings */
@@ -264,7 +292,8 @@ function validate_misc_opts( $opts ) {
   if( $opts['reset_post_views'] == "yes" ) {
     delete_metadata( 'post', 0, 'post_views_count', "", true );
   } else {
-    validate_bool( $opts['show_comments'] );
+    foreach( array('show_comments','show_weather_bar','marquee_info_bar') as $p )
+      validate_bool( $opts[$p] );
     if( $old['show_comments'] !== $opts['show_comments'] ) {
       /* Delete post meta data */
       delete_metadata( 'post', 0, METAPREF."_show_comments", "", true );

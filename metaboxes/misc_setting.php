@@ -28,19 +28,31 @@ function pdefault( $a, $v ) {
 }
 
 $keys = array(
+
+  'general_sect' => array('Random Things',array('type'=>'sep')),    
   'show_comments' => array('Theme should show comments','checkbox'),
+
+  'header_sect' => array('Header',array('type'=>'sep')),
   'show_weather_bar' => array('Show a weather bar','checkbox'),
   'marquee_info_bar' => array('Apply marquee effect on the info bar','checkbox'),
   'global_msg' => array('Global header annoncement','text'),
+
+  'footer_sect' => array('Footer',array('type'=>'sep')),
+  'footer_msg' => array('Footer message','text'),
+
+  'style_sect' => array('Styles stuff',array('type'=>'sep')),  
   'colours' => array('%s Colour', array(
     'type'=>'selector',
     'bg_colour'=>array('Background','colour'),
-    'menu_colour'=>array('Menu','colour')
+    'menu_colour'=>array('Menu','colour'),
+    'menu_font_colour'=>array('Menu Font','colour')
   )),
+
+  'reset_sect' => array('Danger Zone',array('type'=>'sep')),
   'resets' => array('Reset', array(
     'type'=>'row',
     'btn_reset_all'=>array('All','button'),
-    'btn_reset_misc'=>array('Miscellaneous','button')
+    'btn_reset_misc'=>array('This page','button')
   ))
 );
 
@@ -49,7 +61,8 @@ $field_input_type = array(
     'checkbox' => 'checkbox',
     'radio' => 'radio',
     'colour' => 'text',
-    'button' => 'Submit'
+    'button' => 'Submit',
+    'number' => 'number'
 );
 
 
@@ -122,6 +135,9 @@ foreach( $keys as $k=>$t ) {
 		$nhtml .= '<option>'.$ele[0].'</option>';
 	      }
 	      $nhtml .= '</select>';
+	   } elseif ( $t == 'sep' ) {
+	     $label = sprintf('<h2>%s',$label);
+	     $fields = array();
 	   }
 	    
 	 } else {

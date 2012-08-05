@@ -20,7 +20,11 @@
 $prefix = get_template_directory_uri();
 
 $posts = get_posts( array('meta_key' => METAPREF.'_slideshow_img') );
+
 $slidelist = get_option( 'slide_opts' );
+/* Set stub if needed */
+if( $slidelist === false )
+  add_option( 'slide_opts', array() );
 $slidelist = is_array($slidelist) ? $slidelist : array();
 
 foreach( $posts as $i=>$post )
@@ -67,7 +71,11 @@ foreach( $posts as $i=>$post )
       width: 100px;
       margin: auto auto;
       margin-top: 30px;
-  }  
+  }
+
+  .slider {
+      border: 0px solid red;
+  }
 </style>
 <link rel="stylesheet" href="<?php echo $prefix?>/slideshow.css"/>
 <script type="text/javascript" src="<?php echo $prefix?>/js/jquery.min.js"></script>

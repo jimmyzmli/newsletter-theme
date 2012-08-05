@@ -20,30 +20,31 @@
 
 $prefix = get_template_directory_uri();
 
+/* Get stored option */
 $opts = get_option("layout_opts");
+/* First time? Then set a stub */
+if( $opts === false )
+  add_option("layout_opts", array());
 $opts = is_array($opts) ? $opts : array();
+
 $layout = is_array( $opts['layout'] ) ? $opts['layout'] : array();
 $hlayout = is_array( $opts['hidden_layout'] ) ? $opts['hidden_layout'] : array();
 
 $cats = get_cats($layout);
 $hcats = get_cats($hlayout);
 $hcats = array_merge($hcats,cat_inverse($hcats,$cats));
-/*
-print "<pre>";
-var_dump($layout,$cats);
-print "</pre>";
-*/
+
+
+wp_enqueue_style( "theme-layout-settings", "$prefix/metaboxes/layout_setting.css" );
+wp_enqueue_style( "smoothness-ui", "$prefix/css/resizable.css" );
+
+wp_enqueue_script( "jquery", "$prefix/js/jquery.min.js" );
+wp_enqueue_script( "jquery-ui", "$prefix/js/jquery-ui.min.js" );
+wp_enqueue_script( "json2", "$prefix/js/json2.js" );
+wp_enqueue_script( "theme-utils", "$prefix/utils.js" );
+wp_enqueue_script( "theme-layout-settings", "$prefix/metaboxes/layout_setting.js" );
 
 ?>
-
-<link href="<?php echo "$prefix/metaboxes/layout_setting.css"?>" rel="stylesheet"/>
-<link href="<?php echo "$prefix/css/resizable.css"?>" rel="stylesheet"/>
-
-<script type="text/javascript" src="<?php echo "$prefix/js/jquery.min.js"?>"></script>
-<script type="text/javascript" src="<?php echo "$prefix/js/jquery-ui.min.js"?>"></script>
-<script type="text/javascript" src="<?php echo "$prefix/js/json2.js"?>"></script>
-<script type="text/javascript" src="<?php echo "$prefix/utils.js"?>"></script>
-<script type="text/javascript" src="<?php echo "$prefix/metaboxes/layout_setting.js"?>"></script>
 
 <section id="body" class="clearfix">
   <section id="layout-panel" class="clearfix">
