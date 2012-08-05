@@ -79,11 +79,13 @@ $navmenu_opts = array(
 	  <?php endif; ?>
 	  <?php if( get_meta_option('misc_opts', 'show_weather_bar') ) : ?>
 	      
-	  var loc = get_weather();
-	  $(".weather-bar")
-	      .append( $("<span>").text( loc.city + ", " + loc.region ).css("margin-right", "10px") )
-	      .append( $("<span>").text( loc.country ).css("margin-right", "10px") )
-	      .append( $("<span>").html( loc.temp + "&deg;C" + "/" + loc.humidity + "% humidity" ) );
+	  var loc = get_weather( function( loc ) {
+	      console.log( loc );
+	      $(".weather-bar")
+		  .append( $("<span>").text( loc.city + ", " + loc.region ).css("margin-right", "10px") )
+		  .append( $("<span>").text( loc.country ).css("margin-right", "10px") )
+		  .append( $("<span>").html( loc.temp + "&deg;C" + "/" + loc.humidity + "% humidity" ) );	      
+	  });
 	  <?php endif; ?>
 	      
       });
