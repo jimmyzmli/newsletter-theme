@@ -94,7 +94,9 @@ foreach( $posts as $i=>$post )
 						  img: $(this).layoutAttr("img"),
 						  title: $(this).layoutAttr("title"),
 						  desc: $(this).layoutAttr("excerpt"),
-						  cat: $(this).layoutAttr("cat")
+						  cat: $(this).layoutAttr("cat"),
+						  catLink: $(this).layoutAttr("catLink"),
+						  link: $(this).layoutAttr("link")
 					      };
 					      info.push( p );
 					  } );
@@ -141,6 +143,8 @@ function print_post() {
      <input type="hidden" name="post_ID" value="<?php echo get_the_ID()?>"/>
      <input type="hidden" name="title" value="<?php echo get_the_title()?>"/>
      <input type="hidden" name="cat" value="<?php echo $catName?>"/>
+     <input type="hidden" name="catLink" value="<?php echo get_category_link($catID) ?>"/>
+     <input type="hidden" name="link" value="<?php echo get_permalink() ?>"/>
      <input type="hidden" name="excerpt" value="<?php echo get_the_excerpt()?>"/>
      <a><?php the_title(); ?></a>
   </li>

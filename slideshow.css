@@ -36,16 +36,18 @@
 }
 
 .slider .promo-title {
+    display: block;
     font-weight: bold;
     height: 30px;
     line-height: 30px;
+    text-decoration: none;
 }
 
 .slider .promo-desc {
-    height: 220px;
+    height: 229px;        
     line-height: 12.5px;
     font-size: 12.5px;
-}  
+}
 
 .slider .promo-img{
     float: right;
@@ -76,7 +78,6 @@
 }
 
 
-
 .slider .slider-topic {
     display: block;
     height: 30px;
@@ -86,6 +87,7 @@
     line-height: 30px;
     font-size: 20px;
     color: #174F82;
+    text-decoration: none;
 }
 
 .pagination {

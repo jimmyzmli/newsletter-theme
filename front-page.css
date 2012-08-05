@@ -29,14 +29,6 @@
     border: 0px solid maroon;
 }
 
-#top-promo .promo-title {
-    font-size: 20px;
-}
-
-#top-promo div.promo-desc {
-    height: 229px;
-}
-
 /*News Tiles
   -------------------------------------- */
 
@@ -46,11 +38,13 @@
     float: left;
 }
 
-#main .news-promo > h2 {
+#main .news-promo h2 a {
     background: #CCFFE6;
     font-size: 30px;
     color: white;
     background: black;
+    text-decoration: none;
+    display: block;
 }
 
 

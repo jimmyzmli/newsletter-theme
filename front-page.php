@@ -44,7 +44,9 @@ foreach( $slidelist as $i=>$postID ) {
   $p->img = get_post_meta_img($postID,'slideshow');
   $p->post_ID = $postID;
   $p->title = get_the_title();
+  $p->link = get_permalink();
   $p->cat = $catName;
+  $p->catLink = get_category_link( $catID );
   $p->desc = get_the_excerpt();
 
   array_push( $slides, $p );
@@ -62,7 +64,7 @@ foreach( $slidelist as $i=>$postID ) {
     <section id="top-promo" class="slider"></section>
     <?php foreach( $cats as $i=>$c ) : ?>
     <section class="news-promo">
-      <h2><?php echo $c->name?></h2>
+      <h2><a href="<?php echo get_category_link( $c->cat_ID ) ?>"><?php echo $c->name?></a></h2>
     <?php
 
       $img_count = intval(get_meta_option('misc_opts','tiles_img_count'));

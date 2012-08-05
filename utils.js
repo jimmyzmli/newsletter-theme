@@ -127,16 +127,16 @@ jQuery(function($) {
 
 	$(info).each( function(i,p) {
 	    $(slider).empty()
-		.append($("<div>").addClass("slider-topic"))
+		.append($("<div>").append( $("<a>").addClass("slider-topic") ))
 		.append(root);
 	    $(root).append(
 		$("<div>").append(
 		    $("<div>")
 			.append(
-			    $("<div>").text(p.title).addClass("promo-title")
+			    $("<div>").append( $("<a>").text(p.title).attr("href",p.link).addClass("promo-title") )
 			)
 			.append(
-			    $("<img>").attr('src', p.img).addClass("promo-img")
+			    $("<a>").attr("href",p.link).append( $("<img>").attr('src', p.img).addClass("promo-img") )
 			).addClass("clearfix").addClass("promo-story")
 			.append(
 			    $("<div>").text(p.desc).addClass("promo-desc")
@@ -146,7 +146,7 @@ jQuery(function($) {
 	} );
 	var start = typeof(args.start) == "undefined" ? 1 : args.start;
 	var name_cat = function(k) {
-	    $(".slider-topic", slider).text( info[k-1].cat );
+	    $(".slider-topic", slider).text( info[k-1].cat ).attr("href",info[k-1].catLink);
 	};
 	
 	name_cat(start);
