@@ -56,7 +56,8 @@ $allowed_custom_styles = array(
     'single'=>"Post",
     'archive'=>"Archive Page",
     'search'=>null,
-    '404'=>null
+    '404'=>null,
+    'global'=>'Global'
 );
 
 /* Meta value accessors */

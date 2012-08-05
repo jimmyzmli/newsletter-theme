@@ -131,6 +131,7 @@ $navmenu_opts = array(
       /* Custom styles */
       <?php
 	 global $allowed_custom_styles;
+	 echo get_meta_style( 'global' );
 	 if( isset($allowed_custom_styles[$tname]) ) echo get_meta_style( $tname );
       ?>
       
