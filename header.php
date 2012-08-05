@@ -97,6 +97,37 @@ $navmenu_opts = array(
 	  background: <?php echo get_meta_option("misc_opts","menu_colour"); ?>;      
 	  color: <?php echo get_meta_option("misc_opts","menu_font_colour"); ?>;      
       }
+
+      #side .widgettitle {
+	  background: <?php echo get_meta_option('misc_opts','widgettitle_bg') ?>;
+      }
+
+      #side li.widget {
+	  background: <?php echo get_meta_option('misc_opts','widget_bg') ?>;
+      }
+
+      <?php
+        $fs = get_meta_option('misc_opts','tiles_font_size');
+        $lc = get_meta_option('misc_opts','tiles_lines_per_post');
+      ?>
+      #main .tile .promo-desc {
+	  font-size: <?php echo $fs ?>px;
+	  line-height: <?php echo $fs ?>px;
+	  height: <?php echo $fs*$lc ?>px;
+      }
+
+      #main .news-promo {
+	  background: <?php echo get_meta_option('misc_opts','tiles_bg_colour') ?>;
+      }
+
+      #main .tile .promo-title a {
+	  background: <?php echo get_meta_option('misc_opts','tiles_title_bg'); ?>;
+      }
+
+      #main .tile .promo-title a:hover {
+	  background: <?php echo get_meta_option('misc_opts','tiles_title_hover_bg') ?>;
+      }      
+      
       /* Custom styles */
       <?php
 	 global $allowed_custom_styles;

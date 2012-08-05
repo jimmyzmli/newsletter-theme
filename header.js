@@ -52,6 +52,5 @@ jQuery(function($) {
     $("#nav-expand-btn").bind( 'click', function() { $("#nav-bar1-expand").slideToggle(); } );
 
     /* Scale/Trim fonts */
-    $("#side .promo-title").each( function(){ $(this).scaleFontToFit(); } );
-
+    $(".promo-title").each( function(){ $(this).scaleFontToFit(); } );
 });
