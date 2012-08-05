@@ -63,36 +63,45 @@ foreach( $slidelist as $i=>$postID ) {
     <?php foreach( $cats as $i=>$c ) : ?>
     <section class="news-promo">
       <h2><?php echo $c->name?></h2>
-    <?php foreach( $c->tileInfo['tiles'] as $j=>$tile ) : ?>
     <?php
-       $n = intval($tile['height']);
-       $imgh = round(1/$tile['size'] * 260);
-       $i = 0;
+
+      $img_count = intval(get_meta_option('misc_opts','tiles_img_count'));
+      $font_size = intval(get_meta_option('misc_opts','tiles_font_size'));
+      $line_count = intval(get_meta_option('misc_opts','tiles_lines_per_post'));
+      $posts_needed = 0;
+      foreach( $c->tileInfo['tiles'] as $j=>$tile ) $posts_needed += intval($tile['height']);
+      $posts = get_featured_posts( array( 'category'=>$c->cat_ID, 'numberposts'=>$posts_needed ) );
+      $postn = 0;
+				   
+      foreach( $c->tileInfo['tiles'] as $j=>$tile ) :
+        $n = intval($tile['height']);
+	$imgh = intval(round(1/$tile['size'] * 260));
+	$i = 0;
     ?>
-      <section class="news-tile-<?php echo get_size_name($tile['size'])?> clearfix" style="height:<?php echo $imgh+$n*73?>px">
+      <section class="news-tile-<?php echo get_size_name($tile['size'])?> tile clearfix" style="min-height:<?php echo $imgh*$img_count+$n*($line_count*$font_size+50)?>px">
 	<?php
 		global $post;
-		foreach( get_featured_posts( array( 'category'=>$c->cat_ID, 'numberposts'=>$n ) ) as $k=>$post ) :
-		setup_postdata($post); $i++;
-		
+		while( --$n >= 0 && isset($posts[$postn]) ) :
+	        $post = $posts[$postn];
+		setup_postdata($post); $i++; $postn++;
 	?>
 	<section class="promo-story">
 	  <div class="promo-title">
 	    <a href="<?php the_permalink() ?>"><?php the_title() ?></a>
           </div>
-	  <section class="promo-desc" <?php echo ($i==1?'style="padding-bottom: '.$imgh.'px;"':'');?>>
-		<?php if( $i==1 ) : ?>
-	   	<img src="<?php echo get_post_thumb(get_the_ID())?>" class="promo-img" style="height:<?php echo $imgh ?>PX;"/>
+	  <div class="promo-desc" <?php echo ($i<=$img_count?'style="padding-bottom: '.$imgh.'px;"':'');?>>
+	        <?php if( $i<=$img_count ) : ?>
+	   	<img src="<?php echo get_post_meta_img(get_the_ID(),'slideshow')?>" class="promo-img" style="height:<?php echo $imgh ?>PX;"/>
 		<?php endif; ?>
 	  	<?php the_excerpt() ?>
-	  </section>
+	  </div>
 	</section>
-        <?php endforeach; wp_reset_postdata(); ?>
+        <?php endwhile; wp_reset_postdata(); /* End post loop */ ?>
       </section>
-      <?php endforeach; ?>
+      <?php endforeach; /* End Tile loop */ ?>
       <div style="clear:both"></div>
     </section>
-    <?php endforeach; ?>
+    <?php endforeach; /* End category loop */ ?>
     <div style="clear:both"></div>
   </section> <!-- #main -->
   <?php get_sidebar() ?>

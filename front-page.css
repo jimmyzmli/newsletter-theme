@@ -15,6 +15,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*Side
+  -------------------------------------- */
+#side {
+    padding-top: 30px;
+}
+
 /*Top Story
   -------------------------------------- */
 
@@ -23,81 +29,92 @@
     border: 0px solid maroon;
 }
 
+#top-promo .promo-title {
+    font-size: 20px;
+}
+
 #top-promo div.promo-desc {
     height: 229px;
 }
 
 /*News Tiles
   -------------------------------------- */
-#main .news-tile-full {
-    width: 100%;
-}
-
-#main .news-promo .promo-img {
-	height: 70px;
-}
 
 #main .news-promo {
-    background: #E6FFCC;
     padding: 0px;
     margin: 0px;
     float: left;
-}
-
-#main .promo-title {
-    height: 30px;
-	line-height: 30px;
-}
-
-#main .promo-desc {
-    height: 33px;
-    display: block;
-	margin: 0px 0px 10px 0px;
-}
-
-#main .news-promo .promo-title {
-	margin-bottom: 10px;
 }
 
 #main .news-promo > h2 {
     background: #CCFFE6;
-	font-size: 30px;
-	color: white;
-	background: black;
+    font-size: 30px;
+    color: white;
+    background: black;
 }
 
-#main .news-promo .promo-img {
-	display: block;
-	float: left;
+
+#main .news-tile-full {
+    max-width: 624px;
+    width: 624px;
 }
 
-[class|=news-tile] .promo-img,
-[class|=news-tile] .promo-desc,
-[class|=news-tile] .promo-title {
-    width: 100%;
+#main .news-tile-half {
+    max-width: 312px;
+    width: 312px;
 }
 
-[class|=news-tile] .promo-story {
+#main .news-tile-quart {
+    max-width: 166px;
+    width: 166px;
+}
+
+#main .tile {
+    margin: 0px;
+    float: left;
+    text-align: left;
+    padding: 0px;    
+}
+
+.tile .promo-story {
     padding: 0px;
     margin: 0px;
 }
 
-[class|=news-tile] {
-    border: 0px solid maroon;
-    float: left;
-    text-align: left;
-    margin: 4px;
-    padding: 0px;
-}
-
-.news-tile-full {
+.tile .promo-story,
+.tile .promo-title,
+.tile .promo-desc,
+.tile .promo-img {
     width: 100%;
 }
 
-#main .news-tile-half {
-    width: 302px;
+#main .tile .promo-img {
+    display: block;
+    float: left;
 }
 
-.news-tile-quart {
-    width: 146px;
+#main .tile .promo-title {
+    height: 30px;
+    line-height: 30px;
+    margin-bottom: 10px;
+    font-size: 23px;
+}
+
+#main .tile .promo-title a {
+    display: block;
+    text-decoration: none;
+    background: gainsboro;
+    colour: #174F82;
+}
+
+#main .tile .promo-title a:hover {
+    color: red;
+}
+
+#main .tile .promo-desc {
+    display: block;
+    margin: 0px 0px 10px 0px;
+}
+#main .tile .promo-desc p {
+    white-space: pre-wrap;    
 }

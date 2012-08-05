@@ -17,7 +17,7 @@
 */
 ?>
       <footer>
-	Copyright (C) 2012 JzL
+       <?php echo get_meta_option("misc_opts","footer_msg") ?>
       </footer>
       <?php wp_footer() ?>
    </body>

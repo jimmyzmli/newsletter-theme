@@ -69,7 +69,6 @@ html {
 #page {
     margin: 0px;
     position: relative;
-    background: #640404;
 }
 
 header,
@@ -89,9 +88,11 @@ footer {
     margin: 0px auto;
     width: 100%;
     height: 0px;
+    display: none;
 }
 
 /*
+Uncomment for background gradient  
 #page-bg {
     width: 1180px;
     height: 100%;
@@ -100,10 +101,7 @@ footer {
      left: 50%;
     margin-left: -590px;
     z-index: -1000;
-
-    background: #770000;
 }
-*/
 
 #page-bg * {
     position: absolute;
@@ -114,20 +112,22 @@ footer {
 #page-bg .seg1 {
     top: 0px;
     height: 125px;
-    /* background: #FA2062; */
+    background: #FA2062;
 }
 
 #page-bg .seg2 {
     top: 125px;
     height: 53px;
-    /* background: #FA9F20; */
+    background: #FA9F20;
 }
 
 #page-bg .seg3 {
     top: 180px;
     height: 100px;
-    /* background: #202928; */
+    background: #202928;
 }
+
+*/
 
 /*Top Section
   --------------------------------------------------------- */  
@@ -159,11 +159,22 @@ header .info-bar {
     width: 100%;
     height: 125px;
     padding: 0px 0px;
+
+    text-decoration: none;    
 }
 
 #top-banner img {
     width: 100%;
     height: 100%;
+}
+
+#top-banner .site-header-text {
+    text-align: center;
+    height: 125px;
+    line-height: 125px;
+    font-size: 40px;
+    font-weight: bold;
+    font-style: italic;
 }
 
 
@@ -173,8 +184,6 @@ header .info-bar {
 #nav-bar1 a,
 #nav-bar2 a,
 #nav-bar1-expand a {
-	background:gold;
-	color: #CD0404;
 	text-decoration: none;
 	font-weight: bold;
 	font-size: 14px;
@@ -187,10 +196,19 @@ header .info-bar {
 
 #top-nav,
 #nav-bar2 {
-    border: 0px solid maroon;
     width: 100%;
     margin: auto auto;
+
+    line-height: 10px;
+    border: 0px solid maroon;
+    border-left: 0px;
+    border-right: 0px;
 }
+
+#nav-bar2 a .highlighter {
+    margin-top: 5px;
+}
+
 #nav-bar1-expand {
     width: 960px;
 }
@@ -205,13 +223,6 @@ header .info-bar {
 #branding,
 #top-nav #nav-bar1 {
     line-height: 30px;
-}
-
-#top-nav #nav-bar2 {
-    line-height: 10px;
-    border: 0px solid maroon;
-    border-left: 0px;
-    border-right: 0px;
 }
 
 #branding {
@@ -357,11 +368,36 @@ header .info-bar {
     list-style: none;
 }
 
+.widgettitle {
+    width: 300px;    
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    
+    height: 40px;
+    line-height: 40px;    
+    font-size: 20px;
+}
+
+#side li.widget {
+    z-index: 100000;
+    padding-top: 40px;
+    position: relative;
+
+    margin-bottom: 20px;
+}
+
+/* Twitter widget is special */
+#side li.twitter_widget {
+    padding-top: 0px;
+}
+
 /*About/Text widgets
   -------------------------------------- */
 
 .widget_text {
-    margin: 0px 0px 0px 0px;
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 .widget_text,
@@ -376,8 +412,6 @@ header .info-bar {
 
 .widget_text .textwidget {
     width: 100%;
-    background: #52FFFF;
-    border: 4px dashed black;
     border-left: 0px;
     border-right: 0px;
 }
@@ -418,13 +452,14 @@ header .info-bar {
     font-size: 13px;
 }
 
-.featured .promo-story {
+.featured .promo-story {p
     margin: 0px 0px 10px 0px;    
 }
 
 /*Side RSS/Twitter bar
   -------------------------------------- */
-
+/*
+Uncomment for height limiter
 .updates .twtr-widget,
 .updates .twtr-doc {
     height: 300px !important;
@@ -444,6 +479,7 @@ header .info-bar {
 .updates .twtr_ft {
     height: 30px;
 }
+*/
 
 #side .widget_rss {
     border: 1px solid black;
