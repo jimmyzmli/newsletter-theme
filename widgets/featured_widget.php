@@ -16,9 +16,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+defined("ABSPATH") || exit;
+
 class FeaturedWidget extends WP_Widget {
   private static $INFO = array(
-    'classname'=>'FeaturedWidget',
+    'classname'=>'featured_widget',
     'description'=>'Displays Top Featured Posts'
   );
     
@@ -30,7 +32,9 @@ class FeaturedWidget extends WP_Widget {
     if( strlen($this->errmsg) > 0 ) printf('<p style="color:red">%s</p>',$this->errmsg);
     widget_form( $this, $c, array(
       'show'=>array('default'=>3,'type'=>'number','label'=>'Number of posts you wish to show'),
-      'rollup_days'=>array('default'=>1,'type'=>'number','label'=>'Round down date to nearest N days')
+      'rollup_days'=>array('default'=>1,'type'=>'number','label'=>'Round down date to nearest N days'),
+      'lines'=>array('default'=>4,'type'=>'number','label'=>"Number of lines to show"),
+      'font_size'=>array('default'=>16,'type'=>'number','label'=>'Font Size')
     ));
   }
 
@@ -50,6 +54,9 @@ class FeaturedWidget extends WP_Widget {
       $c['rollup_days'] = $n_rollup_days;
     else
       $this->errmsg = "Can only round to nearest postive integer day";
+    /* Check font/line count */
+    if( is_numeric($n_lines) && $n_lines >= 0 ) $c['lines'] = $n_lines; else $this->errmsg = "Teach me how to show negative number of lines, please.";
+    if( is_numeric($n_font_size) && $n_font_size >= 3 ) $c['font_size'] = $n_font_size; else $this->errmsg = "Font too small";
     return $c;
   }
 
@@ -57,11 +64,11 @@ class FeaturedWidget extends WP_Widget {
     extract( $args, EXTR_OVERWRITE );
     extract( $c, EXTR_PREFIX_ALL, 'p' );
     if( $p_show <= 0 ) return;
+    echo $before_widget;
   ?>
 <section class="featured">
-  <h2><?php echo $before_title.(empty($title)?"Featured":$title).$after_title?></h2>
-  <?php
-    echo $before_widget;
+  <?php echo $before_title.(empty($title)?"Featured":$title).$after_title?>
+  <?php    
     global $post;
     foreach( get_featured_posts( array( 'numberposts'=>$p_show, 'rollup_days'=>$p_rollup_days ) ) as $i=>$post ) {
       setup_postdata($post);
@@ -72,7 +79,7 @@ class FeaturedWidget extends WP_Widget {
 	<section class="promo-title">
 	  <a href="<?php the_permalink()?>"><?php echo get_the_title()?></a>
 	</section>
-	<section class="promo-desc">
+	<section class="promo-desc" style="font-size:<?php echo $p_font_size?>px;line-height:<?php echo $p_font_size?>px;height:<?php echo $p_lines*($p_font_size+0.25)?>px;">
 	  <?php the_excerpt() ?>
 	</section>
 	<div style="clear:both"></div>
