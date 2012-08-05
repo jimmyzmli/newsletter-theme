@@ -17,101 +17,34 @@
 */
 
 $prefix = get_template_directory_uri();
-$barname = null;
+
 if( is_single() ) {
   $title = single_post_title("",false);
-  $barname = "single";
 }else if( is_home() || is_front_page() ) {
   $title = get_bloginfo('name') . '|' . get_bloginfo('description');
-  $barname = "front-page";
 }else if( is_search() ) {
   $title = sprintf( 'Search Results for %s - %d ', wp_specialchars($s), get_page_number() );
-  $barname = "archive";
 }else if( is_category() ) {
   $title = wp_title('',false);
-  $barname = "archive";
 }else if( is_404() ) {
   $title = get_bloginfo('name') . ' | 404 - Not found';
 }else if( is_page() ) {
   $title = get_bloginfo('name') . '|' . get_bloginfo('description');
-  $barname = "page";
 }else {
   $title = get_bloginfo('name') . wp_title('|',false) . get_page_number();
 }
-/* Exported names */
-$GLOBALS["barname"] = $barname;
 
 if( is_singular() ) {
   wp_enqueue_script( 'comment-reply' );
 }
 
-class TopMenuWalker extends Walker_Nav_Menu {
-  private $i = 0, $limit = 1;
-  public function __construct( $n ) {
-    $this->limit = $n-1;
-  }
-  function start_el( &$out, $item, $depth ) {
-    if( $depth == 0 ) $this->i++;
-    if( $depth == 0 && $this->i == $this->limit+1 )
-      $out .= '<li id="nav-expand-btn"><a href="#">More</a></li>';    
-    $out .= sprintf( '<li%3$s><a href="%2$s">%1$s</a>',
-		     esc_attr($item->title),
-		     esc_attr($item->url),
-		     ($this->i > $this->limit && $depth == 0) ?
-		     ' style="display:none" class="hidden-nav-section" ' : '');
-  }
-
-  function start_lvl( &$out, $depth = 0 ) {
-    $out .= sprintf('<ul%s>', ($depth >= 0) ? ' class="nav-dropmenu" ' : '') ;
-  }
-
-  function end_lvl( &$out, $depth = 0 ) {
-    $out .= '<div style="clear:both"></div>'.'</ul>';
-  }
-}
+$tname = get_theme_template_name();
 
 $navmenu_opts = array(
 		      'container_id'=>'nav-bar1',
 		      'container_class'=>'nav-bar-horizontal',
 		      'menu_class'=>'clearfix'
 		      );
-
-
-function output_cat_nav_menu() {
-  global $navmenu_opts;
-  $out = "";
-  $k = new TopMenuWalker(7);
-  $header_cat = get_all_category_ids();
-  
-  $k->start_lvl( $out, -1 );
-  foreach( $header_cat as $i=>$cat_ID ) {
-    $item = new stdClass;
-    $c =  get_category( $cat_ID );
-    $item->url = get_category_link($cat_ID);
-    $item->title = $c->name;
-    $k->start_el( $out, $item, 0 );
-    $k->end_el( $out, $item, 0 );    
-  }
-  $k->end_lvl( $out, -1 );
-  print '<div class="nav-bar-horizontal" id="nav-bar1"><ul class="clearfix">'.$out.'</ul></div>';
-}
-
-function output_page_nav_menu() {
-  $out = "";
-  $k = new TopMenuWalker(10000);
-  $pagelist = get_pages();
-  $k->start_lvl( $out, -1 );
-  foreach( $pagelist as $i=>$p ) {
-    $item = new stdClass;
-    $item->url = get_permalink( $p->ID );
-    $item->title = $p->post_title;
-    $k->start_el( $out, $item, 0 );
-    $k->end_el( $out, $item, 0 );    
-  }
-  $k->end_lvl( $out, -1 );
-  print '<div class="nav-bar-horizontal" id="nav-bar2">'.$out.'</div>';
-}
-  
 
 ?>
 <!DOCTYPE html>
@@ -127,31 +60,50 @@ function output_page_nav_menu() {
     <!-- Theme Style Loading -->
     <link href="<?php bloginfo('stylesheet_url') ?>" rel="stylesheet"/> <!-- Main Stylesheet -->
     <link rel="stylesheet" href="<?php echo $prefix?>/slideshow.css"/>
-    <?php if( strlen($barname) && file_exists(get_template_directory()."/$barname.css") ) : ?>
-    <link rel="stylesheet" href="<?php echo $prefix.'/'.$barname.'.css'?>"/>
+    <?php if( file_exists(get_template_directory()."/".get_theme_template_name().".css") ) : ?>
+    <link rel="stylesheet" href="<?php echo $prefix.'/'.get_theme_template_name().'.css'?>"/>
     <?php endif; ?>
     <!-- Script Loading -->
     <script type="text/javascript" src="<?php echo $prefix?>/js/jquery.min.js"></script>
     <script type="text/javascript" src="<?php echo $prefix?>/js/jquery-slides.min.js"></script>
-    <?php if( get_meta_option('misc_opts', 'marquee_info_bar') ) : ?><script type="text/javascript" src="<?php echo $prefix?>/js/jquery-marquee.min.js"></script><?php endif; ?>    
+    <?php if( get_meta_option('misc_opts', 'marquee_info_bar') ) : ?><script type="text/javascript" src="<?php echo $prefix?>/js/jquery-marquee.min.js"></script><?php endif; ?>
     <script type="text/javascript" src="<?php echo $prefix?>/js/weather.js"></script>
     <script type="text/javascript" src="<?php echo $prefix?>/utils.js"></script>
     <script type="text/javascript" src="<?php echo $prefix?>/header.js"></script>
+    <!-- Dnymically generated scripts/styles -->
     <script type="text/javascript">
       /* Generate JS based on settings */
       jQuery(function($) {
 	  <?php if( get_meta_option('misc_opts', 'marquee_info_bar') ) : ?>
-	      $(".info-bar").marquee();
+	  $(".info-bar").marquee();
 	  <?php endif; ?>
 	  <?php if( get_meta_option('misc_opts', 'show_weather_bar') ) : ?>
-	      var loc = get_weather();
-	      $(".weather-bar")
-	          .append( $("<span>").text( loc.city + ", " + loc.region ).css("margin-right", "10px") )
-	          .append( $("<span>").text( loc.country ).css("margin-right", "10px") )
-	          .append( $("<span>").html( loc.temp + "&deg;C" + "/" + loc.humidity + "% humidity" ) );
+	      
+	  var loc = get_weather();
+	  $(".weather-bar")
+	      .append( $("<span>").text( loc.city + ", " + loc.region ).css("margin-right", "10px") )
+	      .append( $("<span>").text( loc.country ).css("margin-right", "10px") )
+	      .append( $("<span>").html( loc.temp + "&deg;C" + "/" + loc.humidity + "% humidity" ) );
 	  <?php endif; ?>
+	      
       });
     </script>
+    <style type="text/css">
+      #page { background: <?php echo get_meta_option("misc_opts","bg_colour") ?>; }
+      
+      #top-nav,
+      header .nav-bar-horizontal a,
+      header .nav-bar-horizontal {
+	  background: <?php echo get_meta_option("misc_opts","menu_colour"); ?>;      
+	  color: <?php echo get_meta_option("misc_opts","menu_font_colour"); ?>;      
+      }
+      /* Custom styles */
+      <?php
+	 global $allowed_custom_styles;
+	 if( isset($allowed_custom_styles[$tname]) ) echo get_meta_style( $tname );
+      ?>
+      
+    </style>
     <?php wp_head(); ?>
   </head>
   <body id="page">

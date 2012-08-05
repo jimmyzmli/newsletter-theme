@@ -18,7 +18,7 @@
 jQuery(function($) {
     var g = window;    
     var hiddens = $("#nav-bar1 .hidden-nav-section");
-    var clrs = ['#F30C23', '#FFBC00', 'green', 'red', 'blue','yellow','lightblue','green'];
+    var clrs = ['#F30C23', 'black', 'green', 'red', 'blue','purple','lightblue','green'];
 
 
     /* Start header nav menu code */
@@ -35,7 +35,7 @@ jQuery(function($) {
 		      .css('position','absolute').css('top','0').css('left','0') );
     });
 
-    $("#nav-bar1 ul>li:not(#nav-expand-btn) a").each( function() {
+    $("header .nav-bar-horizontal ul>li:not(#nav-expand-btn) a").each( function() {
 	$(this)
 	    .append( $("<div>")
 			.css('background-color', clrs[g.i++ % clrs.length])
@@ -53,6 +53,5 @@ jQuery(function($) {
 
     /* Scale/Trim fonts */
     $("#side .promo-title").each( function(){ $(this).scaleFontToFit(); } );
-    //$(".promo-desc").trimTextToFit();
 
 });

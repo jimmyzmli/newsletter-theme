@@ -17,10 +17,10 @@
 */
 ?>
 <section id="side">
-<?php $barname = $GLOBALS["barname"]; ?>
-<?php if( strlen($barname) > 0 ) : ?>
-   <?php if( is_dynamic_sidebar('sidebar-'.$barname) ) : ?>
-   <?php dynamic_sidebar('sidebar-'.$barname) ?>
+<?php $tname = get_theme_template_name(); ?>
+<?php if( strlen($tname) > 0 ) : ?>
+   <?php if( is_dynamic_sidebar('sidebar-'.$tname) ) : ?>
+   <?php dynamic_sidebar('sidebar-'.$tname) ?>
    <?php endif; ?>
 <?php endif; ?>
 </section> <!-- #side -->
