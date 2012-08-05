@@ -53,8 +53,8 @@ foreach( $allowed_custom_styles as $k=>$title )
 
 #editor {
     width: 100%;
-    height: 400px;
-    min-height: 400px;
+    height: 500px;
+    min-height: 500px;
 }
 
 #submit-frm {

@@ -29,26 +29,46 @@ function pdefault( $a, $v ) {
 
 $keys = array(
 
-  'general_sect' => array('Random Things',array('type'=>'sep')),    
+  'general_sect' => array('<h2>Random Things</h2>','none'),    
   'show_comments' => array('Theme should show comments','checkbox'),
 
-  'header_sect' => array('Header',array('type'=>'sep')),
+  'header_sect' => array('<h2>Header</h2>','none'),
   'show_weather_bar' => array('Show a weather bar','checkbox'),
   'marquee_info_bar' => array('Apply marquee effect on the info bar','checkbox'),
   'global_msg' => array('Global header annoncement','text'),
 
-  'footer_sect' => array('Footer',array('type'=>'sep')),
+  'body_sect' => array('<h2>Body</h2>','none'),
+  
+  'newstile_sect' => array('<h3>News Tile</h3>','none'),
+  'tiles_img_count' => array('Number of posts to show images for on the news tile','number'),
+  'tiles_lines_per_post' => array('Number of lines to show per post','number'),
+  'tiles_font_size' => array('Font size of text in the news tile','number'),
+  'tiles_colours' => array('%s',array(
+    'type'=>'selector',
+    'tiles_bg_colour'=>array('Background','colour'),
+    'tiles_title_bg'=>array('Title background','colour'),
+    'tiles_title_hover_bg'=>array('Title background hover','colour')
+  )),
+
+  'sidebar_sect' => array('<h3>Sidebar</h3>','none'),
+  'widget_colours' => array('Widget %s colour',array(
+    'type'=>'selector',
+    'widgettitle_bg' => array('title background','colour'),
+    'widget_bg' => array('background','colour')
+  )),
+  
+  'footer_sect' => array('<h2>Footer</h2>','none'),
   'footer_msg' => array('Footer message','text'),
 
-  'style_sect' => array('Styles stuff',array('type'=>'sep')),  
+  'style_sect' => array('<h2>Global stuff</h2>','none'),  
   'colours' => array('%s Colour', array(
     'type'=>'selector',
-    'bg_colour'=>array('Background','colour'),
+    'bg_colour'=>array('Page Background','colour'),
     'menu_colour'=>array('Menu','colour'),
     'menu_font_colour'=>array('Menu Font','colour')
   )),
 
-  'reset_sect' => array('Danger Zone',array('type'=>'sep')),
+  'reset_sect' => array('<h2 style="color:red">Danger Zone</h2>','none'),
   'resets' => array('Reset', array(
     'type'=>'row',
     'btn_reset_all'=>array('All','button'),
@@ -87,14 +107,25 @@ foreach( $keys as $k=>$t ) {
 	top: 28px;
 	left: 146px;
     }
-    td {
-	width: 200px;
+    tr td:first {
+	width: 30%;
     }
-    td.input-box {
-	width: 350px;
+    td {
+	width: 20%;
     }
     .text-box input {
 	width: 100%;
+    }
+  
+    div.inline-row {
+      float: left;
+    }
+
+    #submit-btn {
+      display: block;
+      width: 50px;
+      margin: auto auto;
+      margin-top: 30px;
     }
 </style>
 <script type="text/javascript">
@@ -102,7 +133,7 @@ foreach( $keys as $k=>$t ) {
 	/* Handles selector events for showing/hiding elements in row */
 	$('.option-switch').change(function(e) {
 	    var i = e.target.selectedIndex;
-	    var s =  $('>td.input-box',$(this).parents("tr"));
+	    var s =  $('>td div.input-box',$(this).parents("tr"));
 	    $(s).css('display','none');
 	    $($(s).get(i)).removeAttr('style');
 	}).trigger( 'change' );
@@ -135,32 +166,30 @@ foreach( $keys as $k=>$t ) {
 		$nhtml .= '<option>'.$ele[0].'</option>';
 	      }
 	      $nhtml .= '</select>';
-	   } elseif ( $t == 'sep' ) {
-	     $label = sprintf('<h2>%s',$label);
-	     $fields = array();
 	   }
-	    
 	 } else {
 	   $label = $info[0];
 	   $nhtml = '';
-	    $fields = array( $k => $info );
+	   $fields = $info[1] == 'none' ? array() : array( $k => $info );
 	 }
       ?> 
       <td><label><?php printf( $label, $nhtml ); ?></label></td>
-      <?php foreach( $fields as $key=>$field ) : ?>
-      <td class="<?php echo $field[1] ?>-box input-box">
-	<input
-	   type="<?php echo $field_input_type[$field[1]]?>" name="misc_opts[<?php echo $key?>]"
-	   value="<?php switch($field[1]) :
-		  case 'checkbox': echo 'yes'; break;
-		  case 'button': echo $field[0]; break;
-		  default: echo $nopts[$key]; break; endswitch;?>"
-	   <?php echo ($field[1]=='checkbox'&&$nopts[$key]?'checked="checked"':'')?>
-         />
-      </td>
-      <?php endforeach; ?>
+      <td>
+	<?php foreach( $fields as $key=>$field ) : ?>
+	<div class="<?php echo $field[1] ?>-box input-box <?php echo isset($t)&&$t=='row'?'inline-row':''?>">
+	  <input
+	     type="<?php echo $field_input_type[$field[1]]?>" name="misc_opts[<?php echo $key?>]"
+	     value="<?php switch($field[1]) :
+		    case 'checkbox': echo 'yes'; break;
+		    case 'button': echo $field[0]; break;
+		    default: echo $nopts[$key]; break; endswitch;?>"
+	     <?php echo ($field[1]=='checkbox'&&$nopts[$key]?'checked="checked"':'')?>
+          />
+	</div>
+	<?php endforeach; ?>
+      <td>
     </tr>
     <?php endforeach; ?>
   </table>
-  <input type="submit" name="submit"/>
+  <input type="submit" name="submit" id="submit-btn" />
 </form>

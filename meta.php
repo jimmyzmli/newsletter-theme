@@ -31,8 +31,17 @@ $meta_defaults = array(
     'bg_colour' => '#640404',
     'menu_colour' => 'gold',
     'menu_font_colour' => '#CD0404',
-    'global_msg' => "Example Notice - Theodore Pees his pants",
-    'footer_msg' => 'Copyright (c) JzL 2012'
+    'global_msg' => "",
+    'footer_msg' => 'Copyright (c) JzL (me@jzl.ca) 2012',
+    'tiles_bg_colour' => '#E6E6E6',
+    'tiles_title_bg' => '#a2a9a8',
+    'tiles_title_hover_bg' => 'gold',
+    'tiles_img_count' => 0,
+    'tiles_lines_per_post' => 3,
+    'tiles_font_size' => 16,
+    
+    'widgettitle_bg' => '#DFDFDF',
+    'widget_bg' => '#E6E6E6'
   ),
   'layout_opts' => array(),
   'slide_opts' => array(),

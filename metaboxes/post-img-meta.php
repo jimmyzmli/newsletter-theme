@@ -21,8 +21,9 @@
   jQuery(function($) {
       function changeDetect() {
 	  $("input[class|='mediafield']").each( function() {
-	      if( this.oldvalue != this.value )
-		  $(this).siblings("img").attr('src',this.value);
+	      if( this.oldvalue != this.value ) {
+		  $(this).parent().children().eq($(this).index()-1).attr('src', this.value.length < 6 ? "http://placehold.it/1x1" : this.value);
+	      }
 	      this.oldvalue = this.value;
 	  });
       }
@@ -30,13 +31,6 @@
   });
 </script>
 <div class="my_meta_control metabox">
-  
-  <?php $mb->the_field('desc'); ?>
-  <p>
-    A short description of the post (If not filled the default excerpt will be used)
-    <textarea name="<?php echo $mb->get_the_name()?>"><?php echo ( $mb->get_the_value() )?></textarea>
-  </p>  
-
   <?php $mb->the_field('featured_thumb_img'); ?>  
   <?php $ma->setGroupName('nn')->setInsertButtonLabel('Insert'); ?>
   <p>
