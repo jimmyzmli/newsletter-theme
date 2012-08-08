@@ -34,7 +34,8 @@ class FeaturedWidget extends WP_Widget {
       'show'=>array('default'=>3,'type'=>'number','label'=>'Number of posts you wish to show'),
       'rollup_days'=>array('default'=>1,'type'=>'number','label'=>'Round down date to nearest N days'),
       'lines'=>array('default'=>4,'type'=>'number','label'=>"Number of lines to show"),
-      'font_size'=>array('default'=>16,'type'=>'number','label'=>'Font Size')
+      'font_size'=>array('default'=>16,'type'=>'number','label'=>'Font Size'),
+      'unique_posts'=>array('default'=>"yes",'type'=>'checkbox','label'=>'Show only unique posts')
     ));
   }
 
@@ -57,6 +58,8 @@ class FeaturedWidget extends WP_Widget {
     /* Check font/line count */
     if( is_numeric($n_lines) && $n_lines >= 0 ) $c['lines'] = $n_lines; else $this->errmsg = "Teach me how to show negative number of lines, please.";
     if( is_numeric($n_font_size) && $n_font_size >= 3 ) $c['font_size'] = $n_font_size; else $this->errmsg = "Font too small";
+    /* Check checkboxes */
+    if( isset($n_unique_posts) ) $c['unique_posts'] = true; else $c['unique_posts'] = false;
     return $c;
   }
 
@@ -69,9 +72,12 @@ class FeaturedWidget extends WP_Widget {
 <section class="featured">
   <?php echo $before_title.(empty($title)?"Featured":$title).$after_title?>
   <?php    
-    global $post;
-    foreach( get_featured_posts( array( 'numberposts'=>$p_show, 'rollup_days'=>$p_rollup_days ) ) as $i=>$post ) {
+    global $post, $postsUsed;
+    $args = array( 'numberposts'=>$p_show, 'rollup_days'=>$p_rollup_days );
+    if( $p_unique_posts && is_array($postsUsed) ) $args['exclude_posts'] = implode(',',$postsUsed);
+    foreach( get_featured_posts( $args ) as $i=>$post ) {
       setup_postdata($post);
+      if( $p_unique_posts && is_array($postsUsed) ) array_push($postsUsed,get_the_ID());
       $thumb = get_post_thumb( get_the_ID() );
     ?>
       <article class="promo-story">
