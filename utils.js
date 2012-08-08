@@ -121,7 +121,7 @@ jQuery(function($) {
 	}
     };
 
-    $.prototype.jslides = function(info, args) {
+    $.prototype.jslides = function(info, usr_opts) {
 	var root, slider = this;
 	root = $("<div>").addClass("slides_container");
 
@@ -139,23 +139,33 @@ jQuery(function($) {
 			    $("<a>").attr("href",p.link).append( $("<img>").attr('src', p.img).addClass("promo-img") )
 			).addClass("clearfix").addClass("promo-story")
 			.append(
-			    $("<div>").text(p.desc).addClass("promo-desc")
-			)			
+			    $("<div>").html(p.desc).addClass("promo-desc")
+			)
 		)
 	    );
 	} );
-	var start = typeof(args.start) == "undefined" ? 1 : args.start;
+
+	var font_fixed = false;
 	var name_cat = function(k) {
+	    /* Set topic text */
 	    $(".slider-topic", slider).text( info[k-1].cat ).attr("href",info[k-1].catLink);
+	    /* Fix fonts */
+	    if( font_fixed === false ) {
+		font_fixed = true;
+		$(".promo-title",slider).each( function() { $(this).scaleFontToFit(); } );
+	    }
 	};
-	
-	name_cat(start);
-	$(".slider").slides({
+	if( typeof(usr_opts) != "object" ) usr_opts = {};	
+	var opts = $.extend({
 	    generateNextPrev: true,
-	    start: start,
+	    start: 1,
 	    animationComplete: name_cat
-	});
-	
+	}, usr_opts);
+
+	/* Create slideshow */
+	name_cat(opts.start);
+	$(".slider").slides( opts );
+	    
 	/* Fix floats */
 	$(".pagination",slider).addClass("clearfix");
 	$(slider).addClass("clearfix");

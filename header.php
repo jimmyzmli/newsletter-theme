@@ -80,7 +80,6 @@ $navmenu_opts = array(
 	  <?php if( get_meta_option('misc_opts', 'show_weather_bar') ) : ?>
 	      
 	  var loc = get_weather( function( loc ) {
-	      console.log( loc );
 	      $(".weather-bar")
 		  .append( $("<span>").text( loc.city + ", " + loc.region ).css("margin-right", "10px") )
 		  .append( $("<span>").text( loc.country ).css("margin-right", "10px") )
@@ -159,7 +158,7 @@ $navmenu_opts = array(
 	  <img alt="<?php echo get_bloginfo('name')?>" src="http://placehold.it/200x32"/>
 	</a>
 -->
-  <?php wp_nav_menu( array_merge( array("theme_location"=>"primary_menu",'walker'=>new TopMenuWalker(7),"fallback_cb"=>'output_cat_nav_menu'), $navmenu_opts) ); ?>
+  <?php wp_nav_menu( array_merge( array("theme_location"=>"primary_menu",'walker'=>new TopMenuWalker(6),"fallback_cb"=>'output_cat_nav_menu'), $navmenu_opts) ); ?>
 	<div id="search-box">
 	  <?php get_search_form(); ?>
 	</div>

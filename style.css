@@ -199,14 +199,16 @@ header .info-bar {
     width: 100%;
     margin: auto auto;
 
-    line-height: 10px;
-    border: 0px solid maroon;
-    border-left: 0px;
-    border-right: 0px;
+    border: 0px;
 }
 
-#nav-bar2 a .highlighter {
-    margin-top: 5px;
+#nav-bar2 li a {
+    line-height: 15px;
+    height: 15px;
+}
+
+#nav-bar2 li a .highlighter {
+    margin-top: 0px;
 }
 
 #nav-bar1-expand {
@@ -228,7 +230,7 @@ header .info-bar {
 #branding {
     line-height: 0px;
     display: block;
-    border: 0px solid maroon;
+    border: 0px;
     width: 200px;
     text-align: center;
     margin-right: 120px;
@@ -306,7 +308,8 @@ header .info-bar {
 }
 
 #nav-bar1-expand ul,
-#nav-bar1-expand li {
+#nav-bar1-expand li,
+#nav-bar1-expand li a  {
     border: 0px;
 }
 
@@ -454,6 +457,23 @@ header .info-bar {
 
 .featured .promo-story {p
     margin: 0px 0px 10px 0px;    
+}
+
+/*Comment boxes
+-------------------------------------- */
+#respond {
+    width: 500px;
+    margin: auto auto;
+}
+
+#respond form {
+
+}
+
+#respond form input[type='submit'] {
+    display: block;
+    width: 150px;
+    margin: auto auto;
 }
 
 /*Side RSS/Twitter bar
