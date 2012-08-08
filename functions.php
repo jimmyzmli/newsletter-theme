@@ -75,7 +75,8 @@ function theme_custom_widget_init() {
 $tname_map = array(
   'post' => 'single',
   'page' => 'page',
-  'category' => 'archive'
+  'category' => 'archive',
+  'search'=>'archive'
 );
 $current_template = null;
 
@@ -117,20 +118,20 @@ function posts_custom_column_views($column_name, $id){
 function create_query_function( $str ) {
   global $wpdb;
 
-  $str = str_replace('$','\$',json_encode($str));  
+  $str = str_replace('$','\$',json_encode($str));
   $rplcmnts = array( "wp_" => $wpdb->prefix, '\${q}' => '$q' );
   foreach( $rplcmnts as $t=>$r ) $str = str_replace($t, $r, $str);
-
   return create_function( '$q', 'return '.$str.';' );
 }
 
 function get_featured_posts( $args ) {
+  global $wpdb;
   static $f_join = null;
-  $f_orderby = null; 
+  $f_orderby = null; $f_where = null; 
 
-  $custom_def = array( 'rollup_days' => 1 );
+  $custom_def = array( 'rollup_days' => 1, 'exclude_posts' => "" );
   $args = wp_parse_args( $args, $custom_def );
-  extract( $args, EXTR_PREFIX_ALL, 'p' );  
+  extract( $args, EXTR_PREFIX_ALL, 'p' );
 
   /* Ignore stupid cases */
   if( $p_numberposts <= 0 ) return array();
@@ -138,11 +139,14 @@ function get_featured_posts( $args ) {
   /* Parse Special Arguments */
   if( isset($p_category) && !is_numeric($p_category) && is_string( $p_category ) )
     $args['category'] = get_cat_ID( $p_category );
+  $p_exclude_posts = array_filter( explode(',',$p_exclude_posts), create_function('$a','return strlen(trim($a)) > 0;') );
   
   /* We don't want our custom keys to be mixed up with the ones we pass to get_posts() */
   foreach( array_keys($custom_def) as $k ) if( isset($args[$k]) ) unset($args[$k]);
 
   /* Create our lambdas */
+  if( is_array($p_exclude_posts) && count($p_exclude_posts) > 0 && !is_callable($f_where) )
+    $f_where = create_query_function( '${q} AND post_ID NOT IN ('.$wpdb->escape(implode(',',$p_exclude_posts)).')' );
   if( !is_callable( $f_orderby ) )
     $f_orderby = create_query_function(
       'YEAR(wp_posts.post_date_gmt),'.
@@ -155,10 +159,12 @@ function get_featured_posts( $args ) {
 
   add_filter('posts_orderby', $f_orderby);
   add_filter('posts_join', $f_join);
+  if( is_callable($f_where) ) add_filter('posts_where',$f_where);
 
-  $args = array_merge( array( 'post_type'=>'post', 'suppress_filters' => false ), $args );
+  $args = array_merge( array( 'post_type'=>'post', 'post_status'=>'publish', 'suppress_filters' => false ), $args );
   $posts = get_posts( $args );    
 
+  if( is_callable($f_where) ) remove_filter('posts_where',$f_where);
   remove_filter('posts_orderby', $f_orderby);
   remove_filter('posts_join', $f_join);
 
@@ -189,10 +195,11 @@ HTML;
   foreach( $form as $k=>$info ) {
     extract( $info, EXTR_PREFIX_ALL, 'p' );
     if( !isset($c[$k]) && isset($p_default) ) $c[$k] = $p_default;
-    printf( "<label for=\"%1\$s\">$p_label</label><br/><input type=\"$p_type\" id=\"%1\$s\" name=\"%2\$s\" value=\"%3\$s\"/><br/>",
+    printf( "<label for=\"%1\$s\">$p_label</label><br/><input type=\"$p_type\" id=\"%1\$s\" name=\"%2\$s\" value=\"%3\$s\" %4\$s/><br/>",
 	    $widget->get_field_id($k),
 	    $widget->get_field_name($k),
-	    esc_attr( is_array($c[$k]) ? implode(':',$c[$k]) : $c[$k] )
+	    esc_attr( is_array($c[$k]) ? implode(':',$c[$k]) : $c[$k] ),
+	    $p_type == 'checkbox' && $c[$k]===true ? 'checked="checked"' : ''
     );
 
     /* Special cases */
@@ -334,7 +341,7 @@ class TopMenuWalker extends Walker_Nav_Menu {
 function output_cat_nav_menu() {
   global $navmenu_opts;
   $out = "";
-  $k = new TopMenuWalker(7);
+  $k = new TopMenuWalker(6);
   $header_cat = get_all_category_ids();
   
   $k->start_lvl( $out, -1 );

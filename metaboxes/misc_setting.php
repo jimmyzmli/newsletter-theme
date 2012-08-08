@@ -40,7 +40,8 @@ $keys = array(
   'body_sect' => array('<h2>Body</h2>','none'),
   
   'newstile_sect' => array('<h3>News Tile</h3>','none'),
-  'tiles_img_count' => array('Number of posts to show images for on the news tile','number'),
+  'tiles_rollup_days' => array('Number of days to round off when evaluating views','number'),  
+  'tiles_img_count' => array('Number of posts to show images for on the news tile','number'),  
   'tiles_lines_per_post' => array('Number of lines to show per post','number'),
   'tiles_font_size' => array('Font size of text in the news tile','number'),
   'tiles_colours' => array('%s',array(

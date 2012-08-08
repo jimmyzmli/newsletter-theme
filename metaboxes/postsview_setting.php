@@ -18,7 +18,7 @@
 ?>
 <?php
 
-define( 'POSTS_PER_PAGE', 3 );
+define( 'POSTS_PER_PAGE', 30 );
 define( 'PAGES_IN_NAV', 10 );   
 
 function get_postviews_page_uri( $n ) {
@@ -28,11 +28,11 @@ function get_postviews_page_uri( $n ) {
 }
 
 $p = $_GET['p'];
-$p = is_numeric( $p ) && $p >= 0 ? $p : 0;
+$p = is_numeric( $p ) && $p >= 0 ? intval($p) : 0;
 $t = wp_count_posts('post')->publish + wp_count_posts('page')->publish;
-$t = round($t/POSTS_PER_PAGE)-1;
+$t = ceil($t/POSTS_PER_PAGE)-1;
 $half = floor((PAGES_IN_NAV)/2);
-$beg = $p-$half; $end = $p+$half;
+$beg = $p-$half; $end = $p+(PAGES_IN_NAV-$half);
 $beg = $beg <= 0 ? 0 : $beg;
 $end = $end >= $t ? $t : $end;
 

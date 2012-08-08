@@ -32,13 +32,16 @@ $meta_defaults = array(
     'menu_colour' => 'gold',
     'menu_font_colour' => '#CD0404',
     'global_msg' => "",
+    'unique_posts' => true,
     'footer_msg' => 'Copyright (c) JzL (me@jzl.ca) 2012',
+
     'tiles_bg_colour' => '#E6E6E6',
     'tiles_title_bg' => '#a2a9a8',
     'tiles_title_hover_bg' => 'gold',
     'tiles_img_count' => 0,
     'tiles_lines_per_post' => 3,
     'tiles_font_size' => 16,
+    'tiles_rollup_days' => 1,
     
     'widgettitle_bg' => '#DFDFDF',
     'widget_bg' => '#E6E6E6'

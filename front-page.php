@@ -31,7 +31,7 @@ $slidelist = is_array($slidelist) ? $slidelist : array();
 foreach( $posts as $i=>$post )
     if( in_array( $post->ID, $slidelist ) ) unset($posts[$i]);
 
-$slides = array();
+$slides = array(); $postsUsed = array();
 foreach( $slidelist as $i=>$postID ) {
   $post = get_post( $postID );
   $p = new stdClass;
@@ -50,13 +50,14 @@ foreach( $slidelist as $i=>$postID ) {
   $p->desc = get_the_excerpt();
 
   array_push( $slides, $p );
+  array_push( $postsUsed, $p->post_ID );
 }
 ?>
 <?php get_header(); ?>
 <script type="text/javascript">
   var slidesInfo=<?php echo json_encode($slides)?>;
   jQuery(function($) {
-      $(".slider").jslides( slidesInfo, {start:1} );
+      $(".slider").jslides( slidesInfo, {start:1,play:5000,hoverPause:true} );
   });
 </script>
 <section id="body">
@@ -72,7 +73,10 @@ foreach( $slidelist as $i=>$postID ) {
       $line_count = intval(get_meta_option('misc_opts','tiles_lines_per_post'));
       $posts_needed = 0;
       foreach( $c->tileInfo['tiles'] as $j=>$tile ) $posts_needed += intval($tile['height']);
-      $posts = get_featured_posts( array( 'category'=>$c->cat_ID, 'numberposts'=>$posts_needed ) );
+      $args = array( 'category'=>$c->cat_ID, 'numberposts'=>$posts_needed );
+      if( get_meta_option('misc_opts','unique_posts') ) $args['exclude_posts'] = implode(',',$postsUsed);
+      if( ($n=get_meta_option('misc_opts','tiles_rollup_days')) && $n>=0 ) $args['rollup_days'] = intval($n);
+      $posts = get_featured_posts( $args );
       $postn = 0;
 				   
       foreach( $c->tileInfo['tiles'] as $j=>$tile ) :
@@ -86,10 +90,11 @@ foreach( $slidelist as $i=>$postID ) {
 		while( --$n >= 0 && isset($posts[$postn]) ) :
 	        $post = $posts[$postn];
 		setup_postdata($post); $i++; $postn++;
+                array_push($postsUsed,get_the_ID());
 	?>
 	<section class="promo-story">
 	  <div class="promo-title">
-	    <a href="<?php the_permalink() ?>"><?php the_title() ?></a>
+	      <a href="<?php the_permalink() ?>"><?php the_title() ?></a>
           </div>
 	  <div class="promo-desc" <?php echo ($i<=$img_count?'style="padding-bottom: '.$imgh.'px;"':'');?>>
 	        <?php if( $i<=$img_count ) : ?>
