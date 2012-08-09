@@ -51,7 +51,10 @@ $meta_defaults = array(
     'widgettitle_bg' => '#DFDFDF',
     'widget_bg' => '#E6E6E6',
     'widgettitle_fg' => '#000000',
-    'widget_fg' => '#000000',    
+    'widget_fg' => '#000000',
+
+    'search_ppp' => 7,
+    'archive_ppp' => 7,
 
     'footer_bg' => '#DFDFDF',
     'footer_fg' => '#000000',

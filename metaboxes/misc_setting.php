@@ -32,11 +32,16 @@ function pdefault( $a, $v ) {
 
 $keys = array(
 
-  'general_sect' => array('<h2>Random Things</h2>','none'),    
-  'show_comments' => array('Theme should show comments','checkbox'),
-  'placeholder_img' => array('Placeholder Image','text'),
+  'general_sect' => array('<h2>'.__("Random Things").'</h2>','none'),    
+  'show_comments' => array(__('Theme should show comments'),'checkbox'),
+  'placeholder_img' => array(__('Placeholder Image'),'text'),
+  'ppps' => array(__('Posts Per Page for %s'),array(
+    'type'=>'selector',
+    'search_ppp' => array(__('Search'),'number'),
+    'archive_ppp'=> array(__('Category'),'number')
+  )),  
 
-  'header_sect' => array('<h2>Header</h2>','none'),
+  'header_sect' => array('<h2>'.__("Header").'</h2>','none'),
   'show_weather_bar' => array('Show a weather bar','checkbox'),
   'marquee_info_bar' => array('Apply marquee effect on the info bar','checkbox'),
   'global_msg' => array('Global header annoncement','text'),

@@ -39,7 +39,6 @@ if( is_readable($locale_file) )
   require_once( $locale_file );
 
 /* Theme Supports */
-//add_theme_support('post-thumbnails');
 add_theme_support( 'custom-header' );
 
 /* Add setting pages */
@@ -97,6 +96,16 @@ function get_theme_template_name( $name = null ) {
 
   return $name;
 }
+
+/* Set posts per page */
+function global_set_ppp() {
+  $n = 0;
+  if( is_search() ) $n = get_meta_option('misc_opts','search_ppp');
+  if( is_category() ) $n = get_meta_option('misc_opts','archive_ppp');
+  if( $n > 0 ) set_query_var('posts_per_archive_page', $n );
+}
+
+add_filter('pre_get_posts', 'global_set_ppp');
 
 /* Add to WP-Admin post listing */
 

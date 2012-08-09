@@ -22,6 +22,7 @@ defined("ABSPATH") || exit;
 <?php get_header() ?>
 <section id="body" class="clearfix">
   <section id="main">
+    <?php if( have_posts() ) : ?>
     <?php while( have_posts() ) : the_post() ?>
     <div class="promo-story clearfix">
       <a href="<?php echo get_permalink(get_the_ID())?>"><img src="<?php echo get_post_thumb( get_the_ID() )?>" class="promo-img" style="width:70px;height:70px;"/></a>
@@ -29,6 +30,13 @@ defined("ABSPATH") || exit;
       <div class="promo-desc"><?php echo get_the_excerpt()?></div>
     </div>
     <?php endwhile; ?>
+    <nav>
+      <?php previous_posts_link(__("Last Page"),10); ?>
+      <?php if( $count == get_meta_option('misc_opts','search_ppp') ) next_posts_link(__("Next Page"),10); ?>
+    </nav>        
+    <?php else: ?>
+    <div class="error">No entries for this category</div>
+    <?php endif; ?>
   </section>
   <?php get_sidebar() ?>
 </section>

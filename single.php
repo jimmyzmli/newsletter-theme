@@ -23,8 +23,8 @@ defined("ABSPATH") || exit;
 <section id="body">
   <section id="main">
     <?php while( have_posts() ) : the_post() ?>
-    <div>Viewed <?php echo increPostViews(get_the_ID());?> Times</div>
-    <div><?php echo wp_count_comments( get_the_ID() )->approved?> Comments</div>
+    <span class="view-count">Viewed <span class="count"><?php echo increPostViews(get_the_ID());?></span> Times</span>
+    <span class="comment-count"><span class="count"><?php echo wp_count_comments( get_the_ID() )->approved?></span> Comments</span>
     <article class="content clearfix">
       <h2><?php echo bloginfo('name')?></h2>
       <a href="<?php the_permalink() ?>"><h3><?php the_title(); ?></h3></a>
