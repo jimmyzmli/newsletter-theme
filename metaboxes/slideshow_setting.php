@@ -20,15 +20,7 @@
 $prefix = get_template_directory_uri();
 
 $posts = get_posts( array('meta_key' => METAPREF.'_slideshow_img') );
-
-$slidelist = get_option( 'slide_opts' );
-/* Set stub if needed */
-if( $slidelist === false )
-  add_option( 'slide_opts', array() );
-$slidelist = is_array($slidelist) ? $slidelist : array();
-
-foreach( $posts as $i=>$post )
-    if( in_array( $post->ID, $slidelist ) ) unset($posts[$i]);
+$slidelist = get_slideshow_posts( $posts );
 
 ?>
 <style type="text/css">
@@ -107,7 +99,7 @@ foreach( $posts as $i=>$post )
 	    $(this).toggleClass("selected-post");
 	});
 	$("#btn-list input:first").click( function() {
-	    $(".post-list:last").append( $(".post-list:first .selected-post")
+	    $(".post-list:last :first").after( $(".post-list:first .selected-post")
 					 .detach().toggleClass("selected-post") );
 	    g.updateSlider();
 	});

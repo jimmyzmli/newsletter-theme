@@ -97,12 +97,6 @@
 #main .tile .promo-title a {
     display: block;
     text-decoration: none;
-    background: gainsboro;
-    colour: #174F82;
-}
-
-#main .tile .promo-title a:hover {
-    color: red;
 }
 
 #main .tile .promo-desc {

@@ -25,6 +25,7 @@ define( 'METAPREF', 'nws' );
 */
 $meta_defaults = array(
   'misc_opts' => array(
+    'placeholder_img' => get_template_directory_uri().'/images/placeholder.gif',
     'show_comments' => true,
     'show_weather_bar' => true,
     'marquee_info_bar' => false,
@@ -32,19 +33,32 @@ $meta_defaults = array(
     'menu_colour' => 'gold',
     'menu_font_colour' => '#CD0404',
     'global_msg' => "",
+    'infobar_bg' => '#DFDFDF',
     'unique_posts' => true,
-    'footer_msg' => 'Copyright (c) JzL (me@jzl.ca) 2012',
+    'footer_msg' => 'Copyright (c) JzL (me@jzl.ca) 2012-'.date("Y"),
 
     'tiles_bg_colour' => '#E6E6E6',
-    'tiles_title_bg' => '#a2a9a8',
-    'tiles_title_hover_bg' => 'gold',
+    'tiles_heading_bg' => '#a2a9a8',
+    'tiles_heading_hover_bg' => 'gold',
+    'tiles_fg_colour' => '#000000',
+    'tiles_heading_fg' => '#174F82',
+    'tiles_heading_hover_fg' => '#FF0000',
     'tiles_img_count' => 0,
     'tiles_lines_per_post' => 3,
     'tiles_font_size' => 16,
     'tiles_rollup_days' => 1,
     
     'widgettitle_bg' => '#DFDFDF',
-    'widget_bg' => '#E6E6E6'
+    'widget_bg' => '#E6E6E6',
+    'widgettitle_fg' => '#000000',
+    'widget_fg' => '#000000',    
+
+    'footer_bg' => '#DFDFDF',
+    'footer_fg' => '#000000',
+    'fb_link' => '',
+    'ln_link' => '',
+    'twitter_link' => '',
+    'youtube_link' => ''
   ),
   'layout_opts' => array(),
   'slide_opts' => array(),
@@ -79,7 +93,7 @@ function get_meta_option( $sect, $k = null ) {
       $v = $meta_defaults[$sect][$k];
       if( isset($v) ) {
 	$cache[$sect][$k] = $v;
-	update_option( $sect, $cache[$sect] );
+	/* update_option( $sect, $cache[$sect] ); */
       } else {
 	$v = "";
       }
@@ -94,13 +108,13 @@ function get_meta_style( $template ) {
 
 function get_cat_meta_img( $id, $type = 'full' ) {
   $img = get_tax_meta( $id, METAPREF."_$type"."_img" );
-  $src = $img["src"];
-  return is_string($src) ? $src : "";  
+  if( is_array($img) ) $src = $img["src"];
+  return is_string($src) ? $src : NOIMG;  
 }
 
 function get_post_meta_img( $id, $type = 'full') {
   $src = get_post_meta( $id, METAPREF."_$type"."_img", true );
-  return is_string($src) ? $src : "";
+  return is_string($src) ? $src : NOIMG;
 }
 
 function get_post_thumb( $id ) {
@@ -110,11 +124,31 @@ function get_post_thumb( $id ) {
   return $thumb;
 }
 
+function get_slideshow_posts( &$posts = null ) {
+  if( !is_array($posts) ) $posts = get_posts(array('meta_key' => METAPREF.'_slideshow_img'));
+  $slidelist = get_meta_option( 'slide_opts' );
+  /* Set stub if needed */
+  if( $slidelist === false )
+    add_option( 'slide_opts', array() );
+  $slidelist = is_array($slidelist) ? $slidelist : array();
+  $changed = false;
+  foreach( $slidelist as $i=>$pid ) {
+    $found = false;
+    foreach( $posts as $k=>$post ) if( $post->ID === $pid ) { $found = true; break; }
+    if( $found ) unset($posts[$k]);
+    else { unset($slidelist[$i]); $changed=true; }
+  }
+  if( $changed ) {
+    update_option('slide_opts',$slidelist);
+  }
+  return $slidelist;
+}
+
 function should_show_comments( $pid, $opt = -1 ) {
   global $meta_defaults;
   /* Get values */
   $g = get_option( "misc_opts" );
-  $g = $g['show_comments'];
+  if( is_array($g) ) $g = $g['show_comments'];
   if( $g !== true && $g !== false ) $g = $meta_defaults['misc_opts']['show_comments'];
   if( $opt === -1 ) $opt = get_post_meta( $pid, METAPREF."_show_comments", true );
   
@@ -267,7 +301,8 @@ function validate_layout_opts($opts) {
 /* Validates slide editor data */
 function validate_slide_opts( $opts ) {
   $old = get_option('slide_opts');
-  if( is_string($opts) ) $list = json_decode($opts,true);
+  if( is_string($opts) ) $list = json_decode($opts,true);  
+  else if( is_array($opts) ) $list = $opts;
   return is_array($list) ? $list : $old;
 }
 

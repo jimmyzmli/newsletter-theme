@@ -24,13 +24,7 @@ $layout = is_array( $opts['layout'] ) ? $opts['layout'] : array();
 
 $cats = get_cats($layout);
 
-$posts = get_posts( array('meta_key' => 'post_banner_image') );
-$slidelist = get_option( 'slide_opts' );
-$slidelist = is_array($slidelist) ? $slidelist : array();
-
-foreach( $posts as $i=>$post )
-    if( in_array( $post->ID, $slidelist ) ) unset($posts[$i]);
-
+$slidelist = get_slideshow_posts();
 $slides = array(); $postsUsed = array();
 foreach( $slidelist as $i=>$postID ) {
   $post = get_post( $postID );

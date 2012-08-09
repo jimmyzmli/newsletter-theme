@@ -16,6 +16,18 @@
 */
 
 jQuery(function($) {
+    var g = window;
+    
+    g.imgErrHandler = function(e) {
+	var img = e.target, clone = new Image();
+	var errsrc = typeof(g.imgPlaceholder)=="undefined" ? "http://placehold.it/1x1" : g.imgPlaceholder;
+	if( img.clientWidth == 0 && img.clientHeight == 0 ) clone.src = img.src;
+	if( e.type == 'error' || (clone.width==0 && clone.height==0 && img.clientWidth==0 && img.clientHeight==0) ) {
+	    img.onerror = "";
+	    $(img).attr('src',errsrc);
+	}
+    };
+    
     $.prototype.hasScrollBar = function() {
 	/* @AUTHOR Praveen Prasad From StackOverFlow */
 	/* note: clientHeight= height of holder */
@@ -136,7 +148,7 @@ jQuery(function($) {
 			    $("<div>").append( $("<a>").text(p.title).attr("href",p.link).addClass("promo-title") )
 			)
 			.append(
-			    $("<a>").attr("href",p.link).append( $("<img>").attr('src', p.img).addClass("promo-img") )
+			    $("<a>").attr("href",p.link).append( $("<img>").attr('src', p.img).addClass("promo-img").error(g.imgErrHandler).load(g.imgErrHandler) )
 			).addClass("clearfix").addClass("promo-story")
 			.append(
 			    $("<div>").html(p.desc).addClass("promo-desc")
@@ -145,21 +157,19 @@ jQuery(function($) {
 	    );
 	} );
 
-	var font_fixed = false;
 	var name_cat = function(k) {
 	    /* Set topic text */
+	    if( typeof(info[k-1]) == "undefined" ) return;
 	    $(".slider-topic", slider).text( info[k-1].cat ).attr("href",info[k-1].catLink);
-	    /* Fix fonts */
-	    if( font_fixed === false ) {
-		font_fixed = true;
-		$(".promo-title",slider).each( function() { $(this).scaleFontToFit(); } );
-	    }
 	};
 	if( typeof(usr_opts) != "object" ) usr_opts = {};	
 	var opts = $.extend({
 	    generateNextPrev: true,
 	    start: 1,
-	    animationComplete: name_cat
+	    animationComplete: name_cat,
+	    slidesLoaded: function() {
+		$(".promo-title",slider).each( function() { $(this).scaleFontToFit(); } );
+	    }
 	}, usr_opts);
 
 	/* Create slideshow */

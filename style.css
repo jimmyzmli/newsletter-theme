@@ -526,6 +526,33 @@ Uncomment for height limiter
   --------------------------------------------------------- */  
 footer {
     margin: 0px auto 0px auto;
+    padding: 0px;
+     padding-bottom: 28px;
     text-align: center;
-    background: lightgrey;
+}
+
+/*Social Icons
+  -------------------------------------- */
+
+.social .icons {
+    margin: 20px 0px 5px 0px;
+    position: relative;
+    z-index: 1000;
+    display: inline-block;
+    width: auto;
+}
+
+.social .icons a {
+    float: left;
+    margin: 0px 7px;
+    display: block;
+    width: 36px;
+    height: 36px;
+}
+
+.social .cross-line {
+    position: relative;
+     top: -25px;
+    width: 100%;
+    border-top: 1px solid;
 }

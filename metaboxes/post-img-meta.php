@@ -22,7 +22,7 @@
       function changeDetect() {
 	  $("input[class|='mediafield']").each( function() {
 	      if( this.oldvalue != this.value ) {
-		  $(this).parent().children().eq($(this).index()-1).attr('src', this.value.length < 6 ? "http://placehold.it/1x1" : this.value);
+		  $(this).parent().children().eq($(this).index()-1).attr('src', this.value.length < 6 ? "<?php echo NOIMG ?>" : this.value);
 	      }
 	      this.oldvalue = this.value;
 	  });

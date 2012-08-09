@@ -19,8 +19,7 @@ jQuery(function($) {
     var g = window;    
     var hiddens = $("#nav-bar1 .hidden-nav-section");
     var clrs = ['#F30C23', 'black', 'green', 'red', 'blue','purple','lightblue','green'];
-
-
+    
     /* Start header nav menu code */
     g.i = 0;
     $("#nav-bar1-expand").css('visibility','hidden').append(
@@ -53,4 +52,5 @@ jQuery(function($) {
 
     /* Scale/Trim fonts */
     $(".promo-title").each( function(){ $(this).scaleFontToFit(); } );
+    $("img").error(g.imageErrHandler).load(g.imageErrHandler);
 });

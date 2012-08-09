@@ -73,9 +73,11 @@ $navmenu_opts = array(
     <!-- Dnymically generated scripts/styles -->
     <script type="text/javascript">
       /* Generate JS based on settings */
+      window.imgPlaceholder = "<?php echo NOIMG; ?>";
       jQuery(function($) {
+	  var g = window;
 	  <?php if( get_meta_option('misc_opts', 'marquee_info_bar') ) : ?>
-	  $(".info-bar").marquee();
+	  $(".info-bar>div").marquee();
 	  <?php endif; ?>
 	  <?php if( get_meta_option('misc_opts', 'show_weather_bar') ) : ?>
 	      
@@ -86,7 +88,6 @@ $navmenu_opts = array(
 		  .append( $("<span>").html( loc.temp + "&deg;C" + "/" + loc.humidity + "% humidity" ) );	      
 	  });
 	  <?php endif; ?>
-	      
       });
     </script>
     <style type="text/css">
@@ -98,36 +99,46 @@ $navmenu_opts = array(
 	  background: <?php echo get_meta_option("misc_opts","menu_colour"); ?>;      
 	  color: <?php echo get_meta_option("misc_opts","menu_font_colour"); ?>;      
       }
-
       #side .widgettitle {
+	  color: <?php echo get_meta_option('misc_opts','widgettitle_fg') ?>;	  
 	  background: <?php echo get_meta_option('misc_opts','widgettitle_bg') ?>;
       }
-
       #side li.widget {
+	  color: <?php echo get_meta_option('misc_opts','widget_fg') ?>;	  	  
 	  background: <?php echo get_meta_option('misc_opts','widget_bg') ?>;
+      }
+      footer,
+      footer .social .icons {
+	  color: <?php echo get_meta_option('misc_opts','footer_fg') ?>;
+	  background: <?php echo get_meta_option('misc_opts','footer_bg') ?>;
+      }
+      footer .social .cross-line {
+	  border-top-color: <?php echo get_meta_option('misc_opts','footer_f2g') ?>;
       }
 
       <?php
-        $fs = get_meta_option('misc_opts','tiles_font_size');
-        $lc = get_meta_option('misc_opts','tiles_lines_per_post');
+      if( is_front_page() ) :
+          $fs = get_meta_option('misc_opts','tiles_font_size');
+          $lc = get_meta_option('misc_opts','tiles_lines_per_post');
       ?>
       #main .tile .promo-desc {
 	  font-size: <?php echo $fs ?>px;
 	  line-height: <?php echo $fs ?>px;
 	  height: <?php echo $fs*$lc ?>px;
+	  color: <?php echo get_meta_option('misc_opts','tiles_fg_colour') ?>;
       }
-
       #main .news-promo {
 	  background: <?php echo get_meta_option('misc_opts','tiles_bg_colour') ?>;
       }
-
       #main .tile .promo-title a {
-	  background: <?php echo get_meta_option('misc_opts','tiles_title_bg'); ?>;
+	  background: <?php echo get_meta_option('misc_opts','tiles_heading_bg'); ?>;
+	  color: <?php echo get_meta_option('misc_opts','tiles_heading_fg'); ?>;	  
       }
-
       #main .tile .promo-title a:hover {
-	  background: <?php echo get_meta_option('misc_opts','tiles_title_hover_bg') ?>;
-      }      
+	  background: <?php echo get_meta_option('misc_opts','tiles_heading_hover_bg') ?>;
+	  color: <?php echo get_meta_option('misc_opts','tiles_heading_hover_fg') ?>;
+      }
+      <?php endif; ?>
       
       /* Custom styles */
       <?php
@@ -166,8 +177,10 @@ $navmenu_opts = array(
       </nav>
       <nav class="nav-bar-horizontal clearfix" id="nav-bar1-expand"></nav>
   <?php wp_nav_menu( array_merge( array("theme_location"=>"secondary_menu",'walker'=>new TopMenuWalker(1000),"fallback_cb"=>'output_page_nav_menu'), $navmenu_opts) ); ?>
-      <div class="info-bar">
-	<span style="color:white;background:red;"><?php echo get_meta_option('misc_opts','global_msg') ?></span>
-        <span class="weather-bar" style="background:gainsboro"></span>
+      <div class="info-bar" style="background:<?php echo get_meta_option('misc_opts','infobar_bg')?>">
+	<div>
+	  <span style="color:red"><?php echo get_meta_option('misc_opts','global_msg') ?></span>
+	  <span class="weather-bar"></span>
+	</div>
       </div>
     </header>

@@ -31,11 +31,13 @@ $keys = array(
 
   'general_sect' => array('<h2>Random Things</h2>','none'),    
   'show_comments' => array('Theme should show comments','checkbox'),
+  'placeholder_img' => array('Placeholder Image','text'),
 
   'header_sect' => array('<h2>Header</h2>','none'),
   'show_weather_bar' => array('Show a weather bar','checkbox'),
   'marquee_info_bar' => array('Apply marquee effect on the info bar','checkbox'),
   'global_msg' => array('Global header annoncement','text'),
+  'infobar_bg' => array('Info bar background','colour'),
 
   'body_sect' => array('<h2>Body</h2>','none'),
   
@@ -44,22 +46,45 @@ $keys = array(
   'tiles_img_count' => array('Number of posts to show images for on the news tile','number'),  
   'tiles_lines_per_post' => array('Number of lines to show per post','number'),
   'tiles_font_size' => array('Font size of text in the news tile','number'),
-  'tiles_colours' => array('%s',array(
+  'tiles_bgcolours' => array('%s background',array(
     'type'=>'selector',
-    'tiles_bg_colour'=>array('Background','colour'),
-    'tiles_title_bg'=>array('Title background','colour'),
-    'tiles_title_hover_bg'=>array('Title background hover','colour')
+    'tiles_bg_colour'=>array('Tiles','colour'),
+    'tiles_title_bg'=>array('Title','colour'),
+    'tiles_title_hover_bg'=>array('Title hover','colour')
+  )),
+  'tiles_fgcolours' => array('%s foreground',array(
+    'type'=>'selector',
+    'tiles_fg_colour'=>array('Tiles','colour'),
+    'tiles_heading_fg'=>array('Heading','colour'),
+    'tiles_heading_hover_fg'=>array('Heading hover','colour')
   )),
 
   'sidebar_sect' => array('<h3>Sidebar</h3>','none'),
-  'widget_colours' => array('Widget %s colour',array(
+  'widget_bgcolours' => array('Widget %s background',array(
     'type'=>'selector',
-    'widgettitle_bg' => array('title background','colour'),
-    'widget_bg' => array('background','colour')
+    'widgettitle_bg' => array('title','colour'),
+    'widget_bg' => array('body','colour')
   )),
+  'widget_fgcolours' => array('Widget %s foreground',array(
+    'type'=>'selector',
+    'widgettitle_fg' => array('title','colour'),
+    'widget_fg' => array('body','colour')
+  )),  
   
   'footer_sect' => array('<h2>Footer</h2>','none'),
+  'footer_colours' => array('Footer %s',array(
+    'type'=>'selector',
+    'footer_fg' => array('Foreground','colour'),
+    'footer_bg' => array('Background','colour')    
+  )),
   'footer_msg' => array('Footer message','text'),
+  'soc_sect' => array('%s Link',array(
+    'type' => 'selector',
+    'fb_link' => array('Facebook','text'),
+    'twitter_link' => array('Twitter','text'),
+    'ln_link' => array('LinkedIn','text'),
+    'youtube_link' => array('Youtube','text')    
+  )),
 
   'style_sect' => array('<h2>Global stuff</h2>','none'),  
   'colours' => array('%s Colour', array(

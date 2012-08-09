@@ -112,22 +112,26 @@ jQuery(function($) {
 	} else {
 	    g.weather_cb = cb;
 	    $("head").append(
-		$("<script>").attr("src","http://www.geoplugin.net/json.gp?callback=?")
+		$("<script>").attr("src","http://www.geoplugin.net/json.gp") /* This will use a geoPlugin() callback */
 	    );
 	}
     };
 
     g.geoPlugin = function(data) {
-	$.cookie('loc_latitude', data.geoplugin_latitude, {expires: 1});	
-	$.cookie('loc_longitude', data.geoplugin_longitude, {expires: 1});
-	$.cookie('loc_country', data.geoplugin_countryName, {expires: 1});
-	$.cookie('loc_region', data.geoplugin_region, {expires: 1});
-	$.cookie('loc_city', data.geoplugin_city, {expires: 1});
-	$.cookie('loc_country_code', data.geoplugin_countryCode, {expires: 1});
-
 	var cb = g.weather_cb;
 	delete g.weather_cb;
-	getWeather( cb );
+	if( typeof(data)=="undefined" || typeof(data.geoplugin_latitude) == "undefined" ) {
+	    var w = {}, p = [ "cond", "img", "temp", "humidity", "country", "region", "city", "desc" ];
+	    for( var k in p ) w[k] = "Unknown";
+	}else {
+	    $.cookie('loc_latitude', data.geoplugin_latitude, {expires: 1});	
+	    $.cookie('loc_longitude', data.geoplugin_longitude, {expires: 1});
+	    $.cookie('loc_country', data.geoplugin_countryName, {expires: 1});
+	    $.cookie('loc_region', data.geoplugin_region, {expires: 1});
+	    $.cookie('loc_city', data.geoplugin_city, {expires: 1});
+	    $.cookie('loc_country_code', data.geoplugin_countryCode, {expires: 1});
+	    getWeather( cb );	    
+	}
     }
 
     g.setWeather = function(data) {
@@ -156,7 +160,7 @@ jQuery(function($) {
 	$.cookie('loc_desc', weather);
 
 	var cb = g.weather_cb;
-	delete g.weather_cb;	
+	delete g.weather_cb;
 	cb( getConditionsObject(conditions, conditions_img, temp, humidity, weather) );
     }    
 

@@ -27,8 +27,11 @@ require_once("meta.php");
 require_once("widgets/featured_widget.php");
 require_once("widgets/twitter_widget.php");
 
-$theme = 'newsletter';
-load_theme_textdomain( $theme, TEMPLATEPATH, '/languages' );
+/* Global defines */
+define('NOIMG', get_meta_option('misc_opts','placeholder_img'));
+define('THEMENAME', 'newsletter' );
+
+load_theme_textdomain( THEMENAME, TEMPLATEPATH, '/languages' );
 $locale = get_locale();
 $locale_file = TEMPLATEPATH . '/languages/$locale.php';
 
@@ -215,7 +218,7 @@ HTML;
 function get_page_number() {
   $p = get_query_var('paged');
   if( $p ) {
-    printf( ' | %s%s', __('Page', $theme), $p );
+    printf( ' | %s%s', __('Page', THEMENAME), $p );
   }
 }
 
