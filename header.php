@@ -16,6 +16,10 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+defined("ABSPATH") || exit;
+
+?>
+<?php
 $prefix = get_template_directory_uri();
 
 if( is_single() ) {

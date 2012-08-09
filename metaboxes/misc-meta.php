@@ -15,6 +15,9 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+defined("ABSPATH") || exit;
+
 ?>
 <?php global $ma; ?>
 <div class="my_meta_control metabox">

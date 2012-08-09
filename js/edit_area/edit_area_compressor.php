@@ -1,4 +1,5 @@
 <?php
+        defined("ABSPATH") || exit;
 	/******
 	 *
 	 *	EditArea PHP compressor
